@@ -1,4 +1,4 @@
-PPII «Projet Pluridisciplinaire d'Informatique Intégrative» 2 (2021-2022)
+_**PPII «Projet Pluridisciplinaire d'Informatique Intégrative» 2 (2021-2022)**_
 
 Membres du groupe :
 - DE TOFFOLI Julien
