@@ -1,0 +1,74 @@
+input.case{
+    height:50px;
+    width: 50px;
+    border: 1px solid whitesmoke;
+    border-radius:6px;
+    text-transform: uppercase;
+    color:white;
+    text-align: center;
+    font-family: Sans; /* à décider */
+    font-weight: bold;
+    font-size: 24px;
+    padding:3px;
+    background-color: grey;
+
+    
+    
+}
+
+
+input.case.g{
+    background-color: rgb(23, 182, 23);
+
+}
+
+input.case.y{
+    background-color:gold;
+}
+
+.mid{
+    margin-left : 20%;
+    margin-right : 20%;
+    border: solid .5px gray;
+    border-radius:12px;
+    padding: 20px;
+    text-align: center;
+
+}
+.shake{
+    padding-top:5px;
+    height :30px;
+    width:60px;
+    border: solid .5px gray;
+    border-radius:6px;
+    background-color: gray;
+    color:white;
+    font-weight: bold;
+    text-align: center;
+
+    
+}
+.button1{
+    border:solid .5px black;
+    border-radius:6px;
+    color:blanchedalmond;
+    background-color:palegreen;
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    
+}
+.cgt{
+    height :30px;
+    margin-top: 5px;
+    margin-left : 20%;
+    margin-right:20%;
+    border:solid .5px black;
+    border-radius:6px;
+
+}
+
+
+
+
+
