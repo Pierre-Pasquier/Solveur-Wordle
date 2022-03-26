@@ -95,9 +95,9 @@ function new_sequence(mot){
     return seq;
 }
 
-var mot_à_deviner="PELLE";
-var longueur_mot=5; /**à modifier */
-var nombre_dessais=2;
+var mot_à_deviner="ITERATIF";
+var longueur_mot=8; /**à modifier */
+var nombre_dessais=10;
 var étape=0;
 var k=0;
 

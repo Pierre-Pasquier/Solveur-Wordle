@@ -67,6 +67,30 @@ input.case.y{
     border-radius:6px;
 
 }
+.conteneur{
+    width: 300px;
+    height :40px;
+    margin-left:0;
+    border:solid 1.5px rgb(48, 46, 46);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+.barre{
+    height :40px;
+    border-radius: 6px;
+    background:rgb(50, 218, 50);
+}
+.pourcentage{
+    width: 300px;
+    position: absolute;
+    top:0;
+    text-align: center;
+    font-size : 24px;
+    font-family: 'Gill Sans';
+}
+
+
 
 
 
