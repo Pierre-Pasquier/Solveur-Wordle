@@ -139,6 +139,8 @@ function const_mot(ell){
 
 function change_colors(ell,sequence){
    var t= 200;
+   var audio_bonne_lettre = new Audio('motus-lettre-bonne.mp3');
+    var audio_mauvaise_lettre = new Audio('uuhhh_KD275SD.mp3');
    
    $(ell).each(function(i)
    {
@@ -147,15 +149,19 @@ function change_colors(ell,sequence){
    setTimeout(function() {
        if (sequence[i]=='1'){
            $this.switchClass("","y",300);
-       }
+        }
        else if(sequence[i]=='2'){
-           $this.switchClass("","g",300);
-       }
+        $this.switchClass("","g",300);
+        audio_bonne_lettre.play();
+        }
+        else{
+            audio_mauvaise_lettre.play();
+        }
 
 
    }, t);
          
-   t += 100;
+   t += 800;
 
    })
 
@@ -168,7 +174,9 @@ function change_colors(ell,sequence){
 
 
 
-
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 
 
@@ -230,6 +238,10 @@ $(document).keyup(function (e)
                        var copy=mot_à_deviner.slice();
                        var seq=sequence(guess,copy);
                        change_colors(ell1,seq);
+                       sleep(3500).then(() => {
+                        var audio_victoire = new Audio('celebration_BCb02kw.mp3');
+                        audio_victoire.play();
+                        });
                        inc='f'; /**On met inc à 'f' pour finir la partie */
 
                    }
@@ -249,7 +261,10 @@ $(document).keyup(function (e)
                        /**Cas de défaite, nbr de trys dépassé */
                        inc='f';
                        console.log("Perdu");
-
+                       sleep(3500).then(() => {            /**A MODIFIER AVEC LONGUEUR MOT */
+                       audio_defaite.play();
+                       console.log('Perdu');
+                       });
                    }
                }
 
@@ -268,9 +283,3 @@ $(document).keyup(function (e)
     }
 
        })
-
-       
-
-
-
-    
