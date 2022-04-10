@@ -13,12 +13,19 @@
         <div class="container-top">
             <div class="gauche"><a href="{{url_for('home')}}"><img src='/static/TuNom.png' style="width: 180%"></a></div>
             <div class="alignright">
-
-                    <nav> <!--VOIR POUR BADGE ICI, BLOCK POUR POUVOIR RECUP BADGE DANS CHILD?-->
-                    
-                    <a href="{{url_for('home')}}" style="float:inline-end"> PSEUDO/GUEST</a> <!--du coup faut pas un pseudo trop long, et voir changer size pseudo-->
-                    <img src='/static/badges/grisbadge1.png' style="float:inline-end; height: 30%;width: 30%">
-                    </nav>
+                    <div class="box">
+                        <div>
+                            <img src='/static/badges/grisbadge1.png' style="float:inline-end; height: 100%;width: 100%">
+                        </div>
+                        <div>
+                            <a href="{{url_for('home')}}" style="float:none; color: white;"> PSEUDO/GUEST</a>
+                            <br>ici la barre d'xp bonjour
+                            <!--faire une page xp comansamarch avec genre daily = xp,
+                                 classmen = xp etc. ou alors mettre ça dans les box d'explications?-->
+                            <!--voir si input du child fonctionne dans parent-->
+                            <!--sinon faire la méthode extend pour chaque position?-->
+                        </div>
+                    </div>
                     
 
             </div>

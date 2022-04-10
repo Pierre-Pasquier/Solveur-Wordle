@@ -1,20 +1,44 @@
 {% extends "templatepage.html" %}
-<!--
-{% block title %}Index{% endblock %}
-
-{% block head %}
-  {{ super() }}
-  <style type="text/css">
-    .important { color: #336699; }
-  </style>
-{% endblock %}
---> 
 
 {% block content %}
-  <h1>nom de la page child</h1>
-  <p class="important">
-    Welcome on my awesome homepage.
+
         <div class="main container-bot"> 
+          <div class="box">
+            <div>
+              <br>
+              <h1>MODE LIBRE</h1>
+              <p>
+                Dans ce mode de jeu, vous pourrez librement vous entrainer et paramétrer vos propres parties!
+              </p>
+              <p>euh mettre les params ici? voir pour lock le bouton si pas tt data?</p>
+              <button class="btn btn-primary"><a style="color:#000000;" href='###'>Lancer une partie</a></button>
+              <br><br>
+              <button class="btn btn-primary"><a style="color:#000000;" href='###'>Historique des parties</a></button>
+            </div>
+
+            <div>
+              <br>
+              <h1>MODE JOURNALIER</h1>
+              <p>
+                Dans ce mode de jeu, retrouvez le mot du jour afin de gagner de l'expérience!
+              </p>
+              <p>1 tentative journalière restante / Vous avez déjà participé</p>
+              <button class="btn btn-primary"><a style="color:#000000;" href='###'>Trouver le mot du jour</a></button>
+            </div>
+
+            <div>
+              <br>
+              <h1>MODE SURVIE</h1>
+              <p>
+                Dans ce mode de jeu, à vos chronomètre! Plus vous tenez longtemps, meilleu</a>
+              </p>
+                <button class="btn btn-primary"><a style="color:#000000;" href='###'>Prêt, feu, partez !</a></button>
+              <br><br>
+              <button class="btn btn-primary"><a style="color:#000000;" href='###'>Classement</a></button>
+            </div>
+          </div>
+          
+          <!--
           <h1>Bienvenue sur notre Help&Go !</h1>
           <div>
             <button class="btn btn-primary"><a style="color:#ffffff" href='/connexion'>Se connecter</a></button>
@@ -28,6 +52,6 @@
           <div id="v-pills-tab" role="tablist" >
             <button class="btn btn-primary"><a style="color:#ffffff" href='/inscription'>S'inscrire</a></button>
           </div>
-        </div>  
-        </div>
+        </div>  -->
+        
 {% endblock %}
