@@ -15,15 +15,16 @@
             <div class="alignright">
                     <div class="box">
                         <div>
-                            <img src='/static/badges/grisbadge1.png' style="float:inline-end; height: 100%;width: 100%">
+                            <img src='/static/badges/{{badge}}' style="float:inline-end; height: 100%;width: 100%">
                         </div>
-                        <div>
-                            <a href="{{url_for('home')}}" style="float:none; color: white;"> PSEUDO/GUEST</a>
-                            <br>ici la barre d'xp bonjour
-                            <!--faire une page xp comansamarch avec genre daily = xp,
-                                 classmen = xp etc. ou alors mettre ça dans les box d'explications?-->
-                            <!--voir si input du child fonctionne dans parent-->
-                            <!--sinon faire la méthode extend pour chaque position?-->
+                        <div style="margin-top: 10px;">
+                            <a href="{{url_for('home')}}" style="float:none; color: white;"> {{pseudo}}</a>
+                            <br><div class="progress" style="width: 175px;">
+                                <div class="progress-bar" role="progressbar" style="width: {{pourcent}}%; background-color: #ffba3a;" aria-valuenow="{{pourcent}}" aria-valuemin="0" aria-valuemax="100">
+                                    
+                                </div><span class="progress-value" style="color: black;">{{pourcent}}%</span>
+                              </div>
+                            <!--VERIFIER LE CAS OU JOUEUR = GUEST => PSEUDO MENE PAS A PROFIL MAIS CONNEXION et euh y'aura probablement d'autres conséquences à vérif-->
                         </div>
                     </div>
                     

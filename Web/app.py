@@ -1,8 +1,28 @@
-from flask import Flask, render_template, request, redirect
 
+from flask import Flask, render_template, request, redirect
+import random
+import sqlite3
 
 app = Flask(__name__)
-#database= "db_projetS2.db"
+database= "db_projetS1.db"
+
+xptab = [300*i for i in range(0,30)]
+badgetab = ['grisbadge1.png','grisbadge2.png','grisbadge3.png','grisbadge4.png','grisbadge5.png','jaunbadge1.png','jaunbadge2.png','jaunbadge3.png','jaunbadge4.png','jaunbadge5.png','verbadge1.png','verbadge2.png','verbadge3.png','verbadge4.png','verbadge5.png','bronzbadge1','bronzbadge2.png','bronzbadge3.png','bronzbadge4.png','bronzbadge5.png','arjanbadge1.png','arjanbadge2.png','arjanbadge3.png','arjanbadge4.png','arjanbadge5.png','goldbadge1.png','goldbadge2.png','goldbadge3.png','goldbadge4.png','goldbadge5.png']
+
+def niveau(xp): #permet de savoir le niveau du joueur sachant son xp total
+    i=0
+    while i<30 and xp>xptab[i]:
+        i+=1
+    return(i) #correspond à la position du badge associé dans badgetab
+
+def pourcentlvlup(xp): #renvoie le % d'xp avant prochain lvl -> renvoie 100% si niveau max
+    i = niveau(xp)
+    if i==29:
+        return(100)
+    else:
+        return(int(100*(xp-xptab[i])/xptab[i+1]))
+        
+
 
 @app.route('/')      #redirection vers page d'accueil
 def redirection():
@@ -26,4 +46,9 @@ def home():
     id=request.args.get('id')
     if id is None or id=='':
         return render_template('home.html') 
-    return render_template('home_connect.html',id_user=id)
+    con = sqlite3.connect(database) 
+    cur = con.cursor()
+    cur.execute('SELECT pseudo,xp FROM Profil WHERE id= ?',(id,))
+    tab=cur.fetchall()
+    con.close()
+    return render_template('home.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])])
