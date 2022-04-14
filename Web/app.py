@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, redirect
 import random
 import sqlite3
@@ -52,3 +51,31 @@ def home():
     tab=cur.fetchall()
     con.close()
     return render_template('home.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])])
+
+@app.route('/<id>/pl')
+def partie_libre(id):
+    longueur_mot=8 #modif prochainement
+    nombre_dessais=10
+    mot_à_deviner="FUSIONNE"
+    return render_template('test_flask.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,nombre_dessais=nombre_dessais)
+
+
+@app.route('/<id>/survie')
+def mode_survie(id):
+
+    con = sqlite3.connect(database) 
+    cur = con.cursor()
+    cur.execute('SELECT mot FROM Mots')
+    tabmots=cur.fetchall()
+    mots=[tabmots[k][0] for k in range(len(tabmots))]
+    con.close()
+
+    longueur_mot=random.randint(6,10)
+    con = sqlite3.connect(database) 
+    cur = con.cursor()
+    cur.execute('SELECT mot FROM Mots WHERE len_mot=?',(longueur_mot,))
+    tabchoice=cur.fetchall()
+    motlen=[tabchoice[k][0] for k in range(len(tabchoice))]
+    borne=random.randint(0,len(motlen)-1)
+    mot_à_deviner=motlen[borne]
+    return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots)

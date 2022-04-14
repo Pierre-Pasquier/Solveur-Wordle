@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{url_for('static',filename='styles.css')}}" rel="stylesheet">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/ui-lightness/jquery-ui.css" />
+    <script>
+var mot_à_deviner="{{mot_à_deviner}}";
+var longueur_mot={{longueur_mot}};
+var nombre_dessais=10;
+var mots={{mots|safe}};
+    </script>
+ 
+
+
+
+</head>
+<body>
+    <div class="mid">
+        <p>Titre (un peu bancal)(Endroit ou les cases apparaîtront)</p>
+        {%for i in range(0,10)%}
+            {%for j in range(0,longueur_mot)%}
+            <input type='text' name='letter' class='case' maxlength='1' autocomplete="off" disabled> 
+            {%endfor%}
+            <br>
+        {%endfor%}
+
+    </div>
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+
+    <script src="{{url_for('static', filename='survie.js')}}"></script>
+</body>
+</html>
