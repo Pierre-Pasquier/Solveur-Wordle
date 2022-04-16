@@ -18,13 +18,22 @@
                             <img src='/static/badges/{{badge}}' style="float:inline-end; height: 100%;width: 100%">
                         </div>
                         <div style="margin-top: 10px;">
-                            <a href="{{url_for('home')}}" style="float:none; color: white;"> {{pseudo}}</a>
+                            {%if id_user==0 %}
+                                <a href="" style="float:none; color: white;text-decoration: underline;"> Guest</a> <!--href menant à connexion, à ajouter-->
+                            {%else%} 
+                                <a href="{{url_for('home')}}" style="float:none; color: white;"> {{pseudo}}</a>
+                            {%endif%}
                             <br><div class="progress" style="width: 175px;">
+                            {%if id_user==0 %}
+                                <div class="progress-bar" role="progressbar" style="width:100%; background-color:#ffba3a;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                <span class="progress-value" style="color: black;"></span>
+                            {% else %}
                                 <div class="progress-bar" role="progressbar" style="width: {{pourcent}}%; background-color: #ffba3a;" aria-valuenow="{{pourcent}}" aria-valuemin="0" aria-valuemax="100">
-                                    
                                 </div><span class="progress-value" style="color: black;">{{pourcent}}%</span>
-                              </div>
-                            <!--VERIFIER LE CAS OU JOUEUR = GUEST => PSEUDO MENE PAS A PROFIL MAIS CONNEXION et euh y'aura probablement d'autres conséquences à vérif-->
+                            {% endif %}
+                            </div>
+                            <!--VERIFIER LE CAS OU JOUEUR = GUEST => PSEUDO MENE PAS A PROFIL MAIS CONNEXION et euh y'aura probablement d'autres conséquences à vérif plus loin
+                            ex : pas d'historiques, pas d'insertion dans le classement (bcz pas de saves)-->
                         </div>
                     </div>
                     

@@ -43,10 +43,10 @@ def contactez():
 @app.route('/home')     #page d'accueil
 def home():
     id=request.args.get('id')
-    if id is None or id=='':
-        return render_template('home.html') 
-    con = sqlite3.connect(database) 
-    cur = con.cursor()
+    if id is None or id=='' or id=='0':
+        return render_template('home.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') #voir un paramètre de disable ? permettant de disable telle ou telle option comme
+    con = sqlite3.connect(database)                         #les historiques puisque liés au compte? ATTENTION : faudra faire gaffe niveau bd à ne pas save les parties guests
+    cur = con.cursor()                                      #faut pas que j'oublie de mettre guest.png sur git (manuellement bcz pas sur la vm)
     cur.execute('SELECT pseudo,xp FROM Profil WHERE id= ?',(id,))
     tab=cur.fetchall()
     con.close()

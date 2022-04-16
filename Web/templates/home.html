@@ -14,7 +14,7 @@
                 Dans ce mode de jeu, vous pourrez librement vous entrainer et paramétrer vos propres parties!
               </p>
               <p>euh mettre les params ici? voir pour lock le bouton si pas tt data?</p>
-              <button class="btn btn-primary"><a style="color:#000000;" href='###'>Lancer une partie</a></button>
+              <button class="btn btn-primary"><a style="color:#000000;" href="{{url_for('partie_libre',id=id_user)}}">Lancer une partie</a></button>
               <br><br>
               <button class="btn btn-primary"><a style="color:#000000;" href='###'>Historique des parties</a></button>
             </div>
@@ -35,7 +35,7 @@
               <p>
                 Dans ce mode de jeu, à vos chronomètre! Plus vous tenez longtemps, meilleur sera votre score !</a>
               </p>
-                <button class="btn btn-primary"><a style="color:#000000;" href='###'>Prêt, feu, partez !</a></button>
+                <button class="btn btn-primary"><a style="color:#000000;" href="{{url_for('mode_survie',id=id_user)}}">Prêt, feu, partez !</a></button>
               <br><br>
               <button class="btn btn-primary"><a style="color:#000000;" href='###'>Classement</a></button>
             </div>
