@@ -30,14 +30,28 @@ def redirection():
 
 @app.route('/à_propos')      #page à propos
 def apropos():
-    id = request.args.get('id')
-    return render_template('apropos.html',id_user=id)
+    id=request.args.get('id')
+    if id is None or id=='' or id=='0':
+        return render_template('apropos.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') 
+    con = sqlite3.connect(database)                         
+    cur = con.cursor()                                      
+    cur.execute('SELECT pseudo,xp FROM Profil WHERE id= ?',(id,))
+    tab=cur.fetchall()
+    con.close()
+    return render_template('apropos.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])])
 
 
 @app.route('/contactez_nous')   #page contactez nous
 def contactez():
-    id = request.args.get('id')
-    return render_template('contacteznous.html',id_user=id)
+    id=request.args.get('id')
+    if id is None or id=='' or id=='0':
+        return render_template('contacteznous.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') 
+    con = sqlite3.connect(database)                         
+    cur = con.cursor()                                      
+    cur.execute('SELECT pseudo,xp FROM Profil WHERE id= ?',(id,))
+    tab=cur.fetchall()
+    con.close()
+    return render_template('contacteznous.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])])
 
 
 @app.route('/home')     #page d'accueil

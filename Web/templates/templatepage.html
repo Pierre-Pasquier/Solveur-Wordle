@@ -11,7 +11,7 @@
 </head>        
 <div class="fixed-header">
         <div class="container-top">
-            <div class="gauche"><a href="{{url_for('home')}}"><img src='/static/TuNom.png' style="width: 180%"></a></div>
+            <div class="gauche"><a href="/home?id={{id_user}}"><img src='/static/TuNom.png' style="width: 180%"></a></div>
             <div class="alignright">
                     <div class="box">
                         <div>
@@ -19,9 +19,9 @@
                         </div>
                         <div style="margin-top: 10px;">
                             {%if id_user==0 %}
-                                <a href="" style="float:none; color: white;text-decoration: underline;"> Guest</a> <!--href menant à connexion, à ajouter-->
+                                <a href="###" style="float:none; color: white;text-decoration: underline;"> Guest</a> <!--href menant à connexion, à ajouter-->
                             {%else%} 
-                                <a href="{{url_for('home')}}" style="float:none; color: white;"> {{pseudo}}</a>
+                                <a href="###" style="float:none; color: white;"> {{pseudo}}</a> <!--href menant à profil ?-->
                             {%endif%}
                             <br><div class="progress" style="width: 175px;">
                             {%if id_user==0 %}

@@ -89,6 +89,9 @@ header {
 .fixed-footer a:hover{
     color:#ffba3a;
 }
+.fixed-footer a:visited{
+    color: white
+}
 
 .alignleft{
     float: left;
