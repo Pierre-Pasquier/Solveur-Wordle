@@ -103,7 +103,7 @@ def daily(id):
     con = sqlite3.connect(database)
     cur = con.cursor()
     cur.execute('Select MAX(SELECT id FROM Historique WHERE id_joueur=? AND type=?) FROM Sondages',(id,'daily',))
-    idpartie=cur.fetchall()
+    idpartie=cur.fetchall()[0][0] + 1
     con.close()
     ###ensuite on pré-génère la partie dans la bd
     con = sqlite3.connect(database)
