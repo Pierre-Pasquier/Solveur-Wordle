@@ -36,7 +36,7 @@
                 <a style="color:#000000;" href='###'>Trouver le mot du jour</a></button>
               {%else%}
               <p>Il vous reste 1 tentative journalière</p>
-              <button class="btn btn-primary"><a style="color:#000000;" href='###'>Trouver le mot du jour</a></button>
+              <button class="btn btn-primary"><a style="color:#000000;" href='{{url_for("daily",id=id_user)}}'>Trouver le mot du jour</a></button>
               {%endif%}
               <br><br>
               {%if id_user==0 %}
