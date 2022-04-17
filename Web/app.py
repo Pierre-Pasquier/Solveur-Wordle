@@ -97,7 +97,7 @@ def daily(id):
         guessmot = "MEILLEUR"
         lenmot=8
     else:
-        mot = tab[0][0]
+        guessmot = tab[0][0]
     ###là on crée les valeurs à rentrer dans la bd
     heure = datetime.now().strftime("%H:%M:%S")
     con = sqlite3.connect(database)
