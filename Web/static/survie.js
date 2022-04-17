@@ -302,7 +302,7 @@ $(document).keyup(function (e)
                                 inc=-1;
                                 étape=0;});
                         });
-                        sleep(100).then(()=>{
+                        sleep(1000).then(()=>{
                         mot_à_deviner=genere();
                         console.log(mot_à_deviner); /** On laisse pour l'instant pour les tests */
                         longueur_mot=mot_à_deviner.length;

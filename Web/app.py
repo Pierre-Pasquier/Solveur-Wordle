@@ -124,7 +124,7 @@ def daily(id):
 @app.route('/<id>/pl')
 def partie_libre(id):
     longueur_mot=8 #modif prochainement
-    nombre_dessais=10
+    nombre_dessais=8
     mot_à_deviner="FUSIONNE"
     return render_template('test_flask.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,nombre_dessais=nombre_dessais)
 
