@@ -30,8 +30,14 @@
               <p>
                 Dans ce mode de jeu, retrouvez le mot du jour afin de gagner de l'expérience!
               </p>
-              <p>1 tentative journalière restante / Vous avez déjà participé</p>
+              {%if bool==True%}
+              <p>Vous avez déjà participé aujourd'hui</p>
+              <button class="btn btn-primary" disabled style="background-color: rgb(235, 157, 56); border-color:rgb(209, 124, 12);">
+                <a style="color:#000000;" href='###'>Trouver le mot du jour</a></button>
+              {%else%}
+              <p>Il vous reste 1 tentative journalière</p>
               <button class="btn btn-primary"><a style="color:#000000;" href='###'>Trouver le mot du jour</a></button>
+              {%endif%}
               <br><br>
               {%if id_user==0 %}
               <button class="btn btn-primary" disabled style="background-color: rgb(235, 157, 56); border-color:rgb(209, 124, 12);">
