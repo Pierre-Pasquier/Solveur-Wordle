@@ -266,7 +266,7 @@ $(document).keyup(function (e)
                         $(childs[k]).toggle("fade");
                         }
                         });
-                        sleep(longueur_mot*600).then(()=>{
+                        sleep(longueur_mot*400).then(()=>{
                             removeAllChildNodes(mid);
                             sleep(100).then(()=>{
                                 var noeuds=[];

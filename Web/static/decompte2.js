@@ -20,7 +20,7 @@ let a = 0;
 let b=0;
 let c=0;
 
-const DimChrono = () =>{
+var DimChrono =setInterval(function(){
 
     TempsSurvécu ++ ; 
     minutes = parseInt(minutes);
@@ -32,10 +32,9 @@ const DimChrono = () =>{
         secondes = 60;
     }
     if(secondes == 0 && minutes == 0){
-        a=Math.floor(TempsSurvécu/60);
-        b= TempsSurvécu-Math.floor(TempsSurvécu/60)*60;
-        alert("Vous avez survécu : "+ a +" minute(s) " + b + " seconde(s)");
-        clearTimeout(DimChrono)
+        $(".notime").val(TempsSurvécu);
+        document.myform.submit();
+        clearInterval(DimChrono);
     }
     if(minutes<=2 && minutes>=1){
         chrono.className = 'circleO';
@@ -63,19 +62,13 @@ const DimChrono = () =>{
     if (b==1){
         c+=1;
     }
-    if (c==7){
+    if (c>longueur_mot*0.5){
         b=0;
         c=0;
+        histoire.innerHTML="";
     }
 
-    // Durée de l'animation de transition pour afficher le temps supplémentaire accordé
-    if((histoire.className == 'historiqueV' || histoire.className == 'historiqueR')&& b==1){
-        a=a+1;
-        if(a == 3){
-            histoire.innerHTML = "";
-            a=0;
-        }
-    }
+
 
 //    if(secondes==35){
 //        secondes-=40;
@@ -101,6 +94,6 @@ const DimChrono = () =>{
     }
     chrono.textContent = `${minutes}:${secondes}`;
 
-    setTimeout(DimChrono, 1000);
-} 
-DimChrono()
+
+},1000)
+

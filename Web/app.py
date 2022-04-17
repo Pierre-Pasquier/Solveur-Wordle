@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 import random
 import sqlite3
 from datetime import date,datetime
@@ -130,22 +130,26 @@ def partie_libre(id):
     return render_template('test_flask.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,nombre_dessais=nombre_dessais)
 
 
-@app.route('/<id>/survie')
+@app.route('/<id>/survie',methods=['GET','POST'])
 def mode_survie(id):
+    if request.method=='GET':
+        con = sqlite3.connect(database) 
+        cur = con.cursor()
+        cur.execute('SELECT mot FROM Mots')
+        tabmots=cur.fetchall()
+        mots=[tabmots[k][0] for k in range(len(tabmots))]
+        con.close()
 
-    con = sqlite3.connect(database) 
-    cur = con.cursor()
-    cur.execute('SELECT mot FROM Mots')
-    tabmots=cur.fetchall()
-    mots=[tabmots[k][0] for k in range(len(tabmots))]
-    con.close()
-
-    longueur_mot=random.randint(6,10)
-    con = sqlite3.connect(database) 
-    cur = con.cursor()
-    cur.execute('SELECT mot FROM Mots WHERE len_mot=?',(longueur_mot,))
-    tabchoice=cur.fetchall()
-    motlen=[tabchoice[k][0] for k in range(len(tabchoice))]
-    borne=random.randint(0,len(motlen)-1)
-    mot_à_deviner=motlen[borne]
-    return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots , id_user=id)
+        longueur_mot=random.randint(6,10)
+        con = sqlite3.connect(database) 
+        cur = con.cursor()
+        cur.execute('SELECT mot FROM Mots WHERE len_mot=?',(longueur_mot,))
+        tabchoice=cur.fetchall()
+        motlen=[tabchoice[k][0] for k in range(len(tabchoice))]
+        borne=random.randint(0,len(motlen)-1)
+        mot_à_deviner=motlen[borne]
+        return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots , id_user=id)
+    else :
+        temps=request.form.get('tempssurvie')
+        ##modif bd
+        return redirect(url_for('home'))
