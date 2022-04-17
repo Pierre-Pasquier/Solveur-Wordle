@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{%extends "templatepage.html"%}
+{%block content%}
     <link href="{{url_for('static',filename='styles.css')}}" rel="stylesheet">
     <title>Document</title>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/ui-lightness/jquery-ui.css" />
@@ -13,12 +9,6 @@ var longueur_mot={{longueur_mot}};
 var nombre_dessais=10;
 var mots={{mots|safe}};
     </script>
- 
-
-
-
-</head>
-<body>
     <div class="mid">
         <p>Titre (un peu bancal)(Endroit ou les cases apparaîtront)</p>
         {%for i in range(0,10)%}
@@ -37,5 +27,4 @@ var mots={{mots|safe}};
     <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
 
     <script src="{{url_for('static', filename='survie.js')}}"></script>
-</body>
-</html>
+{%endblock%}
