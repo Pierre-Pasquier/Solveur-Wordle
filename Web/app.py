@@ -61,7 +61,7 @@ def home():
     if id is None or id=='' or id=='0':
         return render_template('home.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') #voir un paramètre de disable ? permettant de disable telle ou telle option comme
     con = sqlite3.connect(database)                         #les historiques puisque liés au compte? ATTENTION : faudra faire gaffe niveau bd à ne pas save les parties guests
-    cur = con.cursor()                                      #faut pas que j'oublie de mettre guest.png sur git (manuellement bcz pas sur la vm)
+    cur = con.cursor()                                      
     cur.execute('SELECT pseudo,xp,date_dernier_essai FROM Profil WHERE id= ?',(id,))
     tab=cur.fetchall()
     con.close()
@@ -118,7 +118,8 @@ def daily(id):
     con.commit()
     con.close()
     ###puis on render la page de partie, dans laquelle il faudra en sortie mettre à jour la bd pour compléter la partie en historique
-    ###voir pour résultat dans la page historique : exemple partie quittée en cours -> partie pas complétée donc vide?
+    ###voir pour résultat dans la page historique : exemple partie quittée en cours -> partie pas complétée donc vide? -> 
+    ###-> possibilité de ne pas prendre en compte les parties vides à l'affichage de l'historique
     return render_template('daily.html',id_user=id,pseudo=joueur[0][0],pourcent=pourcentlvlup(joueur[0][1]),badge=badgetab[niveau(joueur[0][1])],longueur_mot=lenmot, mot_à_deviner=guessmot, nombre_dessai=6)
 
 @app.route('/<id>/pl')
@@ -147,4 +148,4 @@ def mode_survie(id):
     motlen=[tabchoice[k][0] for k in range(len(tabchoice))]
     borne=random.randint(0,len(motlen)-1)
     mot_à_deviner=motlen[borne]
-    return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots)
+    return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots , id_user=id)
