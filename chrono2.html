@@ -43,7 +43,7 @@
             color: rgb(50, 204, 50);
             text-align: center;
             animation-name: spawntime;
-            animation-duration: 2000ms;
+            animation-duration: 4000ms;
             animation-iteration-count: infinite;
         }
         .historiqueR{
@@ -67,7 +67,7 @@
 </head>
 <body>
     <h1 class="colorG" id="test">
-        Temps restant avant de se faire pomper par Thomas dans les chiottes:
+        Temps restant :
     </h1>
     <h1>
         <div class="circleG" id="chrono" >
@@ -78,5 +78,5 @@
         </div>
     </h1>
 
-    <script src="decompte2.js"></script>
+    <script src="{{ url_for('static', filename='decompte2.js') }}"></script>
 </body>

@@ -17,6 +17,8 @@ for (var k=1;k<10;k++){
 }
 var histoire = document.getElementById("background");
 let a = 0;
+let b=0;
+let c=0;
 
 const DimChrono = () =>{
 
@@ -46,16 +48,28 @@ const DimChrono = () =>{
 
     //ici on mettra les condition pour augmenter le temps ou le diminuer:
     if (inc=='f' && ((secondes>=0 && minutes >0)||(secondes>0 && minutes==0))){
-        temp_min=historique[longueur_mot-6][0]+bonus_essais[étape-1][0];
-        temp_sec=historique[longueur_mot-6][1]+bonus_essais[étape-1][1];
-        temp_min+=Math.floor(temp_sec/60);
-        temp_sec=temp_sec%60;
-        console.log("Chgt");
-        console.log(longueur_mot);
+        if (b==0){  /** On regarde pour effectuer le changement au bon moment avec la bonne valeur de la longueur du mot */
+            temp_min=historique[longueur_mot-6][0]+bonus_essais[étape-1][0];
+            temp_sec=historique[longueur_mot-6][1]+bonus_essais[étape-1][1];
+            temp_min+=Math.floor(temp_sec/60);
+            temp_sec=temp_sec%60;
+            b=1;
+            secondes+=temp_sec;
+            minutes+=temp_min;
+            histoire.innerHTML="+ " + temp_min+" min "+temp_sec+" s";
+        }
+
+    }
+    if (b==1){
+        c+=1;
+    }
+    if (c==7){
+        b=0;
+        c=0;
     }
 
     // Durée de l'animation de transition pour afficher le temps supplémentaire accordé
-    if(histoire.className == 'historiqueV' || histoire.className == 'historiqueR'){
+    if((histoire.className == 'historiqueV' || histoire.className == 'historiqueR')&& b==1){
         a=a+1;
         if(a == 3){
             histoire.innerHTML = "";

@@ -142,7 +142,7 @@ display: inline-block;
     color: rgb(50, 204, 50);
     text-align: center;
     animation-name: spawntime;
-    animation-duration: 3000ms;
+    animation-duration: 4000ms;
     animation-iteration-count: infinite;
 }
 .historiqueR{
