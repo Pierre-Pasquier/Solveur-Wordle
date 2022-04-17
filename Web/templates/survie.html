@@ -9,8 +9,15 @@ var longueur_mot={{longueur_mot}};
 var nombre_dessais=10;
 var mots={{mots|safe}};
     </script>
+    <div class="top">
+    <div class="circleG" id="chrono" >
+                00:00
+    </div>
+    <div  class="historique" id="background">
+                 
+    </div>
+</div>
     <div class="mid">
-        <p>Titre (un peu bancal)(Endroit ou les cases apparaîtront)</p>
         {%for i in range(0,10)%}
             {%for j in range(0,longueur_mot)%}
             <input type='text' name='letter' class='case' maxlength='1' autocomplete="off" disabled> 
@@ -27,4 +34,5 @@ var mots={{mots|safe}};
     <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
 
     <script src="{{url_for('static', filename='survie.js')}}"></script>
+    <script src="{{ url_for('static', filename='decompte2.js') }}"></script>
 {%endblock%}

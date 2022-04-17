@@ -27,11 +27,9 @@ input.case.y{
 }
 
 .mid{
-    margin-top: 75px ;
+    margin-top: 20px ;
     margin-left : 20%;
     margin-right : 20%;
-    border: solid .5px gray;
-    border-radius:12px;
     padding: 20px;
     text-align: center;
 
@@ -93,7 +91,83 @@ input.case.y{
 
 
 
-
+.circleR{
+    font-size: 28px;
+    height:60px;
+    margin-top: 80px;
+    text-shadow: 2px 2px 2px rgb(240, 9, 9);
+    color: red;
+    border: solid 6px rgb(240, 4, 4);
+    border-radius: 20px;
+    text-align: center;
+    background-color: rgb(1, 7, 17);
+    margin-left: 43%;
+    margin-right: 43%;
+}
+.circleO{
+    font-size: 28px;
+    height:60px;
+    margin-top: 80px;
+    text-shadow: 2px 2px 2px rgb(240, 9, 9);
+    color: red;
+    border: solid 6px rgb(240, 138, 4);
+    border-radius: 20px;
+    text-align: center;
+    background-color: rgb(1, 7, 17);
+    margin-left: 43%;
+    margin-right: 43%;
+}
+.circleG{
+    font-size: 28px;
+    height:60px;
+    margin-top: 80px;
+    text-shadow: 2px 2px 2px rgb(240, 9, 9);
+    color: red;
+    border: solid 6px rgb(12, 255, 12);
+    border-radius: 20px;
+    text-align: center;
+    background-color: rgb(1, 7, 17);
+    margin-left: 43%;
+    margin-right: 43%;
+}
+.colorG{
+    color: rgb(2, 0, 128);
+}
+.bloc {
+display: inline-block;
+}       
+.historiqueV{
+    font-weight: bold;
+    font-size: 20px;
+    color: rgb(50, 204, 50);
+    text-align: center;
+    animation-name: spawntime;
+    animation-duration: 3000ms;
+    animation-iteration-count: infinite;
+}
+.historiqueR{
+    font-weight: bold;
+    font-size: 20px;
+    color :rgb(240, 4, 4);
+    text-align: center;
+    animation-name: spawntime;
+    animation-duration: 4000ms;
+    animation-iteration-count: infinite;
+}
+@keyframes spawntime {
+    0%{
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    100%{
+        transform: translateX(0px);
+        opacity: 1;
+        }
+}
+.top{
+    height:50px;
+    text-align: center;
+}
 
 
 
