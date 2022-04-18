@@ -8,6 +8,25 @@ function testcase(step){
     }
     return true;
 }
+function newlen(){
+    var p=Math.random();
+    if (p>=0 && p<0.3){
+    return 6
+    }
+    else if (p>=0.3 && p<0.55){
+    return 7
+    }
+    
+    else if (p>=0.55 && p<0.75){
+    return 8
+    }
+    else if (p>=0.75 && p<0.9){
+    return 9
+    }   
+    else{
+    return 10
+    }
+}
 function check_win(mot){
     return mot==mot_à_deviner;
 }
@@ -171,7 +190,7 @@ function removeAllChildNodes(parent) {
 }
 
 function genere(){
-    var long=Math.floor(Math.random() * 5) + 6;
+    var long=newlen();
     var newmots=[];
     for (var k=0;k<mots.length;k++){
         if (mots[k].length==long){

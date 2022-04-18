@@ -6,6 +6,29 @@ from datetime import date,datetime
 app = Flask(__name__)
 database= "db_projetS1test.db"
 
+def newlen():
+    p=random.random()
+    if p>=0 and p<0.3:
+        return 6
+    elif p>=0.3 and p<0.55:
+        return 7
+    elif p>=0.55 and p<0.75:
+        return 8
+    elif p>=0.75 and p<0.9:
+        return 9
+    else:
+        return 10
+
+def update_xp(id,xpgain):
+    con=sqlite3.connect(database)
+    cur=con.cursor()
+    cur.execute("SELECT xp FROM Profil WHERE id=?",(id,))
+    xp=cur.fetchall()[0][0]
+    cur.execute("UPDATE Profil SET xp=? AND niveau=? WHERE id=?",(xp+xpgain,niveau(xp+xpgain),id,))
+    con.commit()
+    con.close()
+
+
 xptab = [300*i for i in range(0,30)]
 badgetab = ['grisbadge1.png','grisbadge2.png','grisbadge3.png','grisbadge4.png','grisbadge5.png','jaunbadge1.png','jaunbadge2.png','jaunbadge3.png','jaunbadge4.png','jaunbadge5.png','verbadge1.png','verbadge2.png','verbadge3.png','verbadge4.png','verbadge5.png','bronzbadge1','bronzbadge2.png','bronzbadge3.png','bronzbadge4.png','bronzbadge5.png','arjanbadge1.png','arjanbadge2.png','arjanbadge3.png','arjanbadge4.png','arjanbadge5.png','goldbadge1.png','goldbadge2.png','goldbadge3.png','goldbadge4.png','goldbadge5.png']
 
@@ -152,7 +175,7 @@ def mode_survie(id):
         mots=[tabmots[k][0] for k in range(len(tabmots))]
         con.close()
 
-        longueur_mot=random.randint(6,10)
+        longueur_mot=newlen()
         con = sqlite3.connect(database) 
         cur = con.cursor()
         cur.execute('SELECT mot FROM Mots WHERE len_mot=?',(longueur_mot,))
@@ -164,5 +187,6 @@ def mode_survie(id):
     else :
         temps=request.form.get('tempssurvie')
         ##modif bd
+        gainxp=(temps-300)//60
         print(temps)
         return redirect(f"/home?id={id}")
