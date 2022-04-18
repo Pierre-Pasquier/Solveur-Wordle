@@ -1,5 +1,5 @@
 let chrono = document.getElementById("chrono");
-let minutes =1
+let minutes =5
 let secondes =1
 let TempsSurvécu = -1
 var temp_min=0;
