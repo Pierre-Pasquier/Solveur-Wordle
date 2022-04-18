@@ -7,10 +7,10 @@
 var mot_à_deviner="{{mot_à_deviner}}";
 var longueur_mot={{longueur_mot}};
 var nombre_dessais={{nombre_dessais}};
+var mots={{mots|safe}};
     </script>
  
     <div class="mid">
-        <p>Titre (un peu bancal)(Endroit ou les cases apparaîtront)</p>
         {%for i in range(0,nombre_dessais)%}
             {%for j in range(0,longueur_mot)%}
             <input type='text' name='letter' class='case' maxlength='1' autocomplete="off" disabled> 
@@ -18,6 +18,12 @@ var nombre_dessais={{nombre_dessais}};
             <br>
         {%endfor%}
 
+    </div>
+    <div class="hidden">
+        <form method="POST" name="myform">
+            <input type="text" name="pattern" class="pattern">
+        </form>
+    
     </div>
 
 

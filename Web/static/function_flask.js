@@ -159,6 +159,9 @@ function change_colors(ell,sequence){
 
    
 }
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 
 
@@ -204,6 +207,10 @@ $(document).keyup(function (e)
        else if (e.keyCode==13){
            if (inc!='f'){
             if (testcase(étape)){
+                var begining=get_cases(étape);
+                var dico=const_mot(begining);
+                if (mots.includes(dico)){
+
                if (étape+1<nombre_dessais){
                    étape+=1;
                    var ell1=get_cases(étape-1);
@@ -228,6 +235,17 @@ $(document).keyup(function (e)
                        var seq=sequence(guess,copy);
                        change_colors(ell1,seq);
                        inc='f'; /**On met inc à 'f' pour finir la partie */
+                       var pattern=[];
+                       var temp_mot="";
+                       var ell=[];
+                       for (var k=0;k<étape;k++){
+                           ell=get_cases(k);
+                           temp_mot=const_mot(ell);
+                           pattern.push(temp_mot);
+
+                       }
+                       $(".pattern").val(pattern);
+                       sleep(longueur_mot*310).then(() => document.myform.submit());
 
                    }
                }
@@ -241,17 +259,42 @@ $(document).keyup(function (e)
                        var seq=sequence(check,copy);
                        change_colors(ell1,seq);
                        inc='f';
+                       var pattern=[];
+                       var temp_mot="";
+                       var ell=[];
+                       for (var k=0;k<étape;k++){
+                           ell=get_cases(k);
+                           temp_mot=const_mot(ell);
+                           pattern.push(temp_mot);
+
+                       }
+                       $(".pattern").val(pattern);
+                       sleep(longueur_mot*310).then(() => document.myform.submit());
                    }
                    else{
                        /**Cas de défaite, nbr de trys dépassé */
                        inc='f';
                        console.log("Perdu");
+                       var pattern=[];
+                       var temp_mot="";
+                       var ell=[];
+                       for (var k=0;k<étape;k++){
+                           ell=get_cases(k);
+                           temp_mot=const_mot(ell);
+                           pattern.push(temp_mot);
+
+                       }
+                       $(".pattern").val(pattern);
+                       sleep(longueur_mot*310).then(() => document.myform.submit());
 
                    }
                }
 
 
-
+            }
+            else{
+                alert("Le mot saisi n'est pas dans notre dictionnaire");
+            }
 
 
            }

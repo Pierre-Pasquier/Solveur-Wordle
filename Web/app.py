@@ -122,12 +122,24 @@ def daily(id):
     ###-> possibilité de ne pas prendre en compte les parties vides à l'affichage de l'historique
     return render_template('daily.html',id_user=id,pseudo=joueur[0][0],pourcent=pourcentlvlup(joueur[0][1]),badge=badgetab[niveau(joueur[0][1])],longueur_mot=lenmot, mot_à_deviner=guessmot, nombre_dessai=6)
 
-@app.route('/<id>/pl')
+@app.route('/<id>/pl',methods=['GET','POST'])
 def partie_libre(id):
-    longueur_mot=8 #modif prochainement
-    nombre_dessais=8
-    mot_à_deviner="FUSIONNE"
-    return render_template('test_flask.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,nombre_dessais=nombre_dessais)
+    if request.method=='GET':
+        con = sqlite3.connect(database) 
+        cur = con.cursor()
+        cur.execute('SELECT mot FROM Mots')
+        tabmots=cur.fetchall()
+        mots=[tabmots[k][0] for k in range(len(tabmots))]
+        con.close()
+        longueur_mot=8 #modif prochainement,gérer avec le formulaire de home
+        nombre_dessais=8
+        mot_à_deviner="FUSIONNE"
+        return render_template('test_flask.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,nombre_dessais=nombre_dessais,id_user=id,mots=mots)
+    else :
+        pattern=request.form.get('pattern')
+        #modif bd
+        print(pattern) ##pour tester
+        return redirect(f"/home?id={id}")
 
 
 @app.route('/<id>/survie',methods=['GET','POST'])

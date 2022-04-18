@@ -26,8 +26,16 @@ input.case.y{
     background-color:gold;
 }
 
-.mid{
+.midsurvie{
     margin-top: 20px ;
+    margin-left : 20%;
+    margin-right : 20%;
+    padding: 20px;
+    text-align: center;
+
+}
+.mid{
+    margin-top: 80px ;
     margin-left : 20%;
     margin-right : 20%;
     padding: 20px;
