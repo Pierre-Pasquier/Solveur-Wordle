@@ -1,6 +1,6 @@
 let chrono = document.getElementById("chrono");
-let minutes =5
-let secondes =0
+let minutes =1
+let secondes =1
 let TempsSurvécu = -1
 var temp_min=0;
 var temp_sec=0;
@@ -31,7 +31,8 @@ var DimChrono =setInterval(function(){
         minutes--;
         secondes = 60;
     }
-    if(secondes == 0 && minutes == 0){
+    secondes = secondes -1
+    if(secondes == 1 && minutes == 0){
         $(".notime").val(TempsSurvécu);
         document.myform.submit();
         clearInterval(DimChrono);
@@ -42,8 +43,11 @@ var DimChrono =setInterval(function(){
     if(minutes<1 ){
         chrono.className = 'circleR';
     }
+    if(minutes>2){
+        chrono.className= 'circleG';
+    }
 
-    secondes = secondes -1
+
 
     //ici on mettra les condition pour augmenter le temps ou le diminuer:
     if (inc=='f' && ((secondes>=0 && minutes >0)||(secondes>0 && minutes==0))){
