@@ -258,7 +258,7 @@ $(document).keyup(function (e)
                        var seq=sequence(guess,copy);
                         change_colors(ell1,seq); /** C'est là qu'on génère un nouveau mot */
                        inc='f'; /**On met inc à 'f' pour finir la partie */
-                       var mid=document.querySelector('.mid');
+                       var mid=document.querySelector('.midsurvie');
                        sleep(longueur_mot*300).then(()=>{
                         
                         var childs=mid.childNodes;

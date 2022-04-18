@@ -164,4 +164,5 @@ def mode_survie(id):
     else :
         temps=request.form.get('tempssurvie')
         ##modif bd
-        return redirect(url_for('home'))
+        print(temps)
+        return redirect(f"/home?id={id}")

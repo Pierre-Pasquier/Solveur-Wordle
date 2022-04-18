@@ -1,7 +1,7 @@
 let chrono = document.getElementById("chrono");
 let minutes =5
 let secondes =1
-let TempsSurvécu = -1
+let TempsSurvécu = 0
 var temp_min=0;
 var temp_sec=0;
 var historique=new Array();
