@@ -66,7 +66,7 @@ var DimChrono =setInterval(function(){
     if (b==1){
         c+=1;
     }
-    if (c>longueur_mot*0.5){
+    if (c==6){
         b=0;
         c=0;
         histoire.innerHTML="";

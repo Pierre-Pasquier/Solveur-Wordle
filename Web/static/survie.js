@@ -259,14 +259,14 @@ $(document).keyup(function (e)
                         change_colors(ell1,seq); /** C'est là qu'on génère un nouveau mot */
                        inc='f'; /**On met inc à 'f' pour finir la partie */
                        var mid=document.querySelector('.midsurvie');
-                       sleep(longueur_mot*300).then(()=>{
+                       sleep(3000).then(()=>{
                         
                         var childs=mid.childNodes;
                         for (var k=0;k<childs.length;k++){
                         $(childs[k]).toggle("fade");
                         }
                         });
-                        sleep(longueur_mot*400).then(()=>{
+                        sleep(4000).then(()=>{
                             removeAllChildNodes(mid);
                             sleep(100).then(()=>{
                                 var noeuds=[];
