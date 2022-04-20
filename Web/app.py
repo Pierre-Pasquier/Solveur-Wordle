@@ -238,8 +238,9 @@ def mode_survie(id):
     else :
         temps=request.form.get('tempssurvie')
         ##modif bd
-        gainxp=(temps-300)//60
+        gainxp=((int(temps)-300)//60)*10
         print(temps)
+        print(gainxp)
         return redirect(f"/home?id={id}")
 
 
