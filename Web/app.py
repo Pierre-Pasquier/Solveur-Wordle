@@ -4,7 +4,7 @@ import sqlite3
 from datetime import date,datetime
 
 app = Flask(__name__)
-database= "db_projetS1.db"
+database= "db_projetS1test.db"
 
 def newlen():
     p=random.random()
