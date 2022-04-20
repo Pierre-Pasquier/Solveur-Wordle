@@ -4,7 +4,7 @@ import sqlite3
 from datetime import date,datetime
 
 app = Flask(__name__)
-database= "db_projetS1test.db"
+database= "db_projetS1.db"
 
 def newlen():
     p=random.random()
@@ -99,65 +99,102 @@ def daily(id):
     ###d'abord verif si mot du jour existe (joueur ayant déjà joué today) et récup
     ###sinon générer mot random (et sa longueur)
     ###cas guest à voir, car idk comment enregistrer fait ou pas fait du daily (empecher sans connexion? sad)
-    if id is None or id=='' or id=='0':
-        return render_template('home.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') 
-    
-    con = sqlite3.connect(database)                         
-    cur = con.cursor()                                      
-    cur.execute('SELECT pseudo,xp,date_dernier_essai FROM Profil WHERE id= ?',(id,))
-    joueur=cur.fetchall()
-    con.close()
+    if request.method=='GET':
+        if id is None or id=='' or id=='0':
+            return render_template('home.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') 
+        
+        con = sqlite3.connect(database)                         
+        cur = con.cursor()                                      
+        cur.execute('SELECT pseudo,xp,date_dernier_essai FROM Profil WHERE id= ?',(id,))
+        joueur=cur.fetchall()
+        con.close()
 
-    today = date.today().strftime("%Y-%m-%d")
-    con = sqlite3.connect(database)
-    cur = con.cursor()
-    cur.execute('SELECT mot_a_deviner FROM Historique WHERE date=? AND type=?',(today,'daily',))
-    tab = cur.fetchall()
-    con.close()
-    a_generer = (tab==[])
-    if a_generer:
-        ###on génère un mot 
-        guessmot = "MEILLEUR"
-        lenmot=8
+        today = date.today().strftime("%Y-%m-%d")
+        con = sqlite3.connect(database)
+        cur = con.cursor()
+        cur.execute('SELECT mot_a_deviner FROM Historique WHERE date=? AND type=?',(today,'daily',))
+        tab = cur.fetchall()
+        con.close()
+        a_generer = (tab==[])
+        if a_generer:
+            ###on génère un mot 
+            guessmot = "MEILLEUR"
+            lenmot=8
+        else:
+            guessmot = tab[0][0]
+        ###là on crée les valeurs à rentrer dans la bd
+        heure = datetime.now().strftime("%H:%M:%S")
+        con = sqlite3.connect(database)
+        cur = con.cursor()
+        cur.execute('Select MAX(SELECT id FROM Historique WHERE id_joueur=? AND type=?) FROM Sondages',(id,'daily',))
+        idpartie=cur.fetchall()[0][0] + 1
+        con.close()
+        ###ensuite on pré-génère la partie dans la bd
+        con = sqlite3.connect(database)
+        cur = con.cursor()
+        cur.execute('Insert into Historique values(?,"daily",?,?,?,?,?)',(idpartie,id,[],guessmot,today,heure))
+        con.commit()
+        con.close()
+        ###maintenant on va changer la date du dernier essai de daily du joueur
+        con = sqlite3.connect(database)
+        cur = con.cursor()
+        cur.execute('UPDATE Profil SET date_dernier_essai=? WHERE id=?',(today,id,))
+        con.commit()
+        con.close()
+        ###puis on render la page de partie, dans laquelle il faudra en sortie mettre à jour la bd pour compléter la partie en historique
+        ###voir pour résultat dans la page historique : exemple partie quittée en cours -> partie pas complétée donc vide? -> 
+        ###-> possibilité de ne pas prendre en compte les parties vides à l'affichage de l'historique
+        return render_template('daily.html',id_user=id,pseudo=joueur[0][0],pourcent=pourcentlvlup(joueur[0][1]),badge=badgetab[niveau(joueur[0][1])],longueur_mot=lenmot, mot_à_deviner=guessmot, nombre_dessai=6)
     else:
-        guessmot = tab[0][0]
-    ###là on crée les valeurs à rentrer dans la bd
-    heure = datetime.now().strftime("%H:%M:%S")
-    con = sqlite3.connect(database)
-    cur = con.cursor()
-    cur.execute('Select MAX(SELECT id FROM Historique WHERE id_joueur=? AND type=?) FROM Sondages',(id,'daily',))
-    idpartie=cur.fetchall()[0][0] + 1
-    con.close()
-    ###ensuite on pré-génère la partie dans la bd
-    con = sqlite3.connect(database)
-    cur = con.cursor()
-    cur.execute('Insert into Historique values(?,"daily",?,?,?,?,?)',(idpartie,id,[],guessmot,today,heure))
-    con.commit()
-    con.close()
-    ###maintenant on va changer la date du dernier essai de daily du joueur
-    con = sqlite3.connect(database)
-    cur = con.cursor()
-    cur.execute('UPDATE Profil SET date_dernier_essai=? WHERE id=?',(today,id,))
-    con.commit()
-    con.close()
-    ###puis on render la page de partie, dans laquelle il faudra en sortie mettre à jour la bd pour compléter la partie en historique
-    ###voir pour résultat dans la page historique : exemple partie quittée en cours -> partie pas complétée donc vide? -> 
-    ###-> possibilité de ne pas prendre en compte les parties vides à l'affichage de l'historique
-    return render_template('daily.html',id_user=id,pseudo=joueur[0][0],pourcent=pourcentlvlup(joueur[0][1]),badge=badgetab[niveau(joueur[0][1])],longueur_mot=lenmot, mot_à_deviner=guessmot, nombre_dessai=6)
+        ###voir ici pour la méthode post, aka potentiellement le retour de la partie?
+        return redirect(f"/home?id={id}")
 
 @app.route('/<id>/pl',methods=['GET','POST'])
 def partie_libre(id):
-    if request.method=='GET':
+    ###partie de récupération des paramètres pour template
+    if id is None or id=='' or id=='0':
+        return render_template('home.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') 
+    con = sqlite3.connect(database)                         
+    cur = con.cursor()                                      
+    cur.execute('SELECT pseudo,xp FROM Profil WHERE id= ?',(id,))
+    tab=cur.fetchall()
+    con.close()
+    ###fin récup
+    if request.method=='POST':
+        ###besoin de post pour lancer partie (car params de home) et pour récup partie (résultats)
+        ###partie de vérif si on vient d'une partie terminée
+        pattern=request.form.get("pattern")
+        print(pattern)
+        if not pattern is None:
+            return redirect(f"/home?id={id}")
+            #ici faut modif la bd
+        ###fin de vérif
+        ###partie de récupération des paramètres du home
+        if request.form.get("lenmot") and request.form.get("nbrguess"):
+            lenmot = int(request.form.get("lenmot"))
+            nbrguess = int(request.form.get("nbrguess"))
+            ###sous partie pour aléatoire et selon mot :
+            if lenmot==-1:
+                lenmot = random.randrange(6,11)
+            if nbrguess==-1:
+                nbrguess = random.randrange(6,11)
+            if nbrguess==-2:
+                nbrguess = lenmot
+        else:
+            lenmot = random.randrange(6,11)
+            nbrguess= lenmot
+        ###fin de la récupération, ajout ci dessous de l'utilisation des params
         con = sqlite3.connect(database) 
         cur = con.cursor()
-        cur.execute('SELECT mot FROM Mots')
+        cur.execute('SELECT mot FROM Mots WHERE len_mot=?',(lenmot,))
         tabmots=cur.fetchall()
         mots=[tabmots[k][0] for k in range(len(tabmots))]
         con.close()
-        longueur_mot=8 #modif prochainement,gérer avec le formulaire de home
-        nombre_dessais=8
-        mot_à_deviner="FUSIONNE"
-        return render_template('test_flask.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,nombre_dessais=nombre_dessais,id_user=id,mots=mots)
+        ###sélection aléatoire dans la table des mots de longeurs lenmot :
+        i = random.randrange(0,len(mots))
+        mot_à_deviner = mots[i]
+        ###
+        return render_template('test_flask.html',longueur_mot=lenmot,mot_à_deviner=mot_à_deviner,nombre_dessais=nbrguess,mots=mots,id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])])
     else :
         pattern=request.form.get('pattern')
         #modif bd
