@@ -340,36 +340,62 @@ $(document).keyup(function (e)
                else{
                    var copy=mot_à_deviner.slice();
                    var ell1=get_cases(étape);
-                   var check=const_mot(ell1);
-                   if (check_win(check)){
+                   var guess=const_mot(ell1);
+                   if (check_win(guess)){
                        /** Victoire sur le dernier try */
                        var copy=mot_à_deviner.slice();
-                       var seq=sequence(check,copy);
-                       change_colors(ell1,seq);
-                       inc='f';
-                       sleep(longueur_mot*300).then(()=>{
-                        var parent=document.querySelector('.mid');
-                        var childs=parent.childNodes;
+                       var seq=sequence(guess,copy);
+                        change_colors(ell1,seq); /** C'est là qu'on génère un nouveau mot */
+                       inc='f'; /**On met inc à 'f' pour finir la partie */
+                       var mid=document.querySelector('.midsurvie');
+                       sleep(3000).then(()=>{
+                        
+                        var childs=mid.childNodes;
                         for (var k=0;k<childs.length;k++){
                         $(childs[k]).toggle("fade");
                         }
                         });
+                        sleep(4000).then(()=>{
+                            removeAllChildNodes(mid);
+                            sleep(100).then(()=>{
+                                var noeuds=[];
+                                var ajout=[];
+                                for (var i=0;i<10;i++){
+                                    ajout=[];
+                                    for (var j=0;j<longueur_mot;j++){
+                                        ajout.push(document.createElement("input"));
+                                        console.log("crée");
+                                        
+                                        
+        
+                                        
+                                    }
+                                    noeuds.push(ajout);
+                                }
+                                for (var i=0;i<10;i++){
+                                    for (var j=0;j<longueur_mot;j++){
+                                        noeuds[i][j].type="text";
+                                        noeuds[i][j].name=i+'f'+j;
+                                        noeuds[i][j].autocomplete="off";
+                                        noeuds[i][j].className="case";
+                                        noeuds[i][j].maxLength=1;
+                                        noeuds[i][j].disabled=true;
+                                        noeuds[i][j].display="none";
+                                        mid.appendChild(noeuds[i][j]);
+                                        mid.append(" ");
+                                    }
+                                    mid.appendChild(document.createElement("br"));
+
+                                }
+
+                                inc=-1;
+                                étape=0;});
+                        });
+                        sleep(1000).then(()=>{
                         mot_à_deviner=genere();
-                        longueur_mot=mot_à_deviner.length;
-                        var input=document.createElement('input');
-                        for (var i=0;i<10;i++){
-                            for (var j=0;j<longueur_mot;j++){
-                                input.type='text';
-                                input.class='case';
-                                input.name=i.toString()+'f'+j.toString();
-                                input.maxLength='1';
-                                input.autocomplete='off';
-                                parent.appendChild(input);
-                            }
-                        }
-                        inc=-1;
-                        étape=0;
-                   }
+                        console.log(mot_à_deviner); /** On laisse pour l'instant pour les tests */
+                        longueur_mot=mot_à_deviner.length;})}
+
                    else{
                        /**Cas de défaite, nbr de trys dépassé */
                        inc='f';
