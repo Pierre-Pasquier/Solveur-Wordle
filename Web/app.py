@@ -118,8 +118,16 @@ def daily(id):
         a_generer = (tab==[])
         if a_generer:
             ###on génère un mot 
-            guessmot = "MEILLEUR"
-            lenmot=8
+            lenmot = random.randrange(6,11) ###à la limite, ici on peut décider de l'aléatoire de la longueur du mot
+            nbrguess= lenmot
+            con = sqlite3.connect(database) 
+            cur = con.cursor()
+            cur.execute('SELECT mot FROM Mots WHERE len_mot=?',(lenmot,))
+            tabmots=cur.fetchall()
+            mots=[tabmots[k][0] for k in range(len(tabmots))]
+            con.close()
+            i = random.randrange(0,len(mots))
+            guessmot = mots[i]
         else:
             guessmot = tab[0][0]
         ###là on crée les valeurs à rentrer dans la bd
@@ -144,7 +152,7 @@ def daily(id):
         ###puis on render la page de partie, dans laquelle il faudra en sortie mettre à jour la bd pour compléter la partie en historique
         ###voir pour résultat dans la page historique : exemple partie quittée en cours -> partie pas complétée donc vide? -> 
         ###-> possibilité de ne pas prendre en compte les parties vides à l'affichage de l'historique
-        return render_template('daily.html',id_user=id,pseudo=joueur[0][0],pourcent=pourcentlvlup(joueur[0][1]),badge=badgetab[niveau(joueur[0][1])],longueur_mot=lenmot, mot_à_deviner=guessmot, nombre_dessai=6)
+        return render_template('test_flask.html',id_user=id,pseudo=joueur[0][0],pourcent=pourcentlvlup(joueur[0][1]),badge=badgetab[niveau(joueur[0][1])],longueur_mot=lenmot, mot_à_deviner=guessmot, nombre_dessai=nbrguess)
     else:
         ###voir ici pour la méthode post, aka potentiellement le retour de la partie?
         return redirect(f"/home?id={id}")
@@ -181,7 +189,7 @@ def partie_libre(id):
             if nbrguess==-2:
                 nbrguess = lenmot
         else:
-            lenmot = random.randrange(6,11)
+            lenmot = random.randrange(6,11) ##à la limite, ici on peut décider de l'aléatoire de la longueur du mot
             nbrguess= lenmot
         ###fin de la récupération, ajout ci dessous de l'utilisation des params
         con = sqlite3.connect(database) 
@@ -218,7 +226,7 @@ def mode_survie(id):
         cur.execute('SELECT mot FROM Mots WHERE len_mot=?',(longueur_mot,))
         tabchoice=cur.fetchall()
         motlen=[tabchoice[k][0] for k in range(len(tabchoice))]
-        borne=random.randint(0,len(motlen)-1)
+        borne=random.randint(0,len(motlen)-1) ##à la limite, ici on peut décider de l'aléatoire de la longueur du mot?
         mot_à_deviner=motlen[borne]
         return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots , id_user=id)
     else :
