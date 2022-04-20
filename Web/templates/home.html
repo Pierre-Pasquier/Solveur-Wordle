@@ -84,7 +84,7 @@
               </p>
                 <button class="btn btn-primary"><a style="color:#000000;" href="{{url_for('mode_survie',id=id_user)}}">Prêt, feu, partez !</a></button>
               <br><br>
-              <button class="btn btn-primary"><a style="color:#000000;" href='###'>Classement</a></button>
+              <button class="btn btn-primary"><a style="color:#000000;" href='{{url_for("classement",id=id_user)}}'>Classement</a></button>
               <br><br>
               {%if id_user==0 %}
               <button class="btn btn-primary" disabled style="background-color: rgb(235, 157, 56); border-color:rgb(209, 124, 12);">
