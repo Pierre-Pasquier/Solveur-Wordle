@@ -275,10 +275,12 @@ $(document).keyup(function (e)
                        /**Cas de défaite, nbr de trys dépassé */
                        inc='f';
                        console.log("Perdu");
+                       var seq=sequence(check,copy);
+                       change_colors(ell1,seq);
                        var pattern=[];
                        var temp_mot="";
                        var ell=[];
-                       for (var k=0;k<étape;k++){
+                       for (var k=0;k<nombre_dessais;k++){
                            ell=get_cases(k);
                            temp_mot=const_mot(ell);
                            pattern.push(temp_mot);

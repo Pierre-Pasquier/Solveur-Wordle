@@ -6,17 +6,17 @@ from datetime import date,datetime
 app = Flask(__name__)
 database= "db_projetS1test.db"
 
-def newlen():
+def newlen(): ### fonction qui renvoie une longueur avec 
     p=random.random()
-    if p>=0 and p<0.3:
+    if p>=0 and p<0.3: # 30% : 6
         return 6
-    elif p>=0.3 and p<0.55:
+    elif p>=0.3 and p<0.55: #25% : 7
         return 7
-    elif p>=0.55 and p<0.75:
+    elif p>=0.55 and p<0.75: #20% : 8
         return 8
-    elif p>=0.75 and p<0.9:
+    elif p>=0.75 and p<0.9: #15% : 9
         return 9
-    else:
+    else:  #10% : 10
         return 10
 
 def update_xp(id,xpgain):
