@@ -8,6 +8,8 @@ var mot_à_deviner="{{mot_à_deviner}}";
 var longueur_mot={{longueur_mot}};
 var nombre_dessais=10;
 var mots={{mots|safe}};
+let TempsSurvécu = 0;
+var DimChrono;
     </script>
     <div class="top">
     <div class="circleG" id="chrono" >
@@ -30,6 +32,8 @@ var mots={{mots|safe}};
 <div class="hidden">
     <form method="POST" name="myform">
         <input type="text" name="tempssurvie" class="notime">
+        <input type="text" name="motsàdeviner" class="toguess">
+        <input type="text" name="motsdonnés" class="given">
     </form>
 
 </div>
