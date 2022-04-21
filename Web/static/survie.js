@@ -118,6 +118,9 @@ function new_sequence(mot){
 var étape=0;
 var k=0;
 var inc=-1;
+var given = document.querySelector('.given');
+var toguess=document.querySelector('.toguess');
+toguess.value+=mot_à_deviner+',';
 
 function sequence(mot,mot2){ /** Attention, si dans le mot à deviner il n'y a qu'un seul L et que dans le mot proposé il y en a plusieurs, n'en mettre que un en jaune */
    var seq='';
@@ -257,11 +260,12 @@ $(document).keyup(function (e)
                    étape+=1;
                    var ell1=get_cases(étape-1);
                    var guess=const_mot(ell1);
+                   given.value+=guess;
+
 
                    if (!check_win(guess)){
                        var ell2=get_cases(étape);
-
-
+                       given.value+=',';
                        var copy2=mot_à_deviner.slice();
                        var copy=guess.slice();
                        /** var seq=sequence(guess,copy); */
@@ -275,6 +279,7 @@ $(document).keyup(function (e)
                    else{
                        var copy=mot_à_deviner.slice();
                        var seq=sequence(guess,copy);
+                       given.value+=';';
                         change_colors(ell1,seq); /** C'est là qu'on génère un nouveau mot */
                        inc='f'; /**On met inc à 'f' pour finir la partie */
                        var mid=document.querySelector('.midsurvie');
@@ -323,6 +328,7 @@ $(document).keyup(function (e)
                         });
                         sleep(1000).then(()=>{
                         mot_à_deviner=genere();
+                        toguess.value+=mot_à_deviner+','
                         console.log(mot_à_deviner); /** On laisse pour l'instant pour les tests */
                         longueur_mot=mot_à_deviner.length;
 
@@ -341,6 +347,7 @@ $(document).keyup(function (e)
                    var copy=mot_à_deviner.slice();
                    var ell1=get_cases(étape);
                    var guess=const_mot(ell1);
+                   given.value+=guess; // On rajoute le mot donné
                    if (check_win(guess)){
                        /** Victoire sur le dernier try */
                        var copy=mot_à_deviner.slice();
@@ -348,6 +355,7 @@ $(document).keyup(function (e)
                         change_colors(ell1,seq); /** C'est là qu'on génère un nouveau mot */
                        inc='f'; /**On met inc à 'f' pour finir la partie */
                        var mid=document.querySelector('.midsurvie');
+                       given.value+=';'; //Séparateur des grilles 
                        sleep(3000).then(()=>{
                         
                         var childs=mid.childNodes;
@@ -393,6 +401,7 @@ $(document).keyup(function (e)
                         });
                         sleep(1000).then(()=>{
                         mot_à_deviner=genere();
+                        toguess.value+=mot_à_deviner+',';
                         console.log(mot_à_deviner); /** On laisse pour l'instant pour les tests */
                         longueur_mot=mot_à_deviner.length;})}
 
@@ -400,9 +409,14 @@ $(document).keyup(function (e)
                        /**Cas de défaite, nbr de trys dépassé */
                        inc='f';
                        var copy=mot_à_deviner.slice();
-                       var seq=sequence(check,copy);
+                       var seq=sequence(guess,copy);
                        change_colors(ell1,seq);
-                       console.log("Perdu");
+                       console.log("Perdu"); //Penser à effectuer la redirection
+                       sleep(longueur_mot*300).then(()=>{
+                        $(".notime").val(TempsSurvécu);
+                        clearInterval(DimChrono);
+                        document.myform.submit();
+                       })
 
                    }
 

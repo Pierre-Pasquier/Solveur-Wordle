@@ -345,9 +345,16 @@ def mode_survie(id):
     else :
         temps=request.form.get('tempssurvie')
         ##modif bd
-        gainxp=((int(temps)-300)//60)*10
+        if int(temps)>300: #vérifier si l'utilisateur est éligible au gain d'xp
+            gainxp=((int(temps)-300)//60)*10
+            #faire les modifications sur la base de données ici, utilisation de update_xp
+        else : gainxp=0
+        given=request.form.get('motsdonnés')
+        toguess=request.form.get("motsàdeviner")
         print(temps)
         print(gainxp)
+        print(toguess)
+        print(given)
         return redirect(f"/home?id={id}")
 
 

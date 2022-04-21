@@ -1,7 +1,6 @@
 let chrono = document.getElementById("chrono");
 let minutes =5
 let secondes =1
-let TempsSurvécu = 0
 var temp_min=0;
 var temp_sec=0;
 var historique=new Array();
@@ -20,7 +19,7 @@ let a = 0;
 let b=0;
 let c=0;
 
-var DimChrono =setInterval(function(){
+DimChrono =setInterval(function(){
 
     TempsSurvécu ++ ; 
     minutes = parseInt(minutes);
@@ -50,7 +49,7 @@ var DimChrono =setInterval(function(){
 
 
     //ici on mettra les condition pour augmenter le temps ou le diminuer:
-    if (inc=='f' && ((secondes>=0 && minutes >0)||(secondes>0 && minutes==0))){
+    if (inc=='f' && ((secondes>=0 && minutes >0)||(secondes>0 && minutes==0))&& étape+1<nombre_dessais){
         if (b==0){  /** On regarde pour effectuer le changement au bon moment avec la bonne valeur de la longueur du mot */
             temp_min=historique[longueur_mot-6][0]+bonus_essais[étape-1][0];
             temp_sec=historique[longueur_mot-6][1]+bonus_essais[étape-1][1];
