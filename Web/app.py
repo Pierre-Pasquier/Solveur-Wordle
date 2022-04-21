@@ -129,7 +129,7 @@ def update_xp(id,xpgain):
     cur=con.cursor()
     cur.execute("SELECT xp FROM Profil WHERE id=?",(id,))
     xp=cur.fetchall()[0][0]
-    cur.execute("UPDATE Profil SET xp=? AND niveau=? WHERE id=?",(xp+xpgain,niveau(xp+xpgain),id,))
+    cur.execute("UPDATE Profil SET xp=?,niveau=? WHERE id=?",(xp+xpgain,niveau(xp+xpgain),id,))
     con.commit()
     con.close()
 
@@ -350,7 +350,21 @@ def mode_survie(id):
             #faire les modifications sur la base de données ici, utilisation de update_xp
         else : gainxp=0
         given=request.form.get('motsdonnés')
-        toguess=request.form.get("motsàdeviner")
+        toguess=request.form.get("motsàdeviner") #On pensera a les encrypter pour prendre moins de place dans la bd
+        if id!=0:
+            con=sqlite3.connect(database)
+            cur=con.cursor()
+            cur.execute("SELECT MAX(id_partie)  FROM Historique_survie WHERE id=?",(id,))
+            tab=cur.fetchall()
+            if tab==[]:
+                id_partie=1
+            else:
+                id_partie=int(tab[0][0])+1
+            today = date.today().strftime("%Y-%m-%d")
+            heure = datetime.now().strftime("%H:%M:%S")
+            cur.execute("INSERT INTO Historique_survie VALUES(?,?,?,?,?,?)",(id_partie,id,toguess,given,today,heure))
+            con.commit()
+            con.close()
         print(temps)
         print(gainxp)
         print(toguess)
