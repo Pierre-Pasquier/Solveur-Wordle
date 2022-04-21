@@ -1,0 +1,171 @@
+input.case{
+    height:50px;
+    width: 50px;
+    border: 1px solid whitesmoke;
+    border-radius:6px;
+    text-transform: uppercase;
+    color:white;
+    text-align: center;
+    font-family: Sans; /* à décider */
+    font-weight: bold;
+    font-size: 24px;
+    padding:3px;
+    background-color: grey;
+
+    
+    
+}
+
+
+input.case.g{
+    background-color: rgb(23, 182, 23);
+
+}
+
+input.case.y{
+    background-color:gold;
+}
+
+.midsurvie{
+    margin-top: 20px ;
+    margin-left : 20%;
+    margin-right : 20%;
+    padding: 20px;
+    text-align: center;
+
+}
+.mid{
+    margin-top: 80px ;
+    margin-left : 20%;
+    margin-right : 20%;
+    padding: 20px;
+    text-align: center;
+
+}
+.shake{
+    padding-top:5px;
+    height :30px;
+    width:60px;
+    border: solid .5px gray;
+    border-radius:6px;
+    background-color: gray;
+    color:white;
+    font-weight: bold;
+    text-align: center;
+
+    
+}
+.button1{
+    border:solid .5px black;
+    border-radius:6px;
+    color:blanchedalmond;
+    background-color:palegreen;
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    
+}
+.cgt{
+    height :30px;
+    margin-top: 5px;
+    margin-left : 20%;
+    margin-right:20%;
+    border:solid .5px black;
+    border-radius:6px;
+
+}
+.conteneur{
+    width: 300px;
+    height :40px;
+    margin-left:0;
+    border:solid 1.5px rgb(48, 46, 46);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+.barre{
+    height :40px;
+    border-radius: 6px;
+    background:rgb(50, 218, 50);
+}
+.pourcentage{
+    width: 300px;
+    position: absolute;
+    top:0;
+    text-align: center;
+    font-size : 24px;
+    font-family: 'Gill Sans';
+}
+
+
+
+.circleR{
+    font-size: 28px;
+    height:60px;
+    margin-top: 80px;
+    text-shadow: 2px 2px 2px rgb(240, 9, 9);
+    color: red;
+    border: solid 6px rgb(240, 4, 4);
+    border-radius: 20px;
+    text-align: center;
+    background-color: rgb(1, 7, 17);
+    margin-left: 43%;
+    margin-right: 43%;
+}
+.circleO{
+    font-size: 28px;
+    height:60px;
+    margin-top: 80px;
+    text-shadow: 2px 2px 2px rgb(240, 9, 9);
+    color: red;
+    border: solid 6px rgb(240, 138, 4);
+    border-radius: 20px;
+    text-align: center;
+    background-color: rgb(1, 7, 17);
+    margin-left: 43%;
+    margin-right: 43%;
+}
+.circleG{
+    font-size: 28px;
+    height:60px;
+    margin-top: 80px;
+    text-shadow: 2px 2px 2px rgb(240, 9, 9);
+    color: red;
+    border: solid 6px rgb(12, 255, 12);
+    border-radius: 20px;
+    text-align: center;
+    background-color: rgb(1, 7, 17);
+    margin-left: 43%;
+    margin-right: 43%;
+}
+.colorG{
+    color: rgb(2, 0, 128);
+}
+.bloc {
+display: inline-block;
+}       
+.historiqueV{
+    font-weight: bold;
+    font-size: 20px;
+    color: rgb(50, 204, 50);
+    text-align: center;
+
+}
+.historiqueR{
+    font-weight: bold;
+    font-size: 20px;
+    color :rgb(240, 4, 4);
+    text-align: center;
+
+}
+
+.top{
+    height:50px;
+    text-align: center;
+}
+.hidden{
+    display:none;
+}
+
+
+

@@ -267,12 +267,19 @@ def daily(id):
 def partie_libre(id):
     ###partie de récupération des paramètres pour template
     if id is None or id=='' or id=='0':
-        return render_template('home.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') 
-    con = sqlite3.connect(database)                         
-    cur = con.cursor()                                      
-    cur.execute('SELECT pseudo,xp FROM Profil WHERE id= ?',(id,))
-    tab=cur.fetchall()
-    con.close()
+        id=0
+        pseudo="Guest"
+        pourcent = 0
+        badge = 'guest.png'
+    else:
+        con = sqlite3.connect(database)                         
+        cur = con.cursor()                                      
+        cur.execute('SELECT pseudo,xp FROM Profil WHERE id= ?',(id,))
+        tab=cur.fetchall()
+        con.close()
+        pseudo = tab[0][0]
+        pourcent = pourcentlvlup(tab[0][1])
+        badge = badgetab[niveau(tab[0][1])]
     ###fin récup
     if request.method=='POST':
         ###besoin de post pour lancer partie (car params de home) et pour récup partie (résultats)
@@ -308,10 +315,10 @@ def partie_libre(id):
         i = random.randrange(0,len(mots))
         mot_à_deviner = mots[i]
         ###
-        return render_template('test_flask.html',longueur_mot=lenmot,mot_à_deviner=mot_à_deviner,nombre_dessais=nbrguess,mots=mots,id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])])
+        return render_template('test_flask.html',longueur_mot=lenmot,mot_à_deviner=mot_à_deviner,nombre_dessais=nbrguess,mots=mots,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
     else :
         pattern=request.form.get('pattern')
-        #modif bd
+        #modif bd et vérifier si id!=0 pour save
         print(pattern) ##pour tester
         return redirect(f"/home?id={id}")
 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>TuNom</title>
+    <link rel="stylesheet" href='/static/templatepage.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>        
+<div class="fixed-header">
+        <div class="container-top">
+            <div class="gauche"><a href="/home?id={{id_user}}"><img src='/static/TuNom.png' style="width: 180%"></a></div>
+            <div class="alignright">
+                    <div class="box">
+                        <div>
+                            <img src='/static/badges/{{badge}}' style="float:inline-end; height: 100%;width: 100%">
+                        </div>
+                        <div style="margin-top: 10px;">
+                            {%if id_user==0 %}
+                                <a href="###" style="float:none; color: white;text-decoration: underline;"> Guest</a> <!--href menant à connexion, à ajouter-->
+                            {%else%} 
+                                <a href="###" style="float:none; color: white;"> {{pseudo}}</a> <!--href menant à profil ?-->
+                            {%endif%}
+                            <br><div class="progress" style="width: 175px;">
+                            {%if id_user==0 %}
+                                <div class="progress-bar" role="progressbar" style="width:100%; background-color:#ffba3a;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                <span class="progress-value" style="color: black;"></span>
+                            {% else %}
+                                <div class="progress-bar" role="progressbar" style="width: {{pourcent}}%; background-color: #ffba3a;" aria-valuenow="{{pourcent}}" aria-valuemin="0" aria-valuemax="100">
+                                </div><span class="progress-value" style="color: black;">{{pourcent}}%</span>
+                            {% endif %}
+                            </div>
+                            <!--VERIFIER LE CAS OU JOUEUR = GUEST => PSEUDO MENE PAS A PROFIL MAIS CONNEXION et euh y'aura probablement d'autres conséquences à vérif plus loin
+                            ex : pas d'historiques, pas d'insertion dans le classement (bcz pas de saves)-->
+                        </div>
+                    </div>
+                    
+
+            </div>
+        </div>
+</div>
+        {% block content %}{% endblock %} 
+         
+        <div class="fixed-footer">
+            <div class="container-bot">
+                <div class="alignright">TuNom</div>
+                <div class="alignleft">
+                    <a href="/à_propos?id={{id_user}}"> <i class="fa fa-question"></i>  A propos</a> 
+                    <p></p>
+                    <a href="/contactez_nous?id={{id_user}}"> <i class="fa fa-envelope"></i>  Contactez nous</a>
+                </div>
+            </div>        
+        </div> 
+
+        
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<body>
+    
+</body>
+</html>

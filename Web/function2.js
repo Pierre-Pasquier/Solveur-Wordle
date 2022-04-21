@@ -137,7 +137,6 @@ function const_mot(ell){
    
 }
 
-
 function change_colors(ell,sequence){
    var t= 200;
    var audio_bonne_lettre = new Audio('motus-lettre-bonne.mp3');

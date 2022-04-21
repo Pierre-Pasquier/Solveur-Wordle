@@ -1,80 +1,100 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>Help&Go</title>
-    <link rel="stylesheet" href='/static/styles-layout.css'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>        
-<div class="fixed-header">
-        <div class="container-top">
-            <div class="gauche"><a href="{{url_for('home')}}"><img src='/static/help_go_icone.png'></a></div>
-            <div class="droite">
-                    <nav>
-                    <a href="{{url_for('home')}}"><i class="fa fa-home"></i>  Accueil</a>
-                    <a href="/à_propos?id={{id_user}}"><i class="fa fa-question"></i>  A propos</a>
-                    <a href="/contactez_nous?id={{id_user}}"><i class="fa fa-envelope"></i>  Contactez nous</a>
-                    </nav>
+{% extends "templatepage.html" %}
 
-            </div>
-        </div>
-</div>
-        <div class="sidenav">
-            <nav class="nav">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                  </button>
-                <ul class="nav flex-column">
-                  <li class="nav-item dropdown" >
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Moi</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown"> 
-                      <li><a class="dropdown-item" href="#">Mes demandes</a></li>
-                      <li><a class="dropdown-item" href="#">Mes offres</a></li>
-                      <li><a class="dropdown-item" href="#">Mes sondages</a></li>
-                    </ul>
-                  </li>
-                  <hr>
-                  <li class="nav-item dropdown" >
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Services</a>
-                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown"> 
-                        <li><a class="dropdown-item" href='#'>Créer une demande</a></li>
-                        <li><a class="dropdown-item" href='#'>Créer une offre</a></li>
-                        <li><a class="dropdown-item" href='#'>Voir les demandes</a></li>
-                        <li><a class="dropdown-item" href='#'>Voir les offres</a></li>
-                      </ul>
-                    </li>
-               
-        
-                  </ul>
-            </nav>
-          </div>
+
+
+
+{% block content %}
+
         <div class="main container-bot"> 
-          <h1>Bienvenue sur notre site Help&Go !</h1>
-          <div>
-            <button class="btn btn-primary"><a style="color:#ffffff" href='/connexion'>Se connecter</a></button>
-            <button class="btn btn-primary"><a style="color:#ffffff" href='/inscription'>S'inscrire</a></button>
-          </div>
-          <p>Vous êtes un citoyen à la recherche d'une personne pour tondre votre gazon, garder vos enfants le temps d'une soirée ou encore vous aider à monter un meuble ?</p>
-          <p>Ce site est fait pour vous ! En quelques clics seulement vous pourrez poster votre annonce et choisir la personnes qui vous convient parmis les postulants.</p>
-          <p>Et si au contraire vous voulez proposer vos services aux citoyens de votre ville, on a aussi pensé à vous !</p>
-          <p>Vous n'avez qu'à décrire les services que vous pourrez effectuer. Cette liste sera visible par tous et on pourra vous contacter en un instant.</p>
-          <p> Alors n'attendez plus et inscrivez vous :</p>
-          <div id="v-pills-tab" role="tablist" >
-            <button class="btn btn-primary"><a style="color:#ffffff" href='/inscription'>S'inscrire</a></button>
-          </div>
-        </div>  
-        </div>    
-        <div class="fixed-footer">
-            <div class="container-bot">Help & Go</div>        
-        </div>
+          <div class="box">
+            <div>
+              <br>
+              <h1>MODE LIBRE</h1>
+              <p>
+                Dans ce mode de jeu, vous pourrez librement vous entrainer et paramétrer vos propres parties!
+              </p>
+              <form action="{{url_for('partie_libre',id=id_user)}}" method="POST">
+              <div class="box" style="width: 380px;height: 200px;background-color: #fdd892;">              
+                <p style="padding-left: 15%;">
+                  <label for=lenmot>- <strong>Taille du mot ?</strong></label><br>
+                  <input type='radio' id=lenmot name=lenmot value=6 required checked>  6 ?
+                  <input type='radio' id=lenmot name=lenmot value=7 required>  7 ?
+                  <input type='radio' id=lenmot name=lenmot value=8 required>  8 ?
+                  <input type='radio' id=lenmot name=lenmot value=9 required>  9 ?
+                  <input type='radio' id=lenmot name=lenmot value=10 required>  10 ?
+                  <br>
+                  <input type='radio' id=lenmot name=lenmot value=-1 required>  aléatoire ?
+                </p>
+                <p style="padding-left: 15%;">
+                  <label for=nbrguess>- <strong>Nombre d'essais ?</strong></label><br>
+                  <input type='radio' id=nbrguess name=nbrguess value=6 required checked>  6 ?
+                  <input type='radio' id=nbrguess name=nbrguess value=7 required>  7 ?
+                  <input type='radio' id=nbrguess name=nbrguess value=8 required>  8 ?
+                  <input type='radio' id=nbrguess name=nbrguess value=9 required>  9 ?
+                  <input type='radio' id=nbrguess name=nbrguess value=10 required>  10 ?
+                  <br>
+                  <input type='radio' id=nbrguess name=nbrguess value=-1 required>  aléatoire ?
+                  <input type='radio' id=nbrguess name=nbrguess value=-2 required>  selon le mot ?
+                </p></div>
+                <br>
+                <input type="submit" class="btn btn-primary" value="Lancer une partie" style="color: #000000;text-decoration: underline;">
+              </form>
+              <br>
+              {%if id_user==0 %}
+              <button class="btn btn-primary" disabled style="background-color: rgb(235, 157, 56); border-color:rgb(209, 124, 12);">
+                <a style="color:#000000;" href='###'>Historique des parties</a></button>
+              {%else%}
+              <button class="btn btn-primary"><a style="color:#000000;" href='###'>Historique des parties</a></button>
+              {%endif%}
+            </div>
 
+            <div>
+              <br>
+              <h1>MODE JOURNALIER</h1>
+              <p>
+                Dans ce mode de jeu, retrouvez le mot du jour afin de gagner de l'expérience!
+              </p>
+              {%if bool==True%}
+              <p>Vous avez déjà participé aujourd'hui</p>
+              <button class="btn btn-primary" disabled style="background-color: rgb(235, 157, 56); border-color:rgb(209, 124, 12);">
+                <a style="color:#000000;" href='###'>Trouver le mot du jour</a></button>
+              {%else%}{%if id_user==0%}
+              <p>Veuillez vous connecter pour participer</p>
+              <button class="btn btn-primary" disabled style="background-color: rgb(235, 157, 56); border-color:rgb(209, 124, 12);">
+                <a style="color:#000000;" href='###'>Trouver le mot du jour</a></button>
+              {%else%}
+              <p>Il vous reste 1 tentative journalière</p>
+              <button class="btn btn-primary"><a style="color:#000000;" href='{{url_for("daily",id=id_user)}}'>Trouver le mot du jour</a></button>
+              {%endif%}{%endif%}
+              <br><br>
+              {%if id_user==0 %}
+              <button class="btn btn-primary" disabled style="background-color: rgb(235, 157, 56); border-color:rgb(209, 124, 12);">
+                <a style="color:#000000;" href='###'>Historique des parties</a></button>
+              {%else%}
+              <button class="btn btn-primary"><a style="color:#000000;" href='###'>Historique des parties</a></button>
+              {%endif%}
+            </div>
+            
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-<body>
-    
-</body>
-</html>
+            <div>
+              <br>
+              <h1>MODE SURVIE</h1>
+              <p>
+                Dans ce mode de jeu, à vos chronomètre! Plus vous tenez longtemps, meilleur sera votre score !</a>
+              </p>
+                <button class="btn btn-primary"><a style="color:#000000;" href="{{url_for('mode_survie',id=id_user)}}">Prêt, feu, partez !</a></button>
+              <br><br>
+              <button class="btn btn-primary"><a style="color:#000000;" href='{{url_for("classement",id=id_user)}}'>Classement</a></button>
+              <br><br>
+              {%if id_user==0 %}
+              <button class="btn btn-primary" disabled style="background-color: rgb(235, 157, 56); border-color:rgb(209, 124, 12);">
+                <a style="color:#000000;" href='###'>Historique des parties</a></button>
+              {%else%}
+              <button class="btn btn-primary"><a style="color:#000000;" href='###'>Historique des parties</a></button>
+              {%endif%}
+            
+            </div>
+          </div>
+          
+        
+{% endblock %}

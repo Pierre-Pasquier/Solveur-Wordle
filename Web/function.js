@@ -95,9 +95,9 @@ function new_sequence(mot){
     return seq;
 }
 
-var mot_à_deviner="PELLE";
-var longueur_mot=5; /**à modifier */
-var nombre_dessais=2;
+var mot_à_deviner="ITERATIF";
+var longueur_mot=8; /**à modifier */
+var nombre_dessais=10;
 var étape=0;
 var k=0;
 
@@ -135,15 +135,9 @@ function const_mot(ell){
     
 }
 
-
-
-
-
 function change_colors(ell,sequence){
     var t= 200;
-    var audio_bonne_lettre = new Audio('motus-lettre-bonne.mp3');
-    var audio_mauvaise_lettre = new Audio('uuhhh_KD275SD.mp3');
-    var audio_mal_place = new Audio('denis_ha.mp3');
+    
     $(ell).each(function(i)
     {
     var $this = $(this);
@@ -151,32 +145,26 @@ function change_colors(ell,sequence){
     setTimeout(function() {
         if (sequence[i]=='1'){
             $this.switchClass("","y",300);
-            audio_mal_place.play();
-
         }
         else if(sequence[i]=='2'){
             $this.switchClass("","g",300);
-            audio_bonne_lettre.play();
-        }
-        else{
-            audio_mauvaise_lettre.play();
-            
         }
 
 
     }, t);
           
-    t += 800;
-    
+    t += 100;
+
     })
+
+
+    
 }
 
 
 
 
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-}
+
 
 
 
@@ -194,12 +182,13 @@ $(document).ready(function ()
         }
         else if (e.keyCode==8 || e.keyCode==46){
             $(this).val('');
+            $(this).prev().focus();
 
         }
         else if (e.keyCode==13){
 
             if (testcase(L)){
-                if (étape+1<nombre_dessais){
+                if (étape+1<=nombre_dessais){
                     
                     étape+=1;
                     var ell1=get_cases(étape-1);
@@ -217,18 +206,14 @@ $(document).ready(function ()
                         var change=bonnes_lettres(t[0],t[1],t[2]);
                         change_colors(ell1,change); 
                         disable(ell1);
-                        
 
                     }
                     else{
+
                         var copy=mot_à_deviner.slice();
                         var seq=sequence(guess,copy);
                         change_colors(ell1,seq);
                         disable(ell1);
-                        sleep(3500).then(() => {
-                            var audio_victoire = new Audio('celebration_BCb02kw.mp3');
-                            audio_victoire.play();
-                        });
                     }
 
 
@@ -237,21 +222,10 @@ $(document).ready(function ()
                     var ell1=get_cases(étape);
                     var check=const_mot(ell1);
                     if (check_win(check)){
-                        var copy=mot_à_deviner.slice();
-                        var seq=sequence(check,copy);
-                        change_colors(ell1,seq);
-                        disable(ell1);
+
                     }
                     else{
-                        var audio_defaite = new Audio('motus-boule-noire.mp3');
-                        var copy=mot_à_deviner.slice();
-                        var seq=sequence(check,copy);
-                        change_colors(ell1,seq);
-                        disable(ell1);
-                        sleep(3500).then(() => {            /**A MODIFIER AVEC LONGUEUR MOT */
-                        audio_defaite.play();
-                        console.log('Perdu');
-                        });
+
                     }
                 }
 
