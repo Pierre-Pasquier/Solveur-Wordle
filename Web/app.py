@@ -14,7 +14,7 @@ from datetime import date,datetime
 
 
 app = Flask(__name__)
-database= "db_projetS2.db"
+database= "db_projetS1test.db"
 
 
 
@@ -475,7 +475,7 @@ def verification(url_chiffre):
 
 
 @app.route('/<id>/historiqueeee', methods=["GET", "POST"])      #Pour tester historique sans BD
-def historique(id):
+def historiqueeee(id):
     mode = request.form.get("mode")
     if mode == "Mode" or mode == None:
         mode = "Daily"
@@ -489,7 +489,7 @@ def historique(id):
 
 
 @app.route('/<id>/historique/<mode>', methods=["GET", "POST"])
-def historiqueeee(id,mode):
+def historique(id,mode):
     if mode == "Type" or mode == 'daily':
         db = getdb()
         a = db.cursor()
