@@ -139,7 +139,7 @@ badgetab = ['grisbadge1.png','grisbadge2.png','grisbadge3.png','grisbadge4.png',
 
 def niveau(xp): #permet de savoir le niveau du joueur sachant son xp total
     i=0
-    while i<30 and xp>xptab[i]:
+    while i<29 and xp>xptab[i+1]:
         i+=1
     return(i) #correspond à la position du badge associé dans badgetab
 
@@ -188,8 +188,8 @@ def contactez():
 def home():
     id=request.args.get('id')
     if id is None or id=='' or id=='0':
-        return render_template('home.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') #voir un paramètre de disable ? permettant de disable telle ou telle option comme
-    con = sqlite3.connect(database)                         #les historiques puisque liés au compte? ATTENTION : faudra faire gaffe niveau bd à ne pas save les parties guests
+        return render_template('home.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') 
+    con = sqlite3.connect(database)                         
     cur = con.cursor()                                      
     cur.execute('SELECT pseudo,xp,date_dernier_essai FROM Profil WHERE id= ?',(id,))
     tab=cur.fetchall()
@@ -198,7 +198,7 @@ def home():
     today = date.today()
     day = today.strftime("%d/%m/%Y")
     done = (dateder==day)
-    print(done)
+    print(pourcentlvlup(tab[0][1]))
     return render_template('home.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])],bool=done)
 
 @app.route('/<id>/daily',methods=['GET','POST'])
@@ -283,7 +283,10 @@ def daily(id):
         tab = cur.fetchall()
         con.close()
         guessmot = tab[0][0]
-        if not(pattern is None) and pattern!='' and pattern[-len(guessmot):0]==guessmot:
+        print("test1")
+        print(guessmot)
+        print(pattern[-len(guessmot):0])
+        if not(pattern is None) and pattern!='' and pattern[-len(guessmot):]==guessmot:
             print("test")
             update_xp(id,300)
         return redirect(f"/home?id={id}") 
