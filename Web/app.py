@@ -184,7 +184,7 @@ def contactez():
     return render_template('contacteznous.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])])
 
 
-@app.route('/home')     #page d'accueil
+@app.route('/home',methods=['GET','POST'])     #page d'accueil
 def home():
     id=request.args.get('id')
     if id is None or id=='' or id=='0':
@@ -196,9 +196,10 @@ def home():
     con.close()
     dateder = tab[0][2]
     today = date.today()
-    day = today.strftime("%Y-%m-%d")
+    day = today.strftime("%d/%m/%Y")
     done = (dateder==day)
-    return render_template('home.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])],daily=done)
+    print(done)
+    return render_template('home.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])],bool=done)
 
 @app.route('/<id>/daily',methods=['GET','POST'])
 def daily(id):
@@ -215,10 +216,10 @@ def daily(id):
         joueur=cur.fetchall()
         con.close()
 
-        today = date.today().strftime("%Y-%m-%d")
+        today = date.today().strftime("%d/%m/%Y")
         con = sqlite3.connect(database)
         cur = con.cursor()
-        cur.execute('SELECT mot_a_deviner FROM Historique WHERE date=? AND type=?',(today,'daily',))
+        cur.execute('SELECT mot_a_deviner FROM Historique WHERE date_partie=? AND type=?',(today,'daily',))
         tab = cur.fetchall()
         con.close()
         a_generer = (tab==[])
@@ -236,17 +237,25 @@ def daily(id):
             guessmot = mots[i]
         else:
             guessmot = tab[0][0]
+            lenmot= len(guessmot)
+            nbrguess=lenmot
+            con = sqlite3.connect(database) 
+            cur = con.cursor()
+            cur.execute('SELECT mot FROM Mots WHERE len_mot=?',(lenmot,))
+            tabmots=cur.fetchall()
+            mots=[tabmots[k][0] for k in range(len(tabmots))]
+            con.close()
         ###là on crée les valeurs à rentrer dans la bd
-        heure = datetime.now().strftime("%H:%M:%S")
+        heure = datetime.now().strftime("%H:%M")
         con = sqlite3.connect(database)
         cur = con.cursor()
-        cur.execute('Select MAX(SELECT id FROM Historique WHERE id_joueur=? AND type=?) FROM Sondages',(id,'daily',))
+        cur.execute('SELECT MAX(id_partie) FROM Historique WHERE id=? ',(id,))
         idpartie=cur.fetchall()[0][0] + 1
         con.close()
         ###ensuite on pré-génère la partie dans la bd
         con = sqlite3.connect(database)
         cur = con.cursor()
-        cur.execute('Insert into Historique values(?,"daily",?,?,?,?,?)',(idpartie,id,[],guessmot,today,heure))
+        cur.execute('Insert into Historique values(?,?,?,?,?,?,?)',(idpartie,'daily',id,guessmot,"",today,heure,))
         con.commit()
         con.close()
         ###maintenant on va changer la date du dernier essai de daily du joueur
@@ -258,10 +267,26 @@ def daily(id):
         ###puis on render la page de partie, dans laquelle il faudra en sortie mettre à jour la bd pour compléter la partie en historique
         ###voir pour résultat dans la page historique : exemple partie quittée en cours -> partie pas complétée donc vide? -> 
         ###-> possibilité de ne pas prendre en compte les parties vides à l'affichage de l'historique
-        return render_template('test_flask.html',id_user=id,pseudo=joueur[0][0],pourcent=pourcentlvlup(joueur[0][1]),badge=badgetab[niveau(joueur[0][1])],longueur_mot=lenmot, mot_à_deviner=guessmot, nombre_dessai=nbrguess)
+        return render_template('test_flask.html',id_user=id,pseudo=joueur[0][0],pourcent=pourcentlvlup(joueur[0][1]),badge=badgetab[niveau(joueur[0][1])],longueur_mot=lenmot, mot_à_deviner=guessmot, nombre_dessais=nbrguess,mots=mots)
     else:
-        ###voir ici pour la méthode post, aka potentiellement le retour de la partie?
-        return redirect(f"/home?id={id}")
+        pattern = request.form.get("pattern")
+        today = date.today().strftime("%d/%m/%Y")
+        con = sqlite3.connect(database)
+        cur = con.cursor()
+        cur.execute('UPDATE Historique SET mots_donnes=? WHERE id=? AND date_partie=?',(pattern,id,today,))
+        con.commit()
+        con.close()
+        ###voir pour ajouter l'xp ici, SI pattern[last]=mot_a_deviner
+        con = sqlite3.connect(database)
+        cur = con.cursor()
+        cur.execute('SELECT mot_a_deviner FROM Historique WHERE id=? AND date_partie=?',(id,today,))
+        tab = cur.fetchall()
+        con.close()
+        guessmot = tab[0][0]
+        if not(pattern is None) and pattern!='' and pattern[-len(guessmot):0]==guessmot:
+            print("test")
+            update_xp(id,300)
+        return redirect(f"/home?id={id}") 
 
 @app.route('/<id>/pl',methods=['GET','POST'])
 def partie_libre(id):
