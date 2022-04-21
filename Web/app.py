@@ -514,3 +514,31 @@ def historique(id,mode):
         l[k].append(lmode[k][3].split(','))
         l[k].append(paterne(lmode[k][3].plit(',')))
     return render_template('historique.html',lmode=l,mode=mode)
+
+@app.route('/<id>/classement')
+def classement(id):
+    if id is None or id=='' or id=='0':
+        id = 0
+        pseudo = "Guest"
+        pourcent = 0
+        badge = 'guest.png'
+    else:
+        con = sqlite3.connect(database)                         
+        cur = con.cursor()                                      
+        cur.execute('SELECT pseudo,xp FROM Profil WHERE id= ?',(id,))
+        tab=cur.fetchall()
+        con.close()
+        pseudo = tab[0][0]
+        pourcent = pourcentlvlup(tab[0][1])
+        badge = badgetab[niveau(tab[0][1])]
+    ###partie récup des 50 premiers du classement
+    con = sqlite3.connect(database)
+    cur = con.cursor()
+    cur.execute('SELECT pseudo, temps_survie FROM histo_survie as hs JOIN Profil as p ON hs.id_joueur = p.id ORDER BY hs.temps_survie DESC LIMIT 50')   
+    ranks=cur.fetchall()
+    con.close()
+    ranks.append([i for i in range(1,51)])
+    ###partie vérif + récup rang du compte + sup et inf
+
+    ###fin part
+    return render_template('classement.html',ranks,   id_user=id, pseudo=pseudo,pourcent=pourcent,badge=badge)
