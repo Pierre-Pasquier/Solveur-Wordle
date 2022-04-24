@@ -327,21 +327,24 @@ $(document).keyup(function (e)
 
 
 var slideIndex = 1;
-showSlides(slideIndex);
+showSlides(slideIndex,m);
 
-function plusSlides(n) {
-  showSlides(slideIndex += n);
+function plusSlides(n,m) {
+  showSlides(slideIndex += n,m);
 }
 
-function currentSlide(n) {
-  showSlides(slideIndex = n);
+function currentSlide(n,m) {
+  showSlides(slideIndex = n,m);
 }
 
-function showSlides(n) {
+function showSlides(n,m) {
   var i;
-  var slides = document.getElementsByClassName("mySlides");
+  var slides_class = document.getElementsByClassName("mySlides");
+  let p = m.toString();
+  var slides_id = document.getElementsById(p);
+  var slides = intersection(slides_class,slides_id);
   var dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1}    
+  if (n > slides.length) {slideIndex = 1}
   if (n < 1) {slideIndex = slides.length}
   for (i = 0; i < slides.length; i++) {
       slides[i].style.display = "none";  

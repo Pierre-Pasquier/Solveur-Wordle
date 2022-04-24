@@ -430,7 +430,7 @@ def connex():
         if bon_mdp_decrypte != mdp:   #si mauvais mot de passe
             erreur = True
         else:
-            return redirect('/'+str(id)+'/home')   #si bon mot de passe, on redirige
+            return redirect('/home?id='+str(id))   #si bon mot de passe, on redirige
     return render_template('connexion.html',erreur=erreur,pas_inscrit=False)    #on affiche la page
 
 @app.route('/inscription', methods=["GET", "POST"])     #page d'inscription
@@ -525,7 +525,7 @@ def verification(url_chiffre):
         c.execute("INSERT INTO Utilisateurs VALUES(?,?,?,?,?,0,0,1,current_date)",(id,pseudo,mail,numtel,mdp_crypte,))   #on rentre les infos de l'utilisateur dans la table utilisateur
         db.commit()
         close_connection()
-        return redirect('/'+str(id)+'/home')   #et on redirige l'utilisateur vers son profil fraichement créé
+        return redirect('/home?id='+str(id))   #et on redirige l'utilisateur vers son profil fraichement créé
     elif code_donne != '':
         return render_template('verification.html',erreur=True)     #si le code n'est pas le bon, on affiche l'erreur
     else:

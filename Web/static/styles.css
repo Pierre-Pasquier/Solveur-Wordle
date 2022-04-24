@@ -214,7 +214,6 @@ body {font-family: Verdana, sans-serif; margin:0}
 /* Next & previous buttons */
 .prev, .next {
   cursor: pointer;
-  position: static;
   width: auto;
   margin-top: -30px;
   padding: 16px;
@@ -259,3 +258,4 @@ body {font-family: Verdana, sans-serif; margin:0}
 .active, .dot:hover {
   background-color: #717171;
 }
+

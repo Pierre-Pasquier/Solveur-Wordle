@@ -7,7 +7,7 @@
         <h1> Historique de vos parties du mode {{mode}}</h1>
     
         <form method="POST">
-            <div class="form-group col-md-4">
+            <div class="form">
                 <select name="mode" id="inputState" class="form-control">
                 <option selected>Mode</option>
                 <option>Daily</a></option>
@@ -28,7 +28,7 @@
                         </h3>
                         <h3>Vous avez survécu {{lmode[i][2]//60}} minutes et {{lmode[i][2]%60}} secondes</h3>
                         {% for a in range(lmode[i][3]|length) %}
-                            <div class="mySlides" id="">
+                            <div class="mySlides">
                                 <h3>Mot à deviner : {{lmode[i][3][a]}}</h3>
                                 {% for k in range(lmode[i][4][a]|length) %}
                                     {% for j in range(lmode[i][4][a][k]|length) %}
@@ -44,12 +44,12 @@
                                 {% endfor %}
                             </div>
                         {% endfor %}
-                    
-                    <a class="prev" onclick="plusSlides(-1)">❮</a>
-                    <a class="next" onclick="plusSlides(1)">❯</a>
+                    <div class="centre">
+                    <a class="prev" onclick="plusSlides(-1,i)">❮</a>
+                    <a class="next" onclick="plusSlides(1,i)">❯</a></div>
                     <div class="dot-container">
-                        {% for i in range(1,lmode[i][3]|length + 1) %}
-                            <span class="dot" onclick="currentSlide(i)"></span>
+                        {% for r in range(1,lmode[i][3]|length + 1) %}
+                            <span class="dot" onclick="currentSlide(r,i)"></span>
                         {% endfor %}
                         </div>
                 </div><br><br>
