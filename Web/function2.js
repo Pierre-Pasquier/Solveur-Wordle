@@ -138,35 +138,37 @@ function const_mot(ell){
 }
 
 function change_colors(ell,sequence){
-   var t= 200;
-   var audio_bonne_lettre = new Audio('motus-lettre-bonne.mp3');
-    var audio_mauvaise_lettre = new Audio('uuhhh_KD275SD.mp3');
-   
-   $(ell).each(function(i)
-   {
-   var $this = $(this);
-         
-   setTimeout(function() {
-       if (sequence[i]=='1'){
-           $this.switchClass("","y",300);
-        }
-       else if(sequence[i]=='2'){
-        $this.switchClass("","g",300);
-        audio_bonne_lettre.play();
-        }
-        else{
-            audio_mauvaise_lettre.play();
-        }
-
-
-   }, t);
-         
-   t += 800;
-
-   })
-
-
-   
+    var t= 200;
+    var audio_bonne_lettre = new Audio('static/motus-lettre-bonne.mp3');
+     var audio_mauvaise_lettre = new Audio('static/motus-mauvaise-lettre.mp3');
+     var audio_lettre_mal_placee = new Audio('static/motus-lettre-mal-placée');
+    
+    $(ell).each(function(i)
+    {
+    var $this = $(this);
+          
+    setTimeout(function() {
+        if (sequence[i]=='1'){
+            $this.switchClass("","y",300);
+            audio_lettre_mal_placee.play()
+         }
+        else if(sequence[i]=='2'){
+         $this.switchClass("","g",300);
+         audio_bonne_lettre.play();
+         }
+         else{
+             audio_mauvaise_lettre.play();
+         }
+ 
+ 
+    }, t);
+          
+    t += 100;
+ 
+    })
+ 
+ 
+    
 }
 
 

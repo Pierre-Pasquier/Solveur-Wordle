@@ -49,7 +49,7 @@ DimChrono =setInterval(function(){
 
 
     //ici on mettra les condition pour augmenter le temps ou le diminuer:
-    if (inc=='f' && ((secondes>=0 && minutes >0)||(secondes>0 && minutes==0))&& étape+1<nombre_dessais){
+    if (inc=='f' && ((secondes>=0 && minutes >0)||(secondes>0 && minutes==0))&& étape<nombre_dessais){
         if (b==0){  /** On regarde pour effectuer le changement au bon moment avec la bonne valeur de la longueur du mot */
             temp_min=historique[longueur_mot-6][0]+bonus_essais[étape-1][0];
             temp_sec=historique[longueur_mot-6][1]+bonus_essais[étape-1][1];

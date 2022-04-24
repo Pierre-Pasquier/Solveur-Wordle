@@ -157,29 +157,37 @@ function const_mot(ell){
 }
 
 function change_colors(ell,sequence){
-   var t= 200;
-   
-   $(ell).each(function(i)
-   {
-   var $this = $(this);
-         
-   setTimeout(function() {
-       if (sequence[i]=='1'){
-           $this.switchClass("","y",300);
-       }
-       else if(sequence[i]=='2'){
-           $this.switchClass("","g",300);
-       }
-
-
-   }, t);
-         
-   t += 100;
-
-   })
-
-
-   
+    var t= 200;
+    
+    $(ell).each(function(i)
+    {
+    var $this = $(this);
+          
+    setTimeout(function() {
+        if (sequence[i]=='1'){
+            var audio_lettre_mal_placee = new Audio('/static/Sons motus/motus-lettre-mal-placée.mp3');
+            $this.switchClass("","y",300);
+            audio_lettre_mal_placee.play();
+         }
+        else if(sequence[i]=='2'){
+        var audio_bonne_lettre = new Audio('/static/Sons motus/motus-lettre-bonne.mp3');
+         $this.switchClass("","g",300);
+         audio_bonne_lettre.play();
+         }
+         else{
+            var audio_mauvaise_lettre = new Audio('/static/Sons motus/motus-mauvaise-lettre.mp3');
+             audio_mauvaise_lettre.play();
+         }
+ 
+ 
+    }, t);
+          
+    t += 195;
+ 
+    })
+ 
+ 
+    
 }
 function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
