@@ -91,24 +91,27 @@ def close_connection():  # pour fermer la connexion proprement
 
 
 
-def paterne(l,mot_cherche):     #donne la liste de paterne associé au mot à trouver 
+def paterne(l,mot):     #donne la liste de paterne associé au mot à trouver
+    mot_cherche = [k for k in mot]
     res = []
     for j in range(len(l)):
-        mot_donne = l[j]    
+        mot_donne = [k for k in l[j]]
         x = [0 for k in range(len(mot_donne))]
         for k in range(len(mot_cherche)):
             if mot_donne[k] == mot_cherche[k]:
                 x[k] = 2
                 mot_donne[k] = '.'
                 mot_cherche[k] = '.'
-        for k in range(len(mot_cherche)):
+        for k in range(len(mot_donne)):
             if mot_donne[k] in mot_cherche and mot_donne[k] != '.':
                 x[k] = 1
                 mot_donne[k] = '.'
         r = ""
         for k in range(len(x)):
-            r += x[k]
+            r += str(x[k])
         res.append(r)
+        mot_cherche = [k for k in mot]
+    return res
 
 
 def newlen():
@@ -155,6 +158,12 @@ def pourcentlvlup(xp): #renvoie le % d'xp avant prochain lvl -> renvoie 100% si 
 
 @app.route('/')      #redirection vers page d'accueil
 def redirection():
+    db = getdb()
+    c = db.cursor()
+    c.execute("INSERT INTO Historique VALUES(3,'libre',1,'MARTEAU','POIVRES,SOUVENT,BONJOUR,TOURNER,MARTEAU','24/04/2022','15:33')")
+    db.commit()
+    close_connection()
+    
     return redirect('/home')
 
 
@@ -537,31 +546,49 @@ def historiqueeee(id):
     return render_template('historique.html',lmode=l,mode=mode)
 
 
-@app.route('/<id>/historique/<mode>', methods=["GET", "POST"])
-def historique(id,mode):
-    if mode == "Type" or mode == 'daily':
+@app.route('/<id>/historique', methods=["GET", "POST"])
+def historique(id):
+    mode = request.form.get('mode')
+    if mode == "Mode" or mode == 'Daily' or mode == None:
+        mode = 'Daily'
         db = getdb()
         a = db.cursor()
-        a.execute("SELECT date,heure,mot,mots_testés FROM Historique WHERE id = ? AND type = 'daily'",(id,))
+        a.execute("SELECT date_partie,heure,mot_a_deviner,mots_donnes FROM Historique WHERE id = ? AND type = 'daily'",(id,))
         lmode = a.fetchall()
         close_connection()
-    elif mode == 'survie':
+    elif mode == 'Survie':
         db = getdb()
         b = db.cursor()
-        b.execute("SELECT date,heure,temps_survie,mots_à_deviner FROM Historique WHERE id = ? AND type = 'survie'",(id,))
+        b.execute("SELECT date_partie,heure,temps_survie,mot_a_deviner,mots_donnes FROM Historique_survie WHERE id = ?",(id,))
         lmode = b.fetchall()
         close_connection()
     else:
         db = getdb()
         c = db.cursor()
-        c.execute("SELECT date,heure,mot,mots_testés FROM Historique WHERE id = ? AND type = 'libre'",(id,))
+        c.execute("SELECT date_partie,heure,mot_a_deviner,mots_donnes FROM Historique WHERE id = ? AND type = 'libre'",(id,))
         lmode = c.fetchall()
         close_connection()
     l=[[] for k in range(len(lmode))]
     for k in range(len(lmode)):
-        l[k] = lmode[k][0:3]
-        l[k].append(lmode[k][3].split(','))
-        l[k].append(paterne(lmode[k][3].plit(',')))
+        l[k].append(lmode[k][0])
+        l[k].append(lmode[k][1])
+        l[k].append(lmode[k][2])
+        if lmode[k][3][-1] == ',':
+            l[k].append(lmode[k][3][:-1].split(','))
+        else:
+            l[k].append(lmode[k][3].split(','))
+        if mode != 'Survie':
+            l[k].append(paterne(lmode[k][3].split(','),lmode[k][2]))
+        else:
+            if lmode[k][4][-1] == ',' or lmode[k][4][-1] == ';':
+                lint = lmode[k][4][:-1].split(';')
+            else:
+                lint = lmode[k][4].split(';')
+            lint = [lint[i].split(',') for i in range(len(lint))]
+            l[k].append([paterne(lint[i],lmode[k][3].split(',')[i]) for i in range(len(lint))])
+            l[k].append(lint)
+    print(l)
+    print(l[0])
     return render_template('historique.html',lmode=l,mode=mode)
 
 @app.route('/<id>/classement')

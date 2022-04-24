@@ -1,0 +1,95 @@
+{%extends "templatepage.html"%}
+{%block content%}
+    <link href="{{url_for('static',filename='styles.css')}}" rel="stylesheet">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/ui-lightness/jquery-ui.css" />
+    <div class ="mid">
+        <h1> Historique de vos parties du mode {{mode}}</h1>
+    
+        <form method="POST">
+            <div class="form-group col-md-4">
+                <select name="mode" id="inputState" class="form-control">
+                <option selected>Mode</option>
+                <option>Daily</a></option>
+                <option>Survie</a></option>
+                <option>Libre</a></option>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+        
+        
+        {% if mode == "Survie" %}
+            <div>
+                {% for i in range(lmode|length) %}
+                    <div>
+                        <h3>
+                            Partie jouée le {{lmode[i][0]}} à {{lmode[i][1][:2]}}h{{lmode[i][1][-2:]}}
+                        </h3>
+                        <h3>Vous avez survécu {{lmode[i][2]//60}} minutes et {{lmode[i][2]%60}} secondes</h3>
+                        {% for a in range(lmode[i][3]|length) %}
+                            <div class="mySlides" id="">
+                                <h3>Mot à deviner : {{lmode[i][3][a]}}</h3>
+                                {% for k in range(lmode[i][4][a]|length) %}
+                                    {% for j in range(lmode[i][4][a][k]|length) %}
+                                        {% if lmode[i][4][a][k][j] == '0' %}
+                                            <div class="case" >{{lmode[i][5][a][k][j]}}</div>
+                                        {% elif lmode[i][4][a][k][j] == '1' %}
+                                            <div class="case y">{{lmode[i][5][a][k][j]}}</div>
+                                        {% elif lmode[i][4][a][k][j] == '2' %}
+                                            <div class="case g">{{lmode[i][5][a][k][j]}}</div>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <br>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    
+                    <a class="prev" onclick="plusSlides(-1)">❮</a>
+                    <a class="next" onclick="plusSlides(1)">❯</a>
+                    <div class="dot-container">
+                        {% for i in range(1,lmode[i][3]|length + 1) %}
+                            <span class="dot" onclick="currentSlide(i)"></span>
+                        {% endfor %}
+                        </div>
+                </div><br><br>
+                {% endfor %}
+            </div>
+        
+        {% else %}
+        
+            {% for i in range(lmode|length) %}
+                <div>
+                    <h3>
+                        Partie jouée le {{lmode[i][0]}} à {{lmode[i][1][:2]}}h{{lmode[i][1][-2:]}}
+                    </h3>
+                    <h3>Mot à deviner : {{lmode[i][2]}}</h3>
+                    <div>
+                        {% for k in range(lmode[i][4]|length) %}
+                            {% for j in range(lmode[i][4][k]|length) %}
+                                {% if lmode[i][4][k][j] == '0' %}    
+                                    <div class="case" >{{lmode[i][3][k][j]}}</div>
+                                {% elif lmode[i][4][k][j] == '1' %}
+                                    <div class="case y">{{lmode[i][3][k][j]}}</div>
+                                {%elif lmode[i][4][k][j] == '2' %}
+                                    <div class="case g">{{lmode[i][3][k][j]}}</div>
+                                {% endif %}
+                            {% endfor %}
+                            <br>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <br><br><br><br><br><br>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+
+    <script src="{{url_for('static', filename='function_flask.js')}}"></script>
+{%endblock%}
+
+
+
+

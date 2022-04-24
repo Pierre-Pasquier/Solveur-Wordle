@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS Historique CASCADE;
+DROP TABLE IF EXISTS Historique_survie CASCADE;
 DROP TABLE IF EXISTS Profil CASCADE;
 DROP TABLE IF EXISTS Mots CASCADE;
 
@@ -7,9 +8,22 @@ CREATE TABLE Historique(
 	id_partie int check (id_partie >0) DEFAULT 0 NOT NULL,
 	type varchar check (type in ('survie','daily','libre')) NOT NULL,
 	id int check (id > 0) NOT NULL,
-	paterne varchar,
 	mot_a_deviner varchar NOT NULL,
+	mots_donnes varchar NOT NULL,
+	date_partie varchar check (date_partie LIKE '__/__/____') DEFAULT current_date,
+	heure varchar check (heure LIKE '__:__') DEFAULT current_date,
 	primary key(id_partie,id,type));
+	
+	
+CREATE TABLE Historique_survie(
+	id_partie int check (id_partie >0) DEFAULT 0 NOT NULL,
+	id int check (id > 0) NOT NULL,
+	mot_a_deviner varchar NOT NULL,
+	mots_donnes varchar NOT NULL,
+	temps_survie int,
+	date_partie varchar check (date_partie LIKE '__/__/____') DEFAULT current_date,
+	heure varchar check (heure LIKE '__:__') DEFAULT current_date,
+	primary key(id_partie,id));
 
 
 CREATE TABLE Profil(
@@ -27,8 +41,8 @@ CREATE TABLE Profil(
 CREATE TABLE Mots(
 	mot varchar primary key check (4 < length(mot) < 11) NOT NULL,
 	len_mot int check (4 < len_mot < 11));
-	
-	
+
+
 INSERT INTO Mots VALUES("ABATTU",6);
 INSERT INTO Mots VALUES("ABBAYE",6);
 INSERT INTO Mots VALUES("ABETIR",6);
