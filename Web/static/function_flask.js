@@ -327,20 +327,37 @@ $(document).keyup(function (e)
 
 
 var slideIndex = 1;
-showSlides(slideIndex);
-
-function plusSlides(n) {
-  showSlides(slideIndex += n);
+for (var k=0;k<longueur;k++){
+    showSlides(slideIndex,k);
 }
 
-function currentSlide(n) {
-  showSlides(slideIndex = n);
+
+function plusSlides(n,m) {
+  showSlides(slideIndex += n,m);
 }
 
-function showSlides(n) {
+function currentSlide(n,m) {
+  showSlides(slideIndex = n,m);
+}
+
+function showSlides(n,m) {
   var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
+  console.log(m);
+  var slidest = document.getElementsByClassName("mySlides");
+  var dotst = document.getElementsByClassName("dot");
+  var slides=[];
+  var dots=[];
+  for (var k=0;k<slidest.length;k++){
+      if (((slidest[k]).id)==(m.toString())){
+          slides.push(slidest[k])
+      }
+  }
+  for (var k=0;k<dotst.length;k++){
+    if ((dotst[k]).id==m.toString()){
+        dots.push(dotst[k])
+    }
+}
+
   if (n > slides.length) {slideIndex = 1}    
   if (n < 1) {slideIndex = slides.length}
   for (i = 0; i < slides.length; i++) {

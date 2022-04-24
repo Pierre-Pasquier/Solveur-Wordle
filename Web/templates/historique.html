@@ -3,6 +3,9 @@
     <link href="{{url_for('static',filename='styles.css')}}" rel="stylesheet">
     <title>Document</title>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/ui-lightness/jquery-ui.css" />
+    <script>
+        var longueur={{lmode|length}};
+    </script>
     <div class ="mid">
         <h1> Historique de vos parties du mode {{mode}}</h1>
     
@@ -28,7 +31,7 @@
                         </h3>
                         <h3>Vous avez survécu {{lmode[i][2]//60}} minutes et {{lmode[i][2]%60}} secondes</h3>
                         {% for a in range(lmode[i][3]|length) %}
-                            <div class="mySlides" id="">
+                            <div class="mySlides" id="{{i}}">
                                 <h3>Mot à deviner : {{lmode[i][3][a]}}</h3>
                                 {% for k in range(lmode[i][4][a]|length) %}
                                     {% for j in range(lmode[i][4][a][k]|length) %}
@@ -45,13 +48,13 @@
                             </div>
                         {% endfor %}
                     <div class="bricabrac">
-                    <a class="prev" onclick="plusSlides(-1)">❮</a>
-                    <a class="next" onclick="plusSlides(1)">❯</a>
+                    <a class="prev" onclick="plusSlides(-1,{{i}})">❮</a>
+                    <a class="next" onclick="plusSlides(1,{{i}})">❯</a>
                     </div>
  
                     <div class="dot-container">
-                        {% for i in range(1,lmode[i][3]|length + 1) %}
-                            <span class="dot" onclick="currentSlide(i)"></span>
+                        {% for j in range(1,lmode[i][3]|length + 1) %}
+                            <span class="dot" id="{{i}}" onclick="currentSlide({{j}},{{i}})"></span>
                         {% endfor %}
                         </div>
                 </div><br><br>
