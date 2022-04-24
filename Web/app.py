@@ -394,7 +394,7 @@ def mode_survie(id):
                 id_partie=int(tab[0][0])+1
             today = date.today().strftime("%d/%m/%Y")
             heure = datetime.now().strftime("%H:%M")
-            cur.execute("INSERT INTO Historique_survie VALUES(?,?,?,?,?,?)",(id_partie,id,toguess,given,today,heure,)) #ajouter le temps supplémentaire
+            cur.execute("INSERT INTO Historique_survie VALUES(?,?,?,?,?,?,?)",(id_partie,id,toguess,given,int(temps),today,heure,)) #ajouter le temps supplémentaire
             con.commit()
             con.close()
         print(temps)
