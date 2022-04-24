@@ -1,8 +1,9 @@
 {%extends "templatepage.html" %}
 
 {% block content %}
+<link href="{{url_for('static',filename='styles_classement.css')}}" rel="stylesheet">
 
-<div class="main container-bot" style="width:1000px;height: 30px;"> 
+<div class="main container-bot"> 
 {% for (pseudo,temps,rang) in ranks %}
 
     <div class="box" >
