@@ -352,21 +352,21 @@ def mode_survie(id):
         given=request.form.get('motsdonnés')
         toguess=request.form.get("motsàdeviner") #On pensera a les encrypter pour prendre moins de place dans la bd
         if id!=0:
+            update_xp(id,gainxp)
             con=sqlite3.connect(database)
             cur=con.cursor()
             cur.execute("SELECT MAX(id_partie)  FROM Historique_survie WHERE id=?",(id,))
             tab=cur.fetchall()
-            if tab==[]:
+            if tab==[] or (tab[0][0] is None):
                 id_partie=1
             else:
                 id_partie=int(tab[0][0])+1
-            today = date.today().strftime("%Y-%m-%d")
+            today = date.today().strftime("%Y/%m/%d")
             heure = datetime.now().strftime("%H:%M:%S")
-            cur.execute("INSERT INTO Historique_survie VALUES(?,?,?,?,?,?)",(id_partie,id,toguess,given,today,heure))
+            cur.execute("INSERT INTO Historique_survie VALUES(?,?,?,?,?,?)",(id_partie,id,toguess,given,today,heure)) #ajouter le temps supplémentaire
             con.commit()
             con.close()
         print(temps)
-        print(gainxp)
         print(toguess)
         print(given)
         return redirect(f"/home?id={id}")
