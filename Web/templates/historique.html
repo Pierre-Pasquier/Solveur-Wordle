@@ -8,8 +8,9 @@
     </script>
     <div class ="mid">
         <h1> Historique de vos parties du mode {{mode}}</h1>
-    
-        <form method="POST">
+    <br>
+    <br>
+        <form method="POST" class="form">
             <div class="form-group col-md-4">
                 <select name="mode" id="inputState" class="form-control">
                 <option selected>Mode</option>
@@ -20,6 +21,8 @@
             </div>
             <button class="btn btn-primary" type="submit">Search</button>
         </form>
+        <br>
+        <br>
         
         
         {% if mode == "Survie" %}
@@ -68,7 +71,9 @@
                     <h3>
                         Partie jouée le {{lmode[i][0]}} à {{lmode[i][1][:2]}}h{{lmode[i][1][-2:]}}
                     </h3>
+                    <br>
                     <h3>Mot à deviner : {{lmode[i][2]}}</h3>
+                    <br>
                     <div>
                         {% for k in range(lmode[i][4]|length) %}
                             {% for j in range(lmode[i][4][k]|length) %}
