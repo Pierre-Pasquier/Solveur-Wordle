@@ -375,7 +375,6 @@ def mode_survie(id):
         ##modif bd
         if int(temps)>300: #vérifier si l'utilisateur est éligible au gain d'xp
             gainxp=((int(temps)-300)//60)*10
-            update_xp(id,gainxp)
             #faire les modifications sur la base de données ici, utilisation de update_xp
         else : gainxp=0
         given=request.form.get('motsdonnés')
