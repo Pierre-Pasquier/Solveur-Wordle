@@ -212,10 +212,9 @@ body {font-family: Verdana, sans-serif; margin:0}
 }
 
 /* Next & previous buttons */
-.prev, .next {
+.prev{
   cursor: pointer;
-  position: static;
-  width: auto;
+  width: 50%;
   margin-top: -30px;
   padding: 16px;
   color: #888;
@@ -227,10 +226,16 @@ body {font-family: Verdana, sans-serif; margin:0}
 
 /* Position the "next button" to the right */
 .next {
-  position: absolute;
-  right: 0;
-  border-radius: 3px 0 0 3px;
-}
+    cursor: pointer;
+    width: 50%;
+    margin-top: -30px;
+    padding: 16px;
+    color: #888;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+  }
 
 /* On hover, add a black background color with a little bit see-through */
 .prev:hover, .next:hover {
@@ -258,4 +263,9 @@ body {font-family: Verdana, sans-serif; margin:0}
 /* Add a background color to the active dot/circle */
 .active, .dot:hover {
   background-color: #717171;
+}
+.bricabrac{
+    display: flex;
+    margin-left: 20%;
+    margin-right:20%;
 }
