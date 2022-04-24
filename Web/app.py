@@ -139,7 +139,7 @@ badgetab = ['grisbadge1.png','grisbadge2.png','grisbadge3.png','grisbadge4.png',
 
 def niveau(xp): #permet de savoir le niveau du joueur sachant son xp total
     i=0
-    while i<30 and xp>xptab[i]:
+    while i<29 and xp>xptab[i+1]:
         i+=1
     return(i) #correspond à la position du badge associé dans badgetab
 
@@ -184,21 +184,22 @@ def contactez():
     return render_template('contacteznous.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])])
 
 
-@app.route('/home')     #page d'accueil
+@app.route('/home',methods=['GET','POST'])     #page d'accueil
 def home():
     id=request.args.get('id')
     if id is None or id=='' or id=='0':
-        return render_template('home.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') #voir un paramètre de disable ? permettant de disable telle ou telle option comme
-    con = sqlite3.connect(database)                         #les historiques puisque liés au compte? ATTENTION : faudra faire gaffe niveau bd à ne pas save les parties guests
+        return render_template('home.html',id_user=0, pseudo = "Guest", pourcent=0,badge='guest.png') 
+    con = sqlite3.connect(database)                         
     cur = con.cursor()                                      
     cur.execute('SELECT pseudo,xp,date_dernier_essai FROM Profil WHERE id= ?',(id,))
     tab=cur.fetchall()
     con.close()
     dateder = tab[0][2]
     today = date.today()
-    day = today.strftime("%Y-%m-%d")
+    day = today.strftime("%d/%m/%Y")
     done = (dateder==day)
-    return render_template('home.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])],daily=done)
+    print(pourcentlvlup(tab[0][1]))
+    return render_template('home.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])],bool=done)
 
 @app.route('/<id>/daily',methods=['GET','POST'])
 def daily(id):
@@ -215,10 +216,10 @@ def daily(id):
         joueur=cur.fetchall()
         con.close()
 
-        today = date.today().strftime("%Y-%m-%d")
+        today = date.today().strftime("%d/%m/%Y")
         con = sqlite3.connect(database)
         cur = con.cursor()
-        cur.execute('SELECT mot_a_deviner FROM Historique WHERE date=? AND type=?',(today,'daily',))
+        cur.execute('SELECT mot_a_deviner FROM Historique WHERE date_partie=? AND type=?',(today,'daily',))
         tab = cur.fetchall()
         con.close()
         a_generer = (tab==[])
@@ -236,17 +237,25 @@ def daily(id):
             guessmot = mots[i]
         else:
             guessmot = tab[0][0]
+            lenmot= len(guessmot)
+            nbrguess=lenmot
+            con = sqlite3.connect(database) 
+            cur = con.cursor()
+            cur.execute('SELECT mot FROM Mots WHERE len_mot=?',(lenmot,))
+            tabmots=cur.fetchall()
+            mots=[tabmots[k][0] for k in range(len(tabmots))]
+            con.close()
         ###là on crée les valeurs à rentrer dans la bd
-        heure = datetime.now().strftime("%H:%M:%S")
+        heure = datetime.now().strftime("%H:%M")
         con = sqlite3.connect(database)
         cur = con.cursor()
-        cur.execute('Select MAX(SELECT id FROM Historique WHERE id_joueur=? AND type=?) FROM Sondages',(id,'daily',))
+        cur.execute('SELECT MAX(id_partie) FROM Historique WHERE id=? ',(id,))
         idpartie=cur.fetchall()[0][0] + 1
         con.close()
         ###ensuite on pré-génère la partie dans la bd
         con = sqlite3.connect(database)
         cur = con.cursor()
-        cur.execute('Insert into Historique values(?,"daily",?,?,?,?,?)',(idpartie,id,[],guessmot,today,heure))
+        cur.execute('Insert into Historique values(?,?,?,?,?,?,?)',(idpartie,'daily',id,guessmot,"",today,heure,))
         con.commit()
         con.close()
         ###maintenant on va changer la date du dernier essai de daily du joueur
@@ -258,10 +267,29 @@ def daily(id):
         ###puis on render la page de partie, dans laquelle il faudra en sortie mettre à jour la bd pour compléter la partie en historique
         ###voir pour résultat dans la page historique : exemple partie quittée en cours -> partie pas complétée donc vide? -> 
         ###-> possibilité de ne pas prendre en compte les parties vides à l'affichage de l'historique
-        return render_template('test_flask.html',id_user=id,pseudo=joueur[0][0],pourcent=pourcentlvlup(joueur[0][1]),badge=badgetab[niveau(joueur[0][1])],longueur_mot=lenmot, mot_à_deviner=guessmot, nombre_dessai=nbrguess)
+        return render_template('test_flask.html',id_user=id,pseudo=joueur[0][0],pourcent=pourcentlvlup(joueur[0][1]),badge=badgetab[niveau(joueur[0][1])],longueur_mot=lenmot, mot_à_deviner=guessmot, nombre_dessais=nbrguess,mots=mots)
     else:
-        ###voir ici pour la méthode post, aka potentiellement le retour de la partie?
-        return redirect(f"/home?id={id}")
+        pattern = request.form.get("pattern")
+        today = date.today().strftime("%d/%m/%Y")
+        con = sqlite3.connect(database)
+        cur = con.cursor()
+        cur.execute('UPDATE Historique SET mots_donnes=? WHERE id=? AND date_partie=?',(pattern,id,today,))
+        con.commit()
+        con.close()
+        ###voir pour ajouter l'xp ici, SI pattern[last]=mot_a_deviner
+        con = sqlite3.connect(database)
+        cur = con.cursor()
+        cur.execute('SELECT mot_a_deviner FROM Historique WHERE id=? AND date_partie=?',(id,today,))
+        tab = cur.fetchall()
+        con.close()
+        guessmot = tab[0][0]
+        print("test1")
+        print(guessmot)
+        print(pattern[-len(guessmot):0])
+        if not(pattern is None) and pattern!='' and pattern[-len(guessmot):]==guessmot:
+            print("test")
+            update_xp(id,300)
+        return redirect(f"/home?id={id}") 
 
 @app.route('/<id>/pl',methods=['GET','POST'])
 def partie_libre(id):
@@ -347,6 +375,7 @@ def mode_survie(id):
         ##modif bd
         if int(temps)>300: #vérifier si l'utilisateur est éligible au gain d'xp
             gainxp=((int(temps)-300)//60)*10
+            update_xp(id,gainxp)
             #faire les modifications sur la base de données ici, utilisation de update_xp
         else : gainxp=0
         given=request.form.get('motsdonnés')
