@@ -169,8 +169,8 @@ display: inline-block;
 
 
 div.case{
-    height:30px;
-    width: 30px;
+    height:100px;
+    width: 100px;
     border: 1px solid grey;
     border-radius:6px;
     text-transform: uppercase;
@@ -207,14 +207,16 @@ body {font-family: Verdana, sans-serif; margin:0}
 /* Slides */
 .mySlides {
   display: none;
-  padding: 80px;
+  padding-left: 80px;
+  padding-right:80px;
+  padding-top: 20px;
   text-align: center;
 }
 
 /* Next & previous buttons */
-.prev, .next {
+.prev{
   cursor: pointer;
-  width: auto;
+  width: 50%;
   margin-top: -30px;
   padding: 16px;
   color: #888;
@@ -226,10 +228,16 @@ body {font-family: Verdana, sans-serif; margin:0}
 
 /* Position the "next button" to the right */
 .next {
-  position: absolute;
-  right: 0;
-  border-radius: 3px 0 0 3px;
-}
+    cursor: pointer;
+    width: 50%;
+    margin-top: -30px;
+    padding: 16px;
+    color: #888;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+  }
 
 /* On hover, add a black background color with a little bit see-through */
 .prev:hover, .next:hover {
@@ -258,4 +266,12 @@ body {font-family: Verdana, sans-serif; margin:0}
 .active, .dot:hover {
   background-color: #717171;
 }
-
+.bricabrac{
+    display: flex;
+    margin-left: 40%;
+    margin-right:40%;
+}
+.form{
+    display:flex;
+    justify-content: center;
+}

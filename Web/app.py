@@ -137,12 +137,12 @@ def update_xp(id,xpgain):
     con.close()
 
 
-xptab = [300*i for i in range(0,30)]
+xptab = [300*(i*(i+1)/2) for i in range(0,30)]
 badgetab = ['grisbadge1.png','grisbadge2.png','grisbadge3.png','grisbadge4.png','grisbadge5.png','jaunbadge1.png','jaunbadge2.png','jaunbadge3.png','jaunbadge4.png','jaunbadge5.png','verbadge1.png','verbadge2.png','verbadge3.png','verbadge4.png','verbadge5.png','bronzbadge1','bronzbadge2.png','bronzbadge3.png','bronzbadge4.png','bronzbadge5.png','arjanbadge1.png','arjanbadge2.png','arjanbadge3.png','arjanbadge4.png','arjanbadge5.png','goldbadge1.png','goldbadge2.png','goldbadge3.png','goldbadge4.png','goldbadge5.png']
 
 def niveau(xp): #permet de savoir le niveau du joueur sachant son xp total
     i=0
-    while i<29 and xp>xptab[i+1]:
+    while i<29 and xp>=xptab[i+1]:
         i+=1
     return(i) #correspond à la position du badge associé dans badgetab
 
@@ -157,13 +157,7 @@ def pourcentlvlup(xp): #renvoie le % d'xp avant prochain lvl -> renvoie 100% si 
 
 
 @app.route('/')      #redirection vers page d'accueil
-def redirection():
-    db = getdb()
-    c = db.cursor()
-    c.execute("INSERT INTO Historique VALUES(3,'libre',1,'MARTEAU','POIVRES,SOUVENT,BONJOUR,TOURNER,MARTEAU','24/04/2022','15:33')")
-    db.commit()
-    close_connection()
-    
+def redirection():    
     return redirect('/home')
 
 
@@ -207,7 +201,6 @@ def home():
     today = date.today()
     day = today.strftime("%d/%m/%Y")
     done = (dateder==day)
-    print(pourcentlvlup(tab[0][1]))
     return render_template('home.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])],bool=done)
 
 @app.route('/<id>/daily',methods=['GET','POST'])
@@ -285,18 +278,13 @@ def daily(id):
         cur.execute('UPDATE Historique SET mots_donnes=? WHERE id=? AND date_partie=?',(pattern,id,today,))
         con.commit()
         con.close()
-        ###voir pour ajouter l'xp ici, SI pattern[last]=mot_a_deviner
         con = sqlite3.connect(database)
         cur = con.cursor()
-        cur.execute('SELECT mot_a_deviner FROM Historique WHERE id=? AND date_partie=?',(id,today,))
+        cur.execute('SELECT mot_a_deviner FROM Historique WHERE id=? AND date_partie=? AND type=?',(id,today,'daily',))
         tab = cur.fetchall()
         con.close()
         guessmot = tab[0][0]
-        print("test1")
-        print(guessmot)
-        print(pattern[-len(guessmot):0])
         if not(pattern is None) and pattern!='' and pattern[-len(guessmot):]==guessmot:
-            print("test")
             update_xp(id,300)
         return redirect(f"/home?id={id}") 
 
@@ -363,6 +351,22 @@ def partie_libre(id):
 @app.route('/<id>/survie',methods=['GET','POST'])
 def mode_survie(id):
     if request.method=='GET':
+        ###partie de récupération des paramètres pour template
+        if id is None or id=='' or id=='0':
+            id=0
+            pseudo="Guest"
+            pourcent = 0
+            badge = 'guest.png'
+        else:
+            con = sqlite3.connect(database)                         
+            cur = con.cursor()                                      
+            cur.execute('SELECT pseudo,xp FROM Profil WHERE id= ?',(id,))
+            tab=cur.fetchall()
+            con.close()
+            pseudo = tab[0][0]
+            pourcent = pourcentlvlup(tab[0][1])
+            badge = badgetab[niveau(tab[0][1])]
+        ###fin récup
         con = sqlite3.connect(database) 
         cur = con.cursor()
         cur.execute('SELECT mot FROM Mots')
@@ -378,7 +382,7 @@ def mode_survie(id):
         motlen=[tabchoice[k][0] for k in range(len(tabchoice))]
         borne=random.randint(0,len(motlen)-1) ##à la limite, ici on peut décider de l'aléatoire de la longueur du mot?
         mot_à_deviner=motlen[borne]
-        return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots , id_user=id)
+        return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots , id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])])
     else :
         temps=request.form.get('tempssurvie')
         ##modif bd
@@ -422,7 +426,7 @@ def connex():
         l = c.fetchall()
         
         if l == []:     #si pas inscrit
-            return render_template('connexion.html',erreur=erreur,pas_inscrit=True)
+            return render_template('connexion.html',erreur=erreur,pas_inscrit=True, id_user=0,pseudo="Guest",pourcent=0,badge='guest.png')
         close_connection()
         bon_mdp = l[0][1]
         id = l[0][0]
@@ -431,7 +435,7 @@ def connex():
             erreur = True
         else:
             return redirect('/home?id='+str(id))   #si bon mot de passe, on redirige
-    return render_template('connexion.html',erreur=erreur,pas_inscrit=False)    #on affiche la page
+    return render_template('connexion.html',erreur=erreur,pas_inscrit=False, id_user=0,pseudo="Guest",pourcent=0,badge='guest.png')    #on affiche la page
 
 @app.route('/inscription', methods=["GET", "POST"])     #page d'inscription
 def inscription():
@@ -494,7 +498,7 @@ def inscription():
                     url_chiffre = url_chiffre[:c] + 'telecom' + url_chiffre[c+1:]   #on remplace les '/' par 'telecom' pour éviter les problèmes dans l'url
                 c += 1
             return redirect('/verification/'+url_chiffre)
-    return render_template('inscription.html',egal=egal,pris=pseudo_pris,inscrit=inscrit)
+    return render_template('inscription.html',egal=egal,pris=pseudo_pris,inscrit=inscrit,id_user=0,pseudo="Guest",pourcent=0,badge='guest.png')
 
 
 
@@ -518,7 +522,7 @@ def verification(url_chiffre):
     code_donne = str('' if request.form.get("code") is None else request.form.get("code"))  #pour donner type str à code_donne
     if code_donne == code:  #si le code est bon
         if mail == 'pierrepasquier63@gmail.com':
-            return redirect('/'+str(id)+'/home')
+            return redirect('/home?id='+str(id))
         mdp_crypte = cryptocode.encrypt(mdp,'tncy')
         db = getdb()
         c = db.cursor()
@@ -527,27 +531,30 @@ def verification(url_chiffre):
         close_connection()
         return redirect('/home?id='+str(id))   #et on redirige l'utilisateur vers son profil fraichement créé
     elif code_donne != '':
-        return render_template('verification.html',erreur=True)     #si le code n'est pas le bon, on affiche l'erreur
+        return render_template('verification.html',erreur=True,id_user=0,pseudo="Guest",pourcent=0,badge='guest.png')     #si le code n'est pas le bon, on affiche l'erreur
     else:
-        return render_template('verification.html',erreur=False)    #on arrivant sur la page, on lui affiche la page sans erreur
+        return render_template('verification.html',erreur=False,id_user=0,pseudo="Guest",pourcent=0,badge='guest.png')    #on arrivant sur la page, on lui affiche la page sans erreur
 
-
-@app.route('/<id>/historiqueeee', methods=["GET", "POST"])      #Pour tester historique sans BD
-def historiqueeee(id):
-    mode = request.form.get("mode")
-    if mode == "Mode" or mode == None:
-        mode = "Daily"
-    lmode = [['14/04/2022','14h48','PELLES','000100,000100,200022,222222','BATEAU,RATEAU,POIRES,PELLES'],['15/05/2022','15h35','PELLES','000100,000100,222222','BATEAU,RATEAU,PELLES'],['16/06/2022','16h12','PELLES','000100,000100,200022,100022,222222','BATEAU,RATEAU,POIRES,LOMMES,PELLES']]
-    l=[[] for k in range(len(lmode))]
-    for k in range(len(lmode)):
-        l[k] = lmode[k][0:3]
-        l[k].append(lmode[k][3].split(','))
-        l[k].append(lmode[k][4].split(','))
-    return render_template('historique.html',lmode=l,mode=mode)
 
 
 @app.route('/<id>/historique', methods=["GET", "POST"])
 def historique(id):
+    ###partie de récupération des paramètres pour template
+    if id is None or id=='' or id=='0':
+            id=0
+            pseudo="Guest"
+            pourcent = 0
+            badge = 'guest.png'
+    else:
+            con = sqlite3.connect(database)                         
+            cur = con.cursor()                                      
+            cur.execute('SELECT pseudo,xp FROM Profil WHERE id= ?',(id,))
+            tab=cur.fetchall()
+            con.close()
+            pseudo = tab[0][0]
+            pourcent = pourcentlvlup(tab[0][1])
+            badge = badgetab[niveau(tab[0][1])]
+    ###fin récup
     mode = request.form.get('mode')
     if mode == "Mode" or mode == 'Daily' or mode == None:
         mode = 'Daily'
@@ -589,7 +596,7 @@ def historique(id):
             l[k].append(lint)
     print(l)
     print(l[0])
-    return render_template('historique.html',lmode=l,mode=mode)
+    return render_template('historique.html',lmode=l,mode=mode,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
 
 @app.route('/<id>/classement')
 def classement(id):
@@ -610,11 +617,14 @@ def classement(id):
     ###partie récup des 50 premiers du classement
     con = sqlite3.connect(database)
     cur = con.cursor()
-    cur.execute('SELECT pseudo, temps_survie FROM histo_survie as hs JOIN Profil as p ON hs.id_joueur = p.id ORDER BY hs.temps_survie DESC LIMIT 50')   
+    cur.execute('SELECT pseudo,temps_survie FROM historique_survie as hs JOIN Profil as p ON hs.id = p.id GROUP BY pseudo ORDER BY hs.temps_survie DESC LIMIT 50 ')   
     ranks=cur.fetchall()
     con.close()
-    ranks.append([i for i in range(1,51)])
+    ###arrangement de la liste
+    ranking = []
+    for i in range(len(ranks)):
+        ranking.append([ranks[i][0],ranks[i][1],i+1])
     ###partie vérif + récup rang du compte + sup et inf
 
     ###fin part
-    return render_template('classement.html',ranks,   id_user=id, pseudo=pseudo,pourcent=pourcent,badge=badge)
+    return render_template('classement.html',ranks=ranking,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
