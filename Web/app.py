@@ -129,7 +129,7 @@ def update_xp(id,xpgain):
     cur=con.cursor()
     cur.execute("SELECT xp FROM Profil WHERE id=?",(id,))
     xp=cur.fetchall()[0][0]
-    cur.execute("UPDATE Profil SET xp=?,niveau=? WHERE id=?",(xp+xpgain,niveau(xp+xpgain),id,))
+    cur.execute("UPDATE Profil SET xp=?,niveau=? WHERE id=?",(xp+xpgain,niveau(xp+xpgain)+1,id,))
     con.commit()
     con.close()
 
@@ -389,9 +389,9 @@ def mode_survie(id):
                 id_partie=1
             else:
                 id_partie=int(tab[0][0])+1
-            today = date.today().strftime("%Y/%m/%d")
-            heure = datetime.now().strftime("%H:%M:%S")
-            cur.execute("INSERT INTO Historique_survie VALUES(?,?,?,?,?,?)",(id_partie,id,toguess,given,today,heure)) #ajouter le temps supplémentaire
+            today = date.today().strftime("%d/%m/%Y")
+            heure = datetime.now().strftime("%H:%M")
+            cur.execute("INSERT INTO Historique_survie VALUES(?,?,?,?,?,?)",(id_partie,id,toguess,given,today,heure,)) #ajouter le temps supplémentaire
             con.commit()
             con.close()
         print(temps)
