@@ -198,7 +198,6 @@ def home():
     today = date.today()
     day = today.strftime("%d/%m/%Y")
     done = (dateder==day)
-    print(pourcentlvlup(tab[0][1]))
     return render_template('home.html',id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])],bool=done)
 
 @app.route('/<id>/daily',methods=['GET','POST'])
@@ -276,18 +275,13 @@ def daily(id):
         cur.execute('UPDATE Historique SET mots_donnes=? WHERE id=? AND date_partie=?',(pattern,id,today,))
         con.commit()
         con.close()
-        ###voir pour ajouter l'xp ici, SI pattern[last]=mot_a_deviner
         con = sqlite3.connect(database)
         cur = con.cursor()
         cur.execute('SELECT mot_a_deviner FROM Historique WHERE id=? AND date_partie=?',(id,today,))
         tab = cur.fetchall()
         con.close()
         guessmot = tab[0][0]
-        print("test1")
-        print(guessmot)
-        print(pattern[-len(guessmot):0])
         if not(pattern is None) and pattern!='' and pattern[-len(guessmot):]==guessmot:
-            print("test")
             update_xp(id,300)
         return redirect(f"/home?id={id}") 
 
@@ -583,7 +577,7 @@ def classement(id):
     ###partie récup des 50 premiers du classement
     con = sqlite3.connect(database)
     cur = con.cursor()
-    cur.execute('SELECT pseudo, temps_survie FROM histo_survie as hs JOIN Profil as p ON hs.id_joueur = p.id ORDER BY hs.temps_survie DESC LIMIT 50')   
+    cur.execute('SELECT pseudo, temps_survie FROM historique_survie as hs JOIN Profil as p ON hs.id = p.id ORDER BY hs.temps_survie DESC LIMIT 50')   
     ranks=cur.fetchall()
     con.close()
     ranks.append([i for i in range(1,51)])
