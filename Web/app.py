@@ -286,7 +286,7 @@ def daily(id):
         con.close()
         con = sqlite3.connect(database)
         cur = con.cursor()
-        cur.execute('SELECT mot_a_deviner FROM Historique WHERE id=? AND date_partie=?',(id,today,))
+        cur.execute('SELECT mot_a_deviner FROM Historique WHERE id=? AND date_partie=? AND type=?',(id,today,'daily',))
         tab = cur.fetchall()
         con.close()
         guessmot = tab[0][0]
@@ -604,11 +604,14 @@ def classement(id):
     ###partie récup des 50 premiers du classement
     con = sqlite3.connect(database)
     cur = con.cursor()
-    cur.execute('SELECT pseudo, temps_survie FROM historique_survie as hs JOIN Profil as p ON hs.id = p.id ORDER BY hs.temps_survie DESC LIMIT 50')   
+    cur.execute('SELECT pseudo,temps_survie FROM historique_survie as hs JOIN Profil as p ON hs.id = p.id GROUP BY pseudo ORDER BY hs.temps_survie DESC LIMIT 50 ')   
     ranks=cur.fetchall()
     con.close()
-    ranks.append([i for i in range(1,51)])
+    ###arrangement de la liste
+    ranking = []
+    for i in range(len(ranks)):
+        ranking.append([ranks[i][0],ranks[i][1],i+1])
     ###partie vérif + récup rang du compte + sup et inf
 
     ###fin part
-    return render_template('classement.html',ranks,   id_user=id, pseudo=pseudo,pourcent=pourcent,badge=badge)
+    return render_template('classement.html',ranks=ranking,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)

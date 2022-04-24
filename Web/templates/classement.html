@@ -2,11 +2,13 @@
 
 {% block content %}
 
-<div class="main container-bot"> 
+<div class="main container-bot" style="width:1000px;height: 30px;"> 
 {% for (pseudo,temps,rang) in ranks %}
 
-    <div class="box">
+    <div class="box" >
+        <div>
         <p>{{rang}} - {{pseudo}} - {{temps}}</p>
+        </div>
     </div>
 
 {% endfor %}
