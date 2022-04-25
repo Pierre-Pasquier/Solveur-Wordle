@@ -643,7 +643,7 @@ def classement(id):
     ###partie récup des 50 premiers du classement
     con = sqlite3.connect(database)
     cur = con.cursor()
-    cur.execute('SELECT pseudo,temps_survie,hs.id FROM historique_survie as hs JOIN Profil as p ON hs.id = p.id GROUP BY pseudo ORDER BY hs.temps_survie DESC')   
+    cur.execute('SELECT pseudo,MAX(temps_survie),hs.id FROM historique_survie as hs JOIN Profil as p ON hs.id = p.id GROUP BY pseudo ORDER BY hs.temps_survie DESC')   
     ranks=cur.fetchall()
     con.close()
     ###arrangement de la liste
