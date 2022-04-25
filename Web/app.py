@@ -619,16 +619,50 @@ def classement(id):
     ###partie récup des 50 premiers du classement
     con = sqlite3.connect(database)
     cur = con.cursor()
-    cur.execute('SELECT pseudo,temps_survie FROM historique_survie as hs JOIN Profil as p ON hs.id = p.id GROUP BY pseudo ORDER BY hs.temps_survie DESC LIMIT 50 ')   
+    cur.execute('SELECT pseudo,temps_survie,hs.id FROM historique_survie as hs JOIN Profil as p ON hs.id = p.id GROUP BY pseudo ORDER BY hs.temps_survie DESC')   
     ranks=cur.fetchall()
     con.close()
     ###arrangement de la liste
     ranking = []
+    n = len(ranks)
+    rangid = 0
+    pseudoid=""
+    minuteid = 0
+    secondeid = 0
+    advdessousrang=0
+    advdessouspseudo=""
+    advdessousminute= 0
+    advdessousseconde= 0
+    advdessusrang=0
+    advdessuspseudo=""
+    advdessusminute= 0
+    advdessusseconde= 0
     for i in range(len(ranks)):
+        if int(ranks[i][2])==int(id):
+            rangid = i+1
+            pseudoid=ranks[i][0]
+            minuteid = ranks[i][1]//60
+            secondeid = ranks[i][1]%60
+            if i!=0 and i!=n-1:
+                advdessusrang=i
+                advdessuspseudo=ranks[i-1][0]
+                advdessusminute= ranks[i-1][1]//60
+                advdessusseconde= ranks[i-1][1]%60
+                advdessousrang=i+2
+                advdessouspseudo=ranks[i+1][0]
+                advdessousminute= ranks[i+1][1]//60
+                advdessousseconde= ranks[i+1][1]%60
+            elif i==0 and i!=n-1:
+                advdessousrang=i+2
+                advdessouspseudo=ranks[i+1][0]
+                advdessousminute= ranks[i+1][1]//60
+                advdessousseconde= ranks[i+1][1]%60
+            elif i==n-1 and i!=0:
+                advdessusrang=i
+                advdessuspseudo=ranks[i-1][0]
+                advdessusminute= ranks[i-1][1]//60
+                advdessusseconde= ranks[i-1][1]%60                
         minute = ranks[i][1]//60
         seconde = ranks[i][1]%60
-        ranking.append([ranks[i][0],minute,seconde,i+1])
-    ###partie vérif + récup rang du compte + sup et inf
-
-    ###fin part
-    return render_template('classement.html',ranks=ranking,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
+        ranking.append([ranks[i][0],ranks[i][2],minute,seconde,i+1])
+    return render_template('classement.html',ranks=ranking,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge,rangid=rangid,ranglast=n,pseudoid=pseudoid,minuteid=minuteid,secondeid=secondeid,advdessusrang=advdessusrang,advdessuspseudo=advdessuspseudo,advdessusminute=advdessusminute,advdessusseconde=advdessusseconde,advdessousrang=advdessousrang,advdessouspseudo=advdessouspseudo,advdessousminute=advdessousminute,advdessousseconde=advdessousseconde)

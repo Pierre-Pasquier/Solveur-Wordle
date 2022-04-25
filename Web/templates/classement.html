@@ -3,13 +3,38 @@
 {% block content %}
 <link rel="stylesheet" href='/static/style_classement.css'>
 
-<h1 style="margin-top: 80px; margin-left: 42%;">Classement personnel :</h1>
-
-
+{%if id_user==0%}
+{%else%}
+<h1 style="margin-top: 80px; margin-left: 37%;">Classement personnel :</h1>
+<div class="boite">
+    {% if rangid==1 %}
+    {%else%}
+    <div class="inside">
+    <div class="rank">{{advdessusrang}}</div>
+    <div class="pseudo">{{advdessuspseudo}}</div>
+    <div class="temps">{{advdessusminute}}:{{advdessusseconde}}</div>
+    </div>
+    <br>
+    {%endif%}
+    <div class="inside">
+    <div class="rank">{{rangid}}</div>
+    <div class="pseudo">{{pseudoid}}</div>
+    <div class="temps">{{minuteid}}:{{secondeid}}</div>
+    </div><br>
+    {% if rangid==ranglast %}
+    {%else%}
+    <div class="inside">
+    <div class="rank">{{advdessousrang}}</div>
+    <div class="pseudo">{{advdessouspseudo}}</div>
+    <div class="temps">{{advdessousminute}}:{{advdessousseconde}}</div>
+    </div>
+    {%endif%}
+</div>
+{%endif%}
 
 <h1 style="margin-top: 80px; margin-left: 42%;">Classement :</h1>
 <div class="boite"> 
-{% for (pseudo,minute,seconde,rang) in ranks %}
+{% for (pseudo,idd,minute,seconde,rang) in ranks %}
         <div class="inside">
             {%if rang==1 %}
             <div class="rank g">{{rang}}</div>
