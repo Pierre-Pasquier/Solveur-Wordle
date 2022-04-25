@@ -47,9 +47,13 @@
             <div class="container-bot">
                 <div class="alignright">TuNom</div>
                 <div class="alignleft">
+                    {%if id_user!=0%}
+                    <a href="/home"><i class="fa fa-power-off"></i>Déconnexion</a>
+                    {% endif %}
                     <a href="/à_propos?id={{id_user}}"> <i class="fa fa-question"></i>  A propos</a> 
                     <p></p>
                     <a href="/contactez_nous?id={{id_user}}"> <i class="fa fa-envelope"></i>  Contactez nous</a>
+
                 </div>
             </div>        
         </div> 

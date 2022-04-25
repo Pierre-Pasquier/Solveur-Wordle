@@ -399,6 +399,7 @@ def mode_survie(id):
         cur = con.cursor()
         cur.execute('SELECT mot FROM Mots WHERE len_mot=?',(longueur_mot,))
         tabchoice=cur.fetchall()
+        con.close()
         motlen=[tabchoice[k][0] for k in range(len(tabchoice))]
         borne=random.randint(0,len(motlen)-1) ##à la limite, ici on peut décider de l'aléatoire de la longueur du mot?
         mot_à_deviner=motlen[borne]
