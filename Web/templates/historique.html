@@ -73,9 +73,7 @@
                     <h3>
                         Partie jouée le {{lmode[i][0]}} à {{lmode[i][1][:2]}}h{{lmode[i][1][-2:]}}
                     </h3>
-                    <br>
                     <h3>Mot à deviner : {{lmode[i][2]}}</h3>
-                    <br>
                     <div>
                         {% for k in range(lmode[i][4]|length) %}
                             {% for j in range(lmode[i][4][k]|length) %}
@@ -90,6 +88,7 @@
                             <br>
                         {% endfor %}
                     </div>
+                    <br><br>
                 </div>
             {% endfor %}
         {% endif %}
