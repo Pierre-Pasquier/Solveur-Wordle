@@ -216,12 +216,12 @@ def home():
 @app.route('/<id>/daily',methods=['GET','POST'])
 def daily(id):
     ###ici on teste si le joueur ne tente pas de gruger en le renvoyant au home si déjà joué
-    on = sqlite3.connect(database)                         
+    con = sqlite3.connect(database)                         
     cur = con.cursor()                                      
     cur.execute('SELECT date_dernier_essai FROM Profil WHERE id= ?',(id,))
     tab=cur.fetchall()
     con.close()
-    dateder = tab[0][2]
+    dateder = tab[0][0]
     today = date.today()
     day = today.strftime("%d/%m/%Y")
     if (dateder==day):
