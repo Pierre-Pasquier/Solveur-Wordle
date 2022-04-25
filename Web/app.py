@@ -160,7 +160,7 @@ def pourcentlvlup(xp): #renvoie le % d'xp avant prochain lvl -> renvoie 100% si 
 def redirection():
     db = getdb()
     c = db.cursor()
-    c.execute("DELETE FROM Profil WHERE pseudo='Pierre'")
+    c.execute("INSERT INTO Profil VALUES(1,'Benoit','benoitdu63@gmail.com','0606060606','jiFOsg==*p97SKNoPgahT33gDhwgYTg==*4koNRqJLQCDpzDNkhK74uA==*jnJqZZfOrxFNWFvdHO9J2w==',10,100,1,'24/04/2022')")
     db.commit()
     close_connection()
     return redirect('/home')
@@ -320,8 +320,23 @@ def partie_libre(id):
         ###besoin de post pour lancer partie (car params de home) et pour récup partie (résultats)
         ###partie de vérif si on vient d'une partie terminée
         pattern=request.form.get("pattern")
+        mot=request.form.get("toguess")
         print(pattern)
         if not pattern is None:
+            today = date.today().strftime("%d/%m/%Y")
+            heure = datetime.now().strftime("%H:%M")
+            con=sqlite3.connect(database)
+            cur = con.cursor()
+            cur.execute('SELECT MAX(id_partie) FROM Historique WHERE id=? ',(id,))
+            c = cur.fetchall()
+            print(c)
+            if c[0][0] == None:
+                idpartie = 1
+            else:
+                idpartie=c[0][0] + 1
+            cur.execute("INSERT INTO Historique VALUES(?,?,?,?,?,?,?)",(idpartie,"libre",id,mot,pattern,today,heure))
+            con.commit()
+            con.close()
             return redirect(f"/home?id={id}")
             #ici faut modif la bd
         ###fin de vérif
@@ -337,7 +352,7 @@ def partie_libre(id):
             if nbrguess==-2:
                 nbrguess = lenmot
         else:
-            lenmot = random.randrange(6,11) ##à la limite, ici on peut décider de l'aléatoire de la longueur du mot
+            lenmot = newlen() ##à la limite, ici on peut décider de l'aléatoire de la longueur du mot
             nbrguess= lenmot
         ###fin de la récupération, ajout ci dessous de l'utilisation des params
         con = sqlite3.connect(database) 
@@ -351,11 +366,6 @@ def partie_libre(id):
         mot_à_deviner = mots[i]
         ###
         return render_template('test_flask.html',longueur_mot=lenmot,mot_à_deviner=mot_à_deviner,nombre_dessais=nbrguess,mots=mots,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
-    else :
-        pattern=request.form.get('pattern')
-        #modif bd et vérifier si id!=0 pour save
-        print(pattern) ##pour tester
-        return redirect(f"/home?id={id}")
 
 
 @app.route('/<id>/survie',methods=['GET','POST'])
@@ -541,8 +551,8 @@ def verification(url_chiffre):
 
 
 
-@app.route('/<id>/historique', methods=["GET", "POST"])
-def historique(id):
+@app.route('/<id>/historique/<mode>', methods=["GET", "POST"])
+def historique(id,mode):
     ###partie de récupération des paramètres pour template
     if id is None or id=='' or id=='0':
             id=0
@@ -559,46 +569,53 @@ def historique(id):
             pourcent = pourcentlvlup(tab[0][1])
             badge = badgetab[niveau(tab[0][1])]
     ###fin récup
-    mode = request.form.get('mode')
-    if mode == "Mode" or mode == 'Daily' or mode == None:
-        mode = 'Daily'
-        db = getdb()
-        a = db.cursor()
-        a.execute("SELECT date_partie,heure,mot_a_deviner,mots_donnes FROM Historique WHERE id = ? AND type = 'daily'",(id,))
-        lmode = a.fetchall()
-        close_connection()
-    elif mode == 'Survie':
-        db = getdb()
-        b = db.cursor()
-        b.execute("SELECT date_partie,heure,temps_survie,mot_a_deviner,mots_donnes FROM Historique_survie WHERE id = ?",(id,))
-        lmode = b.fetchall()
-        close_connection()
+    mode_donne = request.form.get('mode')
+    
+    if mode_donne == None or mode_donne == 'Mode':
+        mode_donne = mode
+    print(mode_donne,mode)
+    if mode_donne != mode :
+        return redirect(f'/{id}/historique/{mode_donne}')
     else:
-        db = getdb()
-        c = db.cursor()
-        c.execute("SELECT date_partie,heure,mot_a_deviner,mots_donnes FROM Historique WHERE id = ? AND type = 'libre'",(id,))
-        lmode = c.fetchall()
-        close_connection()
-    l=[[] for k in range(len(lmode))]
-    for k in range(len(lmode)):
-        l[k].append(lmode[k][0])
-        l[k].append(lmode[k][1])
-        l[k].append(lmode[k][2])
-        if lmode[k][3][-1] == ',':
-            l[k].append(lmode[k][3][:-1].split(','))
+        if mode == "Mode" or mode == 'Daily' or mode == None:
+            mode = 'Daily'
+            db = getdb()
+            a = db.cursor()
+            a.execute("SELECT date_partie,heure,mot_a_deviner,mots_donnes FROM Historique WHERE id = ? AND type = 'daily'",(id,))
+            lmode = a.fetchall()
+            close_connection()
+        elif mode == 'Survie':
+            db = getdb()
+            b = db.cursor()
+            b.execute("SELECT date_partie,heure,temps_survie,mot_a_deviner,mots_donnes FROM Historique_survie WHERE id = ?",(id,))
+            lmode = b.fetchall()
+            close_connection()
         else:
-            l[k].append(lmode[k][3].split(','))
-        if mode != 'Survie':
-            l[k].append(paterne(lmode[k][3].split(','),lmode[k][2]))
-        else:
-            if lmode[k][4][-1] == ',' or lmode[k][4][-1] == ';':
-                lint = lmode[k][4][:-1].split(';')
+            db = getdb()
+            c = db.cursor()
+            c.execute("SELECT date_partie,heure,mot_a_deviner,mots_donnes FROM Historique WHERE id = ? AND type = 'libre'",(id,))
+            lmode = c.fetchall()
+            close_connection()
+        l=[[] for k in range(len(lmode))]
+        for k in range(len(lmode)):
+            l[k].append(lmode[k][0])
+            l[k].append(lmode[k][1])
+            l[k].append(lmode[k][2])
+            if lmode[k][3][-1] == ',':
+                l[k].append(lmode[k][3][:-1].split(','))
             else:
-                lint = lmode[k][4].split(';')
-            lint = [lint[i].split(',') for i in range(len(lint))]
-            l[k].append([paterne(lint[i],lmode[k][3].split(',')[i]) for i in range(len(lint))])
-            l[k].append(lint)
-    return render_template('historique.html',lmode=l,mode=mode,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
+                l[k].append(lmode[k][3].split(','))
+            if mode != 'Survie':
+                l[k].append(paterne(lmode[k][3].split(','),lmode[k][2]))
+            else:
+                if lmode[k][4][-1] == ',' or lmode[k][4][-1] == ';':
+                    lint = lmode[k][4][:-1].split(';')
+                else:
+                    lint = lmode[k][4].split(';')
+                lint = [lint[i].split(',') for i in range(len(lint))]
+                l[k].append([paterne(lint[i],lmode[k][3].split(',')[i]) for i in range(len(lint))])
+                l[k].append(lint)
+        return render_template('historique.html',lmode=l,mode=mode,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
 
 @app.route('/<id>/classement')
 def classement(id):

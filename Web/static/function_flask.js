@@ -95,7 +95,8 @@ function new_sequence(mot){
    }
    return seq;
 }
-
+var toguess=document.querySelector('.toguess');
+if (toguess!=null){toguess.value+=mot_à_deviner;}
 var étape=0;
 var k=0;
 var inc=-1;
@@ -246,6 +247,10 @@ $(document).keyup(function (e)
                        var copy=mot_à_deviner.slice();
                        var seq=sequence(guess,copy);
                        change_colors(ell1,seq);
+                       sleep(200*longueur_mot).then(() => {
+                        var audio_victoire = new Audio('/static/Sons motus/celebration_BCb02kw.mp3');
+                        audio_victoire.play();
+                        });
                        inc='f'; /**On met inc à 'f' pour finir la partie */
                        var pattern=[];
                        var temp_mot="";
@@ -257,7 +262,7 @@ $(document).keyup(function (e)
 
                        }
                        $(".pattern").val(pattern);
-                       sleep(longueur_mot*310).then(() => document.myform.submit());
+                       sleep(200*longueur_mot+5000).then(() => document.myform.submit());
 
                    }
                }
@@ -287,6 +292,11 @@ $(document).keyup(function (e)
                        /**Cas de défaite, nbr de trys dépassé */
                        inc='f';
                        console.log("Perdu");
+                       sleep(195*longueur_mot).then(() => {
+                       var audio_defaite = new Audio('/static/Sons motus/motus-boule-noire.mp3');
+                       audio_defaite.play();
+                       console.log('Perdu');
+                       });
                        var seq=sequence(check,copy);
                        change_colors(ell1,seq);
                        var pattern=[];
@@ -299,7 +309,7 @@ $(document).keyup(function (e)
 
                        }
                        $(".pattern").val(pattern);
-                       sleep(longueur_mot*310).then(() => document.myform.submit());
+                       sleep(195*longueur_mot+4000).then(() => document.myform.submit());
 
                    }
                }
