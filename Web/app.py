@@ -215,6 +215,17 @@ def home():
 
 @app.route('/<id>/daily',methods=['GET','POST'])
 def daily(id):
+    ###ici on teste si le joueur ne tente pas de gruger en le renvoyant au home si déjà joué
+    on = sqlite3.connect(database)                         
+    cur = con.cursor()                                      
+    cur.execute('SELECT date_dernier_essai FROM Profil WHERE id= ?',(id,))
+    tab=cur.fetchall()
+    con.close()
+    dateder = tab[0][2]
+    today = date.today()
+    day = today.strftime("%d/%m/%Y")
+    if (dateder==day):
+        return redirect(f"/home?id={id}")
     ###d'abord verif si mot du jour existe (joueur ayant déjà joué today) et récup
     ###sinon générer mot random (et sa longueur)
     ###cas guest à voir, car idk comment enregistrer fait ou pas fait du daily (empecher sans connexion? sad)
