@@ -1,18 +1,33 @@
 {%extends "templatepage.html" %}
 
 {% block content %}
-<link href="{{url_for('static',filename='styles_classement.css')}}" rel="stylesheet">
+<link rel="stylesheet" href='/static/style_classement.css'>
 
-<div class="main container-bot"> 
-{% for (pseudo,temps,rang) in ranks %}
+<h1 style="margin-top: 80px; margin-left: 42%;">Classement personnel :</h1>
 
-    <div class="box" >
-        <div>
-        <p>{{rang}} - {{pseudo}} - {{temps}}</p>
+
+
+<h1 style="margin-top: 80px; margin-left: 42%;">Classement :</h1>
+<div class="boite"> 
+{% for (pseudo,minute,seconde,rang) in ranks %}
+        <div class="inside">
+            {%if rang==1 %}
+            <div class="rank g">{{rang}}</div>
+            {%else%}{%if rang==2%}
+            <div class="rank s">{{rang}}</div>
+            {%else%}{%if rang==3%}
+            <div class="rank b">{{rang}}</div>
+            {%else%}
+            <div class="rank">{{rang}}</div>
+            {%endif%}{%endif%}{%endif%}
+            <div class="pseudo">{{pseudo}}</div>
+            <div class="temps">{{minute}}:{{seconde}}</div>
+
+
         </div>
-    </div>
-
+        <br>
 {% endfor %}
+
 </div>
 
 

@@ -598,8 +598,6 @@ def historique(id):
             lint = [lint[i].split(',') for i in range(len(lint))]
             l[k].append([paterne(lint[i],lmode[k][3].split(',')[i]) for i in range(len(lint))])
             l[k].append(lint)
-    print(l)
-    print(l[0])
     return render_template('historique.html',lmode=l,mode=mode,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
 
 @app.route('/<id>/classement')
