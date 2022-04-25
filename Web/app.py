@@ -628,7 +628,9 @@ def classement(id):
     ###arrangement de la liste
     ranking = []
     for i in range(len(ranks)):
-        ranking.append([ranks[i][0],ranks[i][1],i+1])
+        minute = ranks[i][1]//60
+        seconde = ranks[i][1]%60
+        ranking.append([ranks[i][0],minute,seconde,i+1])
     ###partie vérif + récup rang du compte + sup et inf
 
     ###fin part
