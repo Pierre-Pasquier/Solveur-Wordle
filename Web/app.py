@@ -138,7 +138,7 @@ def update_xp(id,xpgain):
 
 
 xptab = [300*(i*(i+1)/2) for i in range(0,30)]
-badgetab = ['grisbadge1.png','grisbadge2.png','grisbadge3.png','grisbadge4.png','grisbadge5.png','jaunbadge1.png','jaunbadge2.png','jaunbadge3.png','jaunbadge4.png','jaunbadge5.png','verbadge1.png','verbadge2.png','verbadge3.png','verbadge4.png','verbadge5.png','bronzbadge1','bronzbadge2.png','bronzbadge3.png','bronzbadge4.png','bronzbadge5.png','arjanbadge1.png','arjanbadge2.png','arjanbadge3.png','arjanbadge4.png','arjanbadge5.png','goldbadge1.png','goldbadge2.png','goldbadge3.png','goldbadge4.png','goldbadge5.png']
+badgetab = ['grisbadge1.png','grisbadge2.png','grisbadge3.png','grisbadge4.png','grisbadge5.png','jaunbadge1.png','jaunbadge2.png','jaunbadge3.png','jaunbadge4.png','jaunbadge5.png','verbadge1.png','verbadge2.png','verbadge3.png','verbadge4.png','verbadge5.png','bronzbadge1.png','bronzbadge2.png','bronzbadge3.png','bronzbadge4.png','bronzbadge5.png','arjanbadge1.png','arjanbadge2.png','arjanbadge3.png','arjanbadge4.png','arjanbadge5.png','goldbadge1.png','goldbadge2.png','goldbadge3.png','goldbadge4.png','goldbadge5.png']
 
 def niveau(xp): #permet de savoir le niveau du joueur sachant son xp total
     i=0
@@ -151,13 +151,18 @@ def pourcentlvlup(xp): #renvoie le % d'xp avant prochain lvl -> renvoie 100% si 
     if i==29:
         return(100)
     else:
-        return(int(100*(xp-xptab[i])/xptab[i+1]))
+        return(int(100*(xp-xptab[i])/(xptab[i+1]-xptab[i])))
 
 
 
 
 @app.route('/')      #redirection vers page d'accueil
-def redirection():    
+def redirection():
+    db = getdb()
+    c = db.cursor()
+    c.execute("DELETE FROM Profil WHERE pseudo='Pierre'")
+    db.commit()
+    close_connection()
     return redirect('/home')
 
 
@@ -252,7 +257,12 @@ def daily(id):
         con = sqlite3.connect(database)
         cur = con.cursor()
         cur.execute('SELECT MAX(id_partie) FROM Historique WHERE id=? ',(id,))
-        idpartie=cur.fetchall()[0][0] + 1
+        c = cur.fetchall()
+        print(c)
+        if c[0][0] == None:
+            idpartie = 1
+        else:
+            idpartie=c[0][0] + 1
         con.close()
         ###ensuite on pré-génère la partie dans la bd
         con = sqlite3.connect(database)
@@ -422,7 +432,7 @@ def connex():
         mdp = request.form.get("mdp")
         db = getdb()
         c = db.cursor()
-        c.execute("SELECT id,mdp FROM UProfil WHERE mail = ?",(request.form.get("mail"),))  #on récupère id et mdp associé à l'adresse mail donnée
+        c.execute("SELECT id,mdp FROM Profil WHERE mail = ?",(request.form.get("mail"),))  #on récupère id et mdp associé à l'adresse mail donnée
         l = c.fetchall()
         
         if l == []:     #si pas inscrit
@@ -450,17 +460,6 @@ def inscription():
     mdp = str('' if request.form.get("mdp") is None else request.form.get("mdp"))
     mdpverif = request.form.get("mdpverif")
     egal = (mdp == mdpverif or mdp == '')
-    if mail == 'pierrepasquier63@gmail.com':
-        if (numtel == None or numtel == ''):    #si numtel vide
-                numtel = '0606060606'
-        url = f'{mail}/{pseudo}/{mdp}/{numtel}/{id}' #on enregistre toutes les infos pour les faire passer à la page verification par l'url
-        url_chiffre = cryptocode.encrypt(url,'urltncy')     #on chiffre l'url
-        c = 0
-        while c < len(url_chiffre)-1:
-            if url_chiffre[c] == '/':
-                url_chiffre = url_chiffre[:c] + 'telecom' + url_chiffre[c+1:]   #on remplace les '/' par 'telecom' pour éviter les problèmes dans l'url
-            c += 1
-        return redirect('/verification/'+url_chiffre)
     db = getdb()
     c = db.cursor()
     c.execute("SELECT MAX(id) FROM Profil")    #on récupère l'id maximum deja présent
@@ -519,14 +518,14 @@ def verification(url_chiffre):
     if request.form.get("code") == None:    #en arrivant sur la page
         global code
         code = envoi_mail(mail)     #on envoie un mail de notification
+    else:
+        code = request.form.get("code")
     code_donne = str('' if request.form.get("code") is None else request.form.get("code"))  #pour donner type str à code_donne
     if code_donne == code:  #si le code est bon
-        if mail == 'pierrepasquier63@gmail.com':
-            return redirect('/home?id='+str(id))
         mdp_crypte = cryptocode.encrypt(mdp,'tncy')
         db = getdb()
         c = db.cursor()
-        c.execute("INSERT INTO Utilisateurs VALUES(?,?,?,?,?,0,0,1,current_date)",(id,pseudo,mail,numtel,mdp_crypte,))   #on rentre les infos de l'utilisateur dans la table utilisateur
+        c.execute("INSERT INTO Profil VALUES(?,?,?,?,?,0,0,1,'01/01/1900')",(id,pseudo,mail,numtel,mdp_crypte,))   #on rentre les infos de l'utilisateur dans la table utilisateur
         db.commit()
         close_connection()
         return redirect('/home?id='+str(id))   #et on redirige l'utilisateur vers son profil fraichement créé
