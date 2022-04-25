@@ -382,7 +382,7 @@ def mode_survie(id):
         motlen=[tabchoice[k][0] for k in range(len(tabchoice))]
         borne=random.randint(0,len(motlen)-1) ##à la limite, ici on peut décider de l'aléatoire de la longueur du mot?
         mot_à_deviner=motlen[borne]
-        return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots , id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])])
+        return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots , id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
     else :
         temps=request.form.get('tempssurvie')
         ##modif bd
