@@ -320,8 +320,23 @@ def partie_libre(id):
         ###besoin de post pour lancer partie (car params de home) et pour récup partie (résultats)
         ###partie de vérif si on vient d'une partie terminée
         pattern=request.form.get("pattern")
+        mot=request.form.get("toguess")
         print(pattern)
         if not pattern is None:
+            today = date.today().strftime("%d/%m/%Y")
+            heure = datetime.now().strftime("%H:%M")
+            con=sqlite3.connect(database)
+            cur = con.cursor()
+            cur.execute('SELECT MAX(id_partie) FROM Historique WHERE id=? ',(id,))
+            c = cur.fetchall()
+            print(c)
+            if c[0][0] == None:
+                idpartie = 1
+            else:
+                idpartie=c[0][0] + 1
+            cur.execute("INSERT INTO Historique VALUES(?,?,?,?,?,?,?)",(idpartie,"libre",id,mot,pattern,today,heure))
+            con.commit()
+            con.close()
             return redirect(f"/home?id={id}")
             #ici faut modif la bd
         ###fin de vérif
@@ -337,7 +352,7 @@ def partie_libre(id):
             if nbrguess==-2:
                 nbrguess = lenmot
         else:
-            lenmot = random.randrange(6,11) ##à la limite, ici on peut décider de l'aléatoire de la longueur du mot
+            lenmot = newlen() ##à la limite, ici on peut décider de l'aléatoire de la longueur du mot
             nbrguess= lenmot
         ###fin de la récupération, ajout ci dessous de l'utilisation des params
         con = sqlite3.connect(database) 
@@ -351,11 +366,6 @@ def partie_libre(id):
         mot_à_deviner = mots[i]
         ###
         return render_template('test_flask.html',longueur_mot=lenmot,mot_à_deviner=mot_à_deviner,nombre_dessais=nbrguess,mots=mots,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
-    else :
-        pattern=request.form.get('pattern')
-        #modif bd et vérifier si id!=0 pour save
-        print(pattern) ##pour tester
-        return redirect(f"/home?id={id}")
 
 
 @app.route('/<id>/survie',methods=['GET','POST'])

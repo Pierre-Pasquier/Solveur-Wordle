@@ -95,7 +95,8 @@ function new_sequence(mot){
    }
    return seq;
 }
-
+var toguess=document.querySelector('.toguess');
+if (toguess!=null){toguess.value+=mot_à_deviner;}
 var étape=0;
 var k=0;
 var inc=-1;

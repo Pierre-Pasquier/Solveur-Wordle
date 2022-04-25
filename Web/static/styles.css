@@ -249,6 +249,7 @@ body {font-family: Verdana, sans-serif; margin:0}
 
 .dot {
   cursor: pointer;
+  border: solid 1px;
   height: 15px;
   width: 15px;
   margin: 0 2px;
