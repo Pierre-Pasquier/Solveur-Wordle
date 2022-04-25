@@ -158,9 +158,14 @@ def pourcentlvlup(xp): #renvoie le % d'xp avant prochain lvl -> renvoie 100% si 
 
 @app.route('/')      #redirection vers page d'accueil
 def redirection():
+    return redirect('/home')
+
+
+@app.route('/bd')      #redirection vers page d'accueil
+def bd():
     db = getdb()
     c = db.cursor()
-    c.execute("INSERT INTO Profil VALUES(1,'Benoit','benoitdu63@gmail.com','0606060606','jiFOsg==*p97SKNoPgahT33gDhwgYTg==*4koNRqJLQCDpzDNkhK74uA==*jnJqZZfOrxFNWFvdHO9J2w==',10,100,1,'24/04/2022')")
+    c.execute("DELETE FROM Historique WHERE id_partie = 2")
     db.commit()
     close_connection()
     return redirect('/home')
@@ -322,23 +327,24 @@ def partie_libre(id):
         pattern=request.form.get("pattern")
         mot=request.form.get("toguess")
         print(pattern)
-        if not pattern is None:
+        if not pattern is None :
             today = date.today().strftime("%d/%m/%Y")
             heure = datetime.now().strftime("%H:%M")
-            con=sqlite3.connect(database)
-            cur = con.cursor()
-            cur.execute('SELECT MAX(id_partie) FROM Historique WHERE id=? ',(id,))
-            c = cur.fetchall()
-            print(c)
-            if c[0][0] == None:
-                idpartie = 1
-            else:
-                idpartie=c[0][0] + 1
-            cur.execute("INSERT INTO Historique VALUES(?,?,?,?,?,?,?)",(idpartie,"libre",id,mot,pattern,today,heure))
-            con.commit()
-            con.close()
+            if id != 0:
+                con=sqlite3.connect(database)
+                cur = con.cursor()
+                cur.execute('SELECT MAX(id_partie) FROM Historique WHERE id=? ',(id,))
+                c = cur.fetchall()
+                print(c)
+                if c[0][0] == None:
+                    idpartie = 1
+                else:
+                    idpartie=c[0][0] + 1
+                print(idpartie)
+                cur.execute("INSERT INTO Historique VALUES(?,?,?,?,?,?,?)",(idpartie,"libre",id,mot,pattern,today,heure))
+                con.commit()
+                con.close()
             return redirect(f"/home?id={id}")
-            #ici faut modif la bd
         ###fin de vérif
         ###partie de récupération des paramètres du home
         if request.form.get("lenmot") and request.form.get("nbrguess"):
