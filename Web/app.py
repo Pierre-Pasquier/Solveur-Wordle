@@ -149,7 +149,7 @@ def niveau(xp): #permet de savoir le niveau du joueur sachant son xp total
 def pourcentlvlup(xp): #renvoie le % d'xp avant prochain lvl -> renvoie 100% si niveau max
     i = niveau(xp)
     if i==29:
-        return(100)
+        return(int(100*(xp-xptab[-2])/(xptab[-1]-xptab[-2]))-100)
     else:
         return(int(100*(xp-xptab[i])/(xptab[i+1]-xptab[i])))
 
