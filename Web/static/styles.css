@@ -204,7 +204,6 @@ div.case.y{
 body {font-family: Verdana, sans-serif; margin:0}
 
 
-/* Slides */
 .mySlides {
   display: none;
   padding-left: 80px;
@@ -213,7 +212,6 @@ body {font-family: Verdana, sans-serif; margin:0}
   text-align: center;
 }
 
-/* Next & previous buttons */
 .prev{
   cursor: pointer;
   width: 50%;
@@ -226,7 +224,6 @@ body {font-family: Verdana, sans-serif; margin:0}
   user-select: none;
 }
 
-/* Position the "next button" to the right */
 .next {
     cursor: pointer;
     width: 50%;
@@ -239,19 +236,17 @@ body {font-family: Verdana, sans-serif; margin:0}
     user-select: none;
   }
 
-/* On hover, add a black background color with a little bit see-through */
+
 .prev:hover, .next:hover {
   background-color: rgba(0,0,0,0.8);
   color: white;
 }
 
-/* The dot/bullet/indicator container */
 .dot-container {
     text-align: center;
     padding: 20px;
 }
 
-/* The dots/bullets/indicators */
 .dot {
   cursor: pointer;
   height: 15px;
@@ -260,9 +255,9 @@ body {font-family: Verdana, sans-serif; margin:0}
   border-radius: 50%;
   display: inline-block;
   transition: background-color 0.6s ease;
+  background-color: #d6d3d3;
 }
 
-/* Add a background color to the active dot/circle */
 .active, .dot:hover {
   background-color: #717171;
 }
