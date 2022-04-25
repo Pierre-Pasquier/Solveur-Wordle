@@ -3,7 +3,7 @@
 {% block content %}
 <link rel="stylesheet" href='/static/style_classement.css'>
 
-{%if id_user==0%}
+{%if id_user==0 or rangid==0%}
 {%else%}
 <h1 style="margin-top: 80px; margin-left: 37%;">Classement personnel :</h1>
 <div class="boite">
