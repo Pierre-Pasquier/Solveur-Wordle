@@ -392,7 +392,7 @@ def mode_survie(id):
         motlen=[tabchoice[k][0] for k in range(len(tabchoice))]
         borne=random.randint(0,len(motlen)-1) ##à la limite, ici on peut décider de l'aléatoire de la longueur du mot?
         mot_à_deviner=motlen[borne]
-        return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots , id_user=id,pseudo=tab[0][0],pourcent=pourcentlvlup(tab[0][1]),badge=badgetab[niveau(tab[0][1])])
+        return render_template('survie.html',longueur_mot=longueur_mot,mot_à_deviner=mot_à_deviner,mots=mots , id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
     else :
         temps=request.form.get('tempssurvie')
         ##modif bd
@@ -401,6 +401,11 @@ def mode_survie(id):
             #faire les modifications sur la base de données ici, utilisation de update_xp
         else : gainxp=0
         given=request.form.get('motsdonnés')
+        if len(given)>10000: #On se fixe une borne pour l'ajout de str dans la base de données, pour éviter les problèmes de mémoire
+            k=9999
+            while given[k]!=',' and given[k]!=';':
+                k+=1
+            given[:k+1]
         toguess=request.form.get("motsàdeviner") #On pensera a les encrypter pour prendre moins de place dans la bd
         if id!=0:
             update_xp(id,gainxp)
