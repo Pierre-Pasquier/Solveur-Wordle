@@ -255,7 +255,7 @@ $(document).keyup(function (e)
                        var pattern=[];
                        var temp_mot="";
                        var ell=[];
-                       for (var k=0;k<=étape;k++){
+                       for (var k=0;k<étape;k++){
                            ell=get_cases(k);
                            temp_mot=const_mot(ell);
                            pattern.push(temp_mot);
@@ -275,18 +275,22 @@ $(document).keyup(function (e)
                        var copy=mot_à_deviner.slice();
                        var seq=sequence(check,copy);
                        change_colors(ell1,seq);
+                       sleep(200*longueur_mot).then(() => {
+                        var audio_victoire = new Audio('/static/Sons motus/celebration_BCb02kw.mp3');
+                        audio_victoire.play();
+                        });
                        inc='f';
                        var pattern=[];
                        var temp_mot="";
                        var ell=[];
-                       for (var k=0;k<étape;k++){
+                       for (var k=0;k<nombre_dessais;k++){
                            ell=get_cases(k);
                            temp_mot=const_mot(ell);
                            pattern.push(temp_mot);
 
                        }
                        $(".pattern").val(pattern);
-                       sleep(longueur_mot*310).then(() => document.myform.submit());
+                       sleep(longueur_mot*200+5000).then(() => document.myform.submit());
                    }
                    else{
                        /**Cas de défaite, nbr de trys dépassé */
