@@ -255,7 +255,7 @@ $(document).keyup(function (e)
                        var pattern=[];
                        var temp_mot="";
                        var ell=[];
-                       for (var k=0;k<étape;k++){
+                       for (var k=0;k<=étape;k++){
                            ell=get_cases(k);
                            temp_mot=const_mot(ell);
                            pattern.push(temp_mot);
