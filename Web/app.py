@@ -24,7 +24,7 @@ def envoi_mail(email_receiver):         #pour envoyer un mail
     smtp_port = 465
 
     # on rentre les informations sur notre adresse e-mail
-    email_address = 'helpnngo@gmail.com'
+    email_address = 'tunomtncy@gmail.com'
     email_password = 'tncytncy'
 
     # on crée un e-mail
