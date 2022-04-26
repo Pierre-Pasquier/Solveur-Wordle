@@ -12,21 +12,36 @@
     <div class="inside">
     <div class="rank">{{advdessusrang}}</div>
     <div class="pseudo">{{advdessuspseudo}}</div>
-    <div class="temps">{{advdessusminute}}:{{advdessusseconde}}</div>
+    <div class="temps">{{advdessusminute}}:
+        {%if 10>advdessusseconde %}
+        0{{advdessusseconde}}
+        {%else%}
+        {{advdessusseconde}}
+        {%endif%}</div>
     </div>
     <br>
     {%endif%}
     <div class="inside">
     <div class="rank">{{rangid}}</div>
     <div class="pseudo">{{pseudoid}}</div>
-    <div class="temps">{{minuteid}}:{{secondeid}}</div>
+    <div class="temps">{{minuteid}}:
+        {%if 10>secondeid %}
+        0{{secondeid}}
+        {%else%}
+        {{secondeid}}
+        {%endif%}</div>
     </div><br>
     {% if rangid==ranglast %}
     {%else%}
     <div class="inside">
     <div class="rank">{{advdessousrang}}</div>
     <div class="pseudo">{{advdessouspseudo}}</div>
-    <div class="temps">{{advdessousminute}}:{{advdessousseconde}}</div>
+    <div class="temps">{{advdessousminute}}:
+        {%if 10>advdessousseconde %}
+        0{{advdessousseconde}}
+        {%else%}
+        {{advdessousseconde}}
+        {%endif%}</div>
     </div>
     {%endif%}
 </div>
@@ -46,7 +61,12 @@
             <div class="rank">{{rang}}</div>
             {%endif%}{%endif%}{%endif%}
             <div class="pseudo">{{pseudo}}</div>
-            <div class="temps">{{minute}}:{{seconde}}</div>
+            <div class="temps">{{minute}}:
+                {%if 10>seconde %}
+                0{{seconde}}
+                {%else%}
+                {{seconde}}
+                {%endif%}</div>
 
 
         </div>
