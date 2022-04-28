@@ -114,20 +114,20 @@ def paterne(l,mot):     #donne la liste de paterne associé au mot à trouver
     return res
 
 
-def newlen():
+def newlen(): #renvoie la longueur d'un mot de la base de donnée selon les proportions suivantes :
     p=random.random()
-    if p>=0 and p<0.3:
+    if p>=0 and p<0.3: #30%
         return 6
-    elif p>=0.3 and p<0.55:
+    elif p>=0.3 and p<0.55: #25%
         return 7
-    elif p>=0.55 and p<0.75:
+    elif p>=0.55 and p<0.75:#20%
         return 8
-    elif p>=0.75 and p<0.9:
+    elif p>=0.75 and p<0.9:#15%
         return 9
-    else:
+    else:#10%
         return 10
 
-def update_xp(id,xpgain):
+def update_xp(id,xpgain):#change l'xp du joueur d'identifiant id, en l'incrémentant de xpgain
     con=sqlite3.connect(database)
     cur=con.cursor()
     cur.execute("SELECT xp FROM Profil WHERE id=?",(id,))
@@ -146,7 +146,7 @@ def niveau(xp): #permet de savoir le niveau du joueur sachant son xp total
         i+=1
     return(i) #correspond à la position du badge associé dans badgetab
 
-def pourcentlvlup(xp): #renvoie le % d'xp avant prochain lvl -> renvoie 100% si niveau max
+def pourcentlvlup(xp): #renvoie le % d'xp avant prochain lvl -> renvoie le taux de dépassement si niveau max
     i = niveau(xp)
     if i==29:
         return(int(100*(xp-xptab[-2])/(xptab[-1]-xptab[-2]))-100)
@@ -160,15 +160,6 @@ def pourcentlvlup(xp): #renvoie le % d'xp avant prochain lvl -> renvoie 100% si 
 def redirection():
     return redirect('/home')
 
-
-@app.route('/bd')      #redirection vers page d'accueil
-def bd():
-    db = getdb()
-    c = db.cursor()
-    c.execute("DELETE FROM Historique WHERE id_partie = 2")
-    db.commit()
-    close_connection()
-    return redirect('/home')
 
 
 @app.route('/à_propos')      #page à propos
@@ -247,7 +238,7 @@ def daily(id):
         a_generer = (tab==[])
         if a_generer:
             ###on génère un mot 
-            lenmot = random.randrange(6,11) ###à la limite, ici on peut décider de l'aléatoire de la longueur du mot
+            lenmot = newlen() ###à la limite ici on peut décider de l'aléatoire de la longueur du mot
             nbrguess= lenmot
             con = sqlite3.connect(database) 
             cur = con.cursor()
@@ -273,7 +264,6 @@ def daily(id):
         cur = con.cursor()
         cur.execute('SELECT MAX(id_partie) FROM Historique WHERE id=? ',(id,))
         c = cur.fetchall()
-        print(c)
         if c[0][0] == None:
             idpartie = 1
         else:
@@ -300,7 +290,7 @@ def daily(id):
         today = date.today().strftime("%d/%m/%Y")
         con = sqlite3.connect(database)
         cur = con.cursor()
-        cur.execute('UPDATE Historique SET mots_donnes=? WHERE id=? AND date_partie=?',(pattern,id,today,))
+        cur.execute('UPDATE Historique SET mots_donnes=? WHERE id=? AND date_partie=? AND type=?',(pattern,id,today,'daily',))
         con.commit()
         con.close()
         con = sqlite3.connect(database)
@@ -336,7 +326,6 @@ def partie_libre(id):
         ###partie de vérif si on vient d'une partie terminée
         pattern=request.form.get("pattern")
         mot=request.form.get("toguess")
-        print(pattern)
         if not pattern is None :
             today = date.today().strftime("%d/%m/%Y")
             heure = datetime.now().strftime("%H:%M")
@@ -345,12 +334,10 @@ def partie_libre(id):
                 cur = con.cursor()
                 cur.execute('SELECT MAX(id_partie) FROM Historique WHERE id=? ',(id,))
                 c = cur.fetchall()
-                print(c)
                 if c[0][0] == None:
                     idpartie = 1
                 else:
                     idpartie=c[0][0] + 1
-                print(idpartie)
                 cur.execute("INSERT INTO Historique VALUES(?,?,?,?,?,?,?)",(idpartie,"libre",id,mot,pattern,today,heure))
                 con.commit()
                 con.close()
@@ -432,8 +419,8 @@ def mode_survie(id):
             k=9999
             while given[k]!=',' and given[k]!=';':
                 k+=1
-            given[:k+1]
-        toguess=request.form.get("motsàdeviner") #On pensera a les encrypter pour prendre moins de place dans la bd
+            given[:k+1] 
+        toguess=request.form.get("motsàdeviner") 
         if id!=0:
             update_xp(id,gainxp)
             con=sqlite3.connect(database)
@@ -449,9 +436,6 @@ def mode_survie(id):
             cur.execute("INSERT INTO Historique_survie VALUES(?,?,?,?,?,?,?)",(id_partie,id,toguess,given,int(temps),today,heure,)) #ajouter le temps supplémentaire
             con.commit()
             con.close()
-        print(temps)
-        print(toguess)
-        print(given)
         return redirect(f"/home?id={id}")
 
 
@@ -590,7 +574,6 @@ def historique(id,mode):
     
     if mode_donne == None or mode_donne == 'Mode':
         mode_donne = mode
-    print(mode_donne,mode)
     if mode_donne != mode :
         return redirect(f'/{id}/historique/{mode_donne}')
     else:
@@ -635,7 +618,7 @@ def historique(id,mode):
         return render_template('historique.html',lmode=l,mode=mode,id_user=id,pseudo=pseudo,pourcent=pourcent,badge=badge)
 
 @app.route('/<id>/classement')
-def classement(id):
+def classement(id): #On affiche les 50 premiers joueurs du classement, et le classement personnel du joueur, celui devant lui et celui derrière lui 
     if id is None or id=='' or id=='0':
         id = 0
         pseudo = "Guest"
