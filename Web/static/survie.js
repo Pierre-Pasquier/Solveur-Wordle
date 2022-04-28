@@ -151,9 +151,19 @@ function const_mot(ell){
    for (var k=0;k<ell.length;k++){
        cons+=ell[k].value;
    }
-   return cons;
+   return cons; 
+}
 
-   
+var saisie_auto=[];
+    for (var k=0;k<longueur_mot;k++){
+        saisie_auto.push('.');
+    }
+function set_cases(ell,motList){
+    for (var k=0;k<motList.length;k++){
+    if (motList[k]!='.'){
+      $(ell[k]).val(motList[k]);  
+        }
+    }
 }
 
 function change_colors(ell,sequence){
@@ -172,6 +182,7 @@ function change_colors(ell,sequence){
         else if(sequence[i]=='2'){
         var audio_bonne_lettre = new Audio('/static/Sons motus/motus-lettre-bonne.mp3');
          $this.switchClass("","g",300);
+         saisie_auto[i]=$this.val();
          audio_bonne_lettre.play();
          }
          else{
@@ -281,6 +292,7 @@ $(document).keyup(function (e)
                        var t=bonnes_cases(copy,copy2,neutre);
                        var change=bonnes_lettres(t[0],t[1],t[2]);
                        change_colors(ell1,change); 
+                       sleep(longueur_mot*200).then(()=>{set_cases(ell2,saisie_auto);});
 
 
                    }
@@ -332,13 +344,19 @@ $(document).keyup(function (e)
                                 }
 
                                 inc=-1;
-                                étape=0;});
+                                étape=0;
+                                sleep(longueur_mot*200).then(()=>{saisie_auto=[];
+                                    for (var k=0;k<longueur_mot;k++){
+                                    saisie_auto.push('.');
+                                    }});
+                            });
                         });
                         sleep(1000).then(()=>{
                         mot_à_deviner=genere();
                         toguess.value+=mot_à_deviner+','
                         console.log(mot_à_deviner); /** On laisse pour l'instant pour les tests */
                         longueur_mot=mot_à_deviner.length;
+
 
 
 
@@ -405,14 +423,23 @@ $(document).keyup(function (e)
                                 }
 
                                 inc=-1;
-                                étape=0;});
+                                étape=0;
+                                sleep(longueur_mot*200).then(()=>{saisie_auto=[];
+                                for (var k=0;k<longueur_mot;k++){
+                                saisie_auto.push('.');
+                                }});
+                            });
                         });
                         sleep(1000).then(()=>{
                         mot_à_deviner=genere();
                         toguess.value+=mot_à_deviner+',';
                         console.log(mot_à_deviner); /** On laisse pour l'instant pour les tests */
-                        longueur_mot=mot_à_deviner.length;})}
+                        longueur_mot=mot_à_deviner.length;
+ 
+                        
+                        })
 
+                    }
                    else{
                        /**Cas de défaite, nbr de trys dépassé */
                        inc='f';
@@ -447,7 +474,7 @@ $(document).keyup(function (e)
 
     }
        else{
-           /**Redirection avec stockage des données */
+           
        }
     }
 

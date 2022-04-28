@@ -124,7 +124,13 @@ function sequence(mot,mot2){ /** Attention, si dans le mot à deviner il n'y a q
    return seq;
    }
 
-
+function set_cases(ell,motList){
+    for (var k=0;k<motList.length;k++){
+    if (motList[k]!='.'){
+      $(ell[k]).val(motList[k]);  
+        }
+    }
+}
 function const_mot(ell){
    var cons='';
    for (var k=0;k<ell.length;k++){
@@ -134,6 +140,13 @@ function const_mot(ell){
 
    
 }
+var saisie_auto=[];
+    for (var k=0;k<longueur_mot;k++){
+        saisie_auto.push('.');
+    }
+
+
+
 
 function change_colors(ell,sequence){
     var t= 200;
@@ -151,6 +164,7 @@ function change_colors(ell,sequence){
         else if(sequence[i]=='2'){
         var audio_bonne_lettre = new Audio('/static/Sons motus/motus-lettre-bonne.mp3');
          $this.switchClass("","g",300);
+         saisie_auto[i]=$this.val();
          audio_bonne_lettre.play();
          }
          else{
@@ -239,7 +253,8 @@ $(document).keyup(function (e)
                        var neutre=new_sequence(guess);
                        var t=bonnes_cases(copy,copy2,neutre);
                        var change=bonnes_lettres(t[0],t[1],t[2]);
-                       change_colors(ell1,change); 
+                       change_colors(ell1,change);
+                       sleep(longueur_mot*200).then(()=>{set_cases(ell2,saisie_auto);});
 
 
                    }
