@@ -14,6 +14,14 @@
             <div class="gauche"><a href="/home?id={{id_user}}"><img src='/static/TuNom.png' style="width: 180%"></a></div>
             <div class="alignright">
                     <div class="box">
+                        <div style="margin-top: 15px;" style="margin-right: 100px;">
+                            {% if id_user == 0 %}
+                            <button class="btn btn-primary"><a style="color:#ffffff" href='/connexion'>Se connecter</a></button>
+                            <button class="btn btn-primary"><a style="color:#ffffff" href='/inscription'>S'inscrire</a></button>
+                            {% else %}
+                            <button class="btn btn-primary"><a style="color:#ffffff" href='/home?id=0'>Se déconnecter</a></button>
+                            {% endif %}
+                        </div>
                         <div>
                             <img src='/static/badges/{{badge}}' style="float:inline-end; height: 100%;width: 100%">
                         </div>
@@ -47,9 +55,6 @@
             <div class="container-bot">
                 <div class="alignright">TuNom</div>
                 <div class="alignleft">
-                    {%if id_user!=0%}
-                    <a href="/home"><i class="fa fa-power-off"></i>Déconnexion</a>
-                    {% endif %}
                     <a href="/à_propos?id={{id_user}}"> <i class="fa fa-question"></i>  A propos</a> 
                     <p></p>
                     <a href="/contactez_nous?id={{id_user}}"> <i class="fa fa-envelope"></i>  Contactez nous</a>
