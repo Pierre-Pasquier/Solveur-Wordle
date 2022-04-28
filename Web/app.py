@@ -551,7 +551,7 @@ def verification(url_chiffre):
         global code
         code = envoi_mail(mail)     #on envoie un mail de notification
     else:
-        code = request.form.get("code")
+        code_donne = request.form.get("code")
     code_donne = str('' if request.form.get("code") is None else request.form.get("code"))  #pour donner type str à code_donne
     if code_donne == code:  #si le code est bon
         mdp_crypte = cryptocode.encrypt(mdp,'tncy')
@@ -598,7 +598,7 @@ def historique(id,mode):
             mode = 'Daily'
             db = getdb()
             a = db.cursor()
-            a.execute("SELECT date_partie,heure,mot_a_deviner,mots_donnes FROM Historique WHERE id = ? AND type = 'daily'",(id,))
+            a.execute("SELECT date_partie,heure,mot_a_deviner,mots_donnes FROM Historique WHERE id = ? AND type = 'daily' AND mots_donnes!=?",(id,"",))
             lmode = a.fetchall()
             close_connection()
         elif mode == 'Survie':
@@ -618,7 +618,7 @@ def historique(id,mode):
             l[k].append(lmode[k][0])
             l[k].append(lmode[k][1])
             l[k].append(lmode[k][2])
-            if lmode[k][3][-1] == ',':
+            if lmode[k][3]!="" and lmode[k][3][-1] == ',':
                 l[k].append(lmode[k][3][:-1].split(','))
             else:
                 l[k].append(lmode[k][3].split(','))
