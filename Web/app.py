@@ -551,7 +551,7 @@ def verification(url_chiffre):
         global code
         code = envoi_mail(mail)     #on envoie un mail de notification
     else:
-        code = request.form.get("code")
+        code_donne = request.form.get("code")
     code_donne = str('' if request.form.get("code") is None else request.form.get("code"))  #pour donner type str à code_donne
     if code_donne == code:  #si le code est bon
         mdp_crypte = cryptocode.encrypt(mdp,'tncy')
