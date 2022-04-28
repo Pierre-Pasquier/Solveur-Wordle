@@ -290,7 +290,7 @@ def daily(id):
         today = date.today().strftime("%d/%m/%Y")
         con = sqlite3.connect(database)
         cur = con.cursor()
-        cur.execute('UPDATE Historique SET mots_donnes=? WHERE id=? AND date_partie=?',(pattern,id,today,))
+        cur.execute('UPDATE Historique SET mots_donnes=? WHERE id=? AND date_partie=? AND type=?',(pattern,id,today,'daily',))
         con.commit()
         con.close()
         con = sqlite3.connect(database)
