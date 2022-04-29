@@ -205,10 +205,18 @@ $(document).keyup(function (e)
 {   var L=document.querySelectorAll('.case'); 
        if (e.keyCode >=65 && e.keyCode<=90){
         if (inc!='f'){  
-        
+        if (étape+1<nombre_dessais){
             if(inc<(longueur_mot)*(étape+1)-1){
                 inc+=1;
             }
+        }
+        else{
+            if (inc<(longueur_mot*nombre_dessais)-1){
+                inc+=1;
+            }
+
+        }
+
             
             $(L[inc]).val(String.fromCharCode(e.keyCode));
             $(L[inc]).animate({height:"53px",width:"53px"},"fast"); /** effet visuel pour l'entrée de lettres */
@@ -254,6 +262,7 @@ $(document).keyup(function (e)
                        var t=bonnes_cases(copy,copy2,neutre);
                        var change=bonnes_lettres(t[0],t[1],t[2]);
                        change_colors(ell1,change);
+                       inc=longueur_mot*étape-1;
                        sleep(longueur_mot*200).then(()=>{set_cases(ell2,saisie_auto);});
 
 
