@@ -73,9 +73,7 @@ DimChrono =setInterval(function(){
 
 
 
-//    if(secondes==35){
-//        secondes-=40;
-//    }
+
 
     if(secondes<0){
         minutes --;

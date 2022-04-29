@@ -1,4 +1,4 @@
-function testcase(step){
+function testcase(step){ //Pour voir si le mot à l'étape step est vide
     var ell=$('.case');
     for(var k=step*longueur_mot;k<(step+1)*longueur_mot;k++){
         if (ell[k].value==''){
@@ -35,7 +35,7 @@ function find_cases_débloquées(){
    return ell;
 }
 
-function get_cases(step){ /**pré-condition étape<nombre de trys max */
+function get_cases(step){ /**pré-condition étape<nombre de trys max */ //Pour avoir les cases à l'étape step
    var L =document.querySelectorAll(".case");
    var ell=[];
    for (var k=step*longueur_mot;k<(step+1)*longueur_mot;k++){
@@ -45,7 +45,7 @@ function get_cases(step){ /**pré-condition étape<nombre de trys max */
    return ell;
 
 }
-function bonnes_cases(mot,mot2,sequ){
+function bonnes_cases(mot,mot2,sequ){ // Détermine la séquence assortie au guess mot par rapport au mot à deviner mot2, séquence des cases vertes
    var cop='';
    var cop2='';
    var cop3='';
@@ -66,7 +66,7 @@ function bonnes_cases(mot,mot2,sequ){
 
 }
 
-function bonnes_lettres(mot,mot2,sequence){
+function bonnes_lettres(mot,mot2,sequence){ // Détermine la séquence assortie au guess mot par rapport au mot à deviner mot2, séquence des cases jaunes
    var cop='';
    var cop2='';
    var cop3='';
@@ -88,7 +88,7 @@ function bonnes_lettres(mot,mot2,sequence){
 
 }
 
-function new_sequence(mot){
+function new_sequence(mot){ //Génère une nouvelle séquence en fonction de la longueur du mot
    var seq='';
    for (var k=0;k<mot.length;k++){
        seq+='0'
@@ -124,14 +124,14 @@ function sequence(mot,mot2){ /** Attention, si dans le mot à deviner il n'y a q
    return seq;
    }
 
-function set_cases(ell,motList){
+function set_cases(ell,motList){ //Affecter aux cases dans ell les valeurs des lettres dans motList
     for (var k=0;k<motList.length;k++){
     if (motList[k]!='.'){
       $(ell[k]).val(motList[k]);  
         }
     }
 }
-function const_mot(ell){
+function const_mot(ell){ //Obtenir le mot dans la liste de cases
    var cons='';
    for (var k=0;k<ell.length;k++){
        cons+=ell[k].value;
@@ -148,7 +148,7 @@ var saisie_auto=[];
 
 
 
-function change_colors(ell,sequence){
+function change_colors(ell,sequence){ //Change les couleurs des cases de ell en fonction de la séquence 
     var t= 200;
     
     $(ell).each(function(i)
@@ -201,9 +201,9 @@ function sleep (time) {
 
    
 
-$(document).keyup(function (e) 
+$(document).keyup(function (e) //Pour détecter les touches du clavier
 {   var L=document.querySelectorAll('.case'); 
-       if (e.keyCode >=65 && e.keyCode<=90){
+       if (e.keyCode >=65 && e.keyCode<=90){ //input lettres
         if (inc!='f'){  
         if (étape+1<nombre_dessais){
             if(inc<(longueur_mot)*(étape+1)-1){
@@ -219,12 +219,10 @@ $(document).keyup(function (e)
 
             
             $(L[inc]).val(String.fromCharCode(e.keyCode));
-            $(L[inc]).animate({height:"53px",width:"53px"},"fast"); /** effet visuel pour l'entrée de lettres */
-            $(L[inc]).animate({height:"50px",width:"50px"},"fast");
             }
 
        }
-       else if (e.keyCode==8 || e.keyCode==46){
+       else if (e.keyCode==8 || e.keyCode==46){ //Cas de suppression
 
 
         if (inc!='f'){
@@ -236,18 +234,17 @@ $(document).keyup(function (e)
            if(inc-1>=longueur_mot*étape-1){
                inc-=1;
            }
-           console.log(inc);
        }
     }
-       else if (e.keyCode==13){
-           if (inc!='f'){
-            if (testcase(étape)){
+       else if (e.keyCode==13){ //Cas de validation
+           if (inc!='f'){//Partie non finie
+            if (testcase(étape)){//Vérification si le mot est vide
                 var begining=get_cases(étape);
                 var dico=const_mot(begining);
-                if (mots.includes(dico)){
+                if (mots.includes(dico)){ //Mot est dans le dictionnaire ?
 
-               if (étape+1<nombre_dessais){
-                   étape+=1;
+               if (étape+1<nombre_dessais){ //Vérification si il nous reste encore un essai
+                   étape+=1; 
                    var ell1=get_cases(étape-1);
                    var guess=const_mot(ell1);
 
@@ -257,7 +254,6 @@ $(document).keyup(function (e)
 
                        var copy2=mot_à_deviner.slice();
                        var copy=guess.slice();
-                       /** var seq=sequence(guess,copy); */
                        var neutre=new_sequence(guess);
                        var t=bonnes_cases(copy,copy2,neutre);
                        var change=bonnes_lettres(t[0],t[1],t[2]);
@@ -319,11 +315,9 @@ $(document).keyup(function (e)
                    else{
                        /**Cas de défaite, nbr de trys dépassé */
                        inc='f';
-                       console.log("Perdu");
                        sleep(195*longueur_mot).then(() => {
                        var audio_defaite = new Audio('/static/Sons motus/motus-boule-noire.mp3');
                        audio_defaite.play();
-                       console.log('Perdu');
                        });
                        var seq=sequence(check,copy);
                        change_colors(ell1,seq);
@@ -355,7 +349,6 @@ $(document).keyup(function (e)
            }
        }
        else{
-           /**Redirection avec stockage des données */
        }
     }
 
@@ -380,7 +373,6 @@ function currentSlide(n,m) {
 
 function showSlides(n,m) {
   var i;
-  console.log(m);
   var slidest = document.getElementsByClassName("mySlides");
   var dotst = document.getElementsByClassName("dot");
   var slides=[];

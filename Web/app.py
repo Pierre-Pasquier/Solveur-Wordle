@@ -91,7 +91,7 @@ def close_connection():  # pour fermer la connexion proprement
 
 
 
-def paterne(l,mot):     #donne la liste de paterne associé au mot à trouver
+def paterne(l,mot):     #donne la liste de paterne associé au mot à trouver, pour afficher les bonnes couleurs dans l'historique
     mot_cherche = [k for k in mot]
     res = []
     for j in range(len(l)):
@@ -221,7 +221,7 @@ def daily(id):
         dateder = tab[0][0]
         today = date.today()
         day = today.strftime("%d/%m/%Y")
-        if (dateder==day):
+        if (dateder==day): #Si le joueur tente d'accéder a la partie quotidienne qu'il a déjà faite, on le redirige
             return redirect(f"/home?id={id}")
         con = sqlite3.connect(database)                         
         cur = con.cursor()                                      
@@ -286,6 +286,7 @@ def daily(id):
         ###-> possibilité de ne pas prendre en compte les parties vides à l'affichage de l'historique
         return render_template('test_flask.html',id_user=id,pseudo=joueur[0][0],pourcent=pourcentlvlup(joueur[0][1]),badge=badgetab[niveau(joueur[0][1])],longueur_mot=lenmot, mot_à_deviner=guessmot, nombre_dessais=nbrguess,mots=mots)
     else:
+        #Partie où on récupère les informations à charger dans l'historique
         pattern = request.form.get("pattern")
         today = date.today().strftime("%d/%m/%Y")
         con = sqlite3.connect(database)
@@ -298,7 +299,7 @@ def daily(id):
         cur.execute('SELECT mot_a_deviner FROM Historique WHERE id=? AND date_partie=? AND type=?',(id,today,'daily',))
         tab = cur.fetchall()
         con.close()
-        guessmot = tab[0][0]
+        guessmot = tab[0][0] #On vérifie si le dernier mot du paterne est le même que le mot à deviner
         if not(pattern is None) and pattern!='' and pattern[-len(guessmot):]==guessmot:
             update_xp(id,300)
         return redirect(f"/home?id={id}") 
@@ -633,7 +634,7 @@ def classement(id): #On affiche les 50 premiers joueurs du classement, et le cla
         pseudo = tab[0][0]
         pourcent = pourcentlvlup(tab[0][1])
         badge = badgetab[niveau(tab[0][1])]
-    ###partie récup des 50 premiers du classement
+    ###partie récup des joueurs du classement
     con = sqlite3.connect(database)
     cur = con.cursor()
     cur.execute('SELECT pseudo,MAX(temps_survie),hs.id FROM historique_survie as hs JOIN Profil as p ON hs.id = p.id GROUP BY pseudo ORDER BY hs.temps_survie DESC')   

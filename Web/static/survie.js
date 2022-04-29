@@ -328,7 +328,7 @@ $(document).keyup(function (e)
                                     ajout=[];
                                     for (var j=0;j<longueur_mot;j++){
                                         ajout.push(document.createElement("input"));
-                                        console.log("crée");
+                                        
                                         
                                         
         
@@ -362,8 +362,7 @@ $(document).keyup(function (e)
                         });
                         sleep(1000).then(()=>{
                         mot_à_deviner=genere();
-                        toguess.value+=mot_à_deviner+','
-                        console.log(mot_à_deviner); /** On laisse pour l'instant pour les tests */
+                        toguess.value+=mot_à_deviner+',';
                         longueur_mot=mot_à_deviner.length;
 
 
@@ -407,7 +406,7 @@ $(document).keyup(function (e)
                                     ajout=[];
                                     for (var j=0;j<longueur_mot;j++){
                                         ajout.push(document.createElement("input"));
-                                        console.log("crée");
+                                        
                                         
                                         
         
@@ -442,7 +441,6 @@ $(document).keyup(function (e)
                         sleep(1000).then(()=>{
                         mot_à_deviner=genere();
                         toguess.value+=mot_à_deviner+',';
-                        console.log(mot_à_deviner); /** On laisse pour l'instant pour les tests */
                         longueur_mot=mot_à_deviner.length;
  
                         
@@ -455,7 +453,6 @@ $(document).keyup(function (e)
                        var copy=mot_à_deviner.slice();
                        var seq=sequence(guess,copy);
                        change_colors(ell1,seq);
-                       console.log("Perdu"); //Penser à effectuer la redirection
                        sleep(longueur_mot*300).then(()=>{
                         $(".notime").val(TempsSurvécu);
                         clearInterval(DimChrono);
