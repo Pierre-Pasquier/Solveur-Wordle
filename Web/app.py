@@ -416,11 +416,6 @@ def mode_survie(id):
             #faire les modifications sur la base de données ici, utilisation de update_xp
         else : gainxp=0
         given=request.form.get('motsdonnés')
-        if len(given)>10000: #On se fixe une borne pour l'ajout de str dans la base de données, pour éviter les problèmes de mémoire
-            k=9999
-            while given[k]!=',' and given[k]!=';':
-                k+=1
-            given[:k+1] 
         toguess=request.form.get("motsàdeviner") 
         if id!=0:
             update_xp(id,gainxp)
