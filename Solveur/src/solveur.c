@@ -42,6 +42,7 @@ int paterne(char *mot_cherche,char *mot_donne){
 
 
 void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int *num_mot_cherche,int *num_mot_donne,int len_mot,int **matrice,int nb_mot){
+    printf("%s\n",prefixe);
     if (elem->terminal){    // cas de base, si on est dans une feuille
         *num_mot_cherche = *num_mot_cherche + 1;      //on passe au mot d'après
         *num_mot_donne = *num_mot_cherche + 1;      //on prend le mot suivant
@@ -50,7 +51,10 @@ void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int *num_mot_che
     for (int i=0; i<26 ; i++){      //pour tous les fils
         if ((elem->fils)[i] != NULL){   //si le fils est non-vide
             char new_prefixe[strlen(prefixe)+2];       // on commence à écrire le mot
-            memcpy(new_prefixe,prefixe,strlen(prefixe));        //copie pour ajouter la valeur du noeud courant
+            
+            
+            memcpy(new_prefixe,prefixe,strlen(prefixe));
+            printf("%s\n",new_prefixe);        //copie pour ajouter la valeur du noeud courant
             new_prefixe[strlen(prefixe)+1] = ((elem->fils)[i])->value;      //ajout de la valeur du noeud courant
             mot_suivant(arbre,elem->fils[i],new_prefixe,num_mot_cherche,num_mot_donne,len_mot,matrice,nb_mot);      //on descend dans l'arbre pour trouver le suite du mot jusqu'à la feuille
         }
@@ -68,14 +72,21 @@ void parcours(arbre_t *arbre, int len_mot, int *num_mot_cherche, int **matrice, 
         int score = 3^len_mot - 1;      //initialisation du score (= paterne en base 10)
         while (!(tmp->char_is_in)[i]){      //tant que la lettre du noeud courant n'est pas dans le mot que l'on veut (mot_donne)
             score -= 2*3^(len_mot-profondeur);          //vu que la lettre n'est pas dans le mot on enleve la valeur associé du score (repésenté par un 2 dans le paterne en bas 3)
-            strcat(suffixe_mot_cherche,tmp->value);     //on ajoute la valeur au suufixe (Attention, reconstitution du suffixe à l'envers)
+            char merge[2];
+            merge[0]=tmp->value;
+            merge[1]='\0';
+            strcat(suffixe_mot_cherche,merge);     //on ajoute la valeur au suufixe (Attention, reconstitution du suffixe à l'envers)
             profondeur--;       //on met à jour la profondeur
             tmp = tmp->pere;    //on remonte au noeud d'au dessus
         }
         while (!tmp->terminal){     //une fois arrivé à une lettre dans le prochain mot, on commence la descente
             for (int k=0; k<26 ; k++){      //pour tous les fils
                 if (((tmp->fils)[k]->char_is_in)[i]){       //si la lettre est dans le prochain mot
-                    strcat(tmp->value,suffixe_mot_donne);   //on ajoute cette lettre au suffixe du prochain mot (mot donne)
+                    char merge[2];
+                    merge[0]=tmp->value;
+                    merge[1]='\0';
+                    strcat(suffixe_mot_donne,merge);   //on ajoute cette lettre au suffixe du prochain mot (mot donne)
+                    
                     tmp = (tmp->fils)[i];       //on se deplace dans ce fils
                 } 
             }
