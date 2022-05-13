@@ -10,6 +10,7 @@
 #define ARBRE_H
 
 struct _element_t{
+    
     char value;
     struct _element_t* pere;
     struct _element_t *fils[26];
@@ -25,6 +26,8 @@ struct _arbre_t {
 };
 
 typedef struct _arbre_t arbre_t;
+
+element_t* create_element(int nbr_mots);
 
 arbre_t* create_arbre_mots(int nbre_mots);
 
