@@ -42,20 +42,36 @@ int paterne(char *mot_cherche,char *mot_donne){
 
 
 void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int *num_mot_cherche,int *num_mot_donne,int len_mot,int **matrice,int nb_mot){
-    printf("%s\n",prefixe);
+    printf("Prefixe : %s\n",prefixe);
     if (elem->terminal){    // cas de base, si on est dans une feuille
+        printf("fin\n");
+        printf("%d\n",*num_mot_cherche);
         *num_mot_cherche = *num_mot_cherche + 1;      //on passe au mot d'après
         *num_mot_donne = *num_mot_cherche + 1;      //on prend le mot suivant
         parcours(arbre,len_mot,num_mot_cherche,matrice,elem,prefixe,nb_mot);    //on parcours tous les autres mots qui sont à droite
     }
+    printf("Avant la boucle \n");
     for (int i=0; i<26 ; i++){      //pour tous les fils
+        printf("Pas dans if, i = %d \n",i);
         if ((elem->fils)[i] != NULL){   //si le fils est non-vide
+            printf("Dans if, i = %d \n",i);
+            printf("%s\n",prefixe);
+            printf("%c\n",elem->value);
             char new_prefixe[strlen(prefixe)+2];       // on commence à écrire le mot
-            
-            
-            memcpy(new_prefixe,prefixe,strlen(prefixe));
-            printf("%s\n",new_prefixe);        //copie pour ajouter la valeur du noeud courant
-            new_prefixe[strlen(prefixe)+1] = ((elem->fils)[i])->value;      //ajout de la valeur du noeud courant
+            printf("Créé \n");
+            if (elem->value == '\0'){
+                memcpy(new_prefixe,prefixe,strlen(prefixe));
+                new_prefixe[0] = elem->fils[i]->value;
+                new_prefixe[1] = '\0';
+                printf("if \n");
+            }
+            else{
+                memcpy(new_prefixe,prefixe,strlen(prefixe));        //copie pour ajouter la valeur du noeud courant  
+                new_prefixe[strlen(prefixe)] = elem->fils[i]->value;      //ajout de la valeur du noeud courant
+                new_prefixe[strlen(prefixe)+1] = '\0';
+                printf("else \n");
+            }
+            printf("%s\n",new_prefixe);
             mot_suivant(arbre,elem->fils[i],new_prefixe,num_mot_cherche,num_mot_donne,len_mot,matrice,nb_mot);      //on descend dans l'arbre pour trouver le suite du mot jusqu'à la feuille
         }
     }
