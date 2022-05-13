@@ -1,37 +1,50 @@
 #include "arbre.h"
 
-
+element_t* create_element(int nbr_mots){
+    element_t* root=malloc(sizeof(element_t));
+    for (int i=0;i<26;i++){
+        root->fils[i]=NULL;
+    }
+    root->pere=NULL;
+    bool* tab=malloc(nbr_mots*sizeof(bool));
+    for (int i=0;i<nbr_mots;i++){
+        tab[i]=false;
+    }
+    root->char_is_in=tab;
+    root->terminal=false;
+    return root;
+}
 
 
 arbre_t* create_arbre_mots(int nbr_mots){
-    arbre_t* res=calloc(1,sizeof(arbre_t));
-    res->racine=malloc(sizeof(element_t*));
+    arbre_t* res=malloc(sizeof(arbre_t));
+    element_t* root=create_element(nbr_mots);
+    res->nbr_mots=nbr_mots;
+    res->racine=root;
     res->racine->value='\0';
-    res->racine->terminal=false;
-    res->racine->char_is_in=calloc(nbr_mots,sizeof(bool));
-    res->racine->pere=NULL;
-    for (int i=0;i<25;i++){
-        (res->racine->fils)[i]=NULL;
-    }
+    res->nbr_mots=nbr_mots;
+
     return res;
 
 }
 
 void destroy_element(element_t* begin){
-    assert(begin!=NULL);
-    element_t* top = begin;
-    if (top->terminal){
-        free(top);
+    if (begin->terminal){
+        free(begin->char_is_in);
+        free(begin);
     }
     else{
-        for (int i=0;i<25;i++){
-            if ((top->fils)[i]!=NULL){
-                destroy_element((top->fils)[i]);
-                
+        for (int i=0;i<26;i++){
+            if (begin->fils[i]!=NULL){
+                destroy_element(begin->fils[i]);
             }
+
         }
-        free(top);
+        free(begin->char_is_in);
+        free(begin);
     }
+    
+
 
 }
 
@@ -47,16 +60,18 @@ bool insert_arbre(arbre_t* abr,char* signed_mot,int num_mot){
     unsigned char* mot=(unsigned char*) signed_mot;
     element_t* tmp=abr->racine;
     int len=strlen(signed_mot);
-
     for (int i=0;i<len;i++){
-        if ((tmp->fils)[mot[i]-65]==NULL){
-            (tmp->fils)[mot[i]-65]=calloc(1,sizeof(element_t));
-
+        if (tmp->fils[mot[i]-65]==NULL){
+            
+            element_t* content=create_element(abr->nbr_mots);
+            tmp->fils[mot[i]-65]=content;
+            tmp->fils[mot[i]-65]->value=mot[i];
+            tmp->fils[mot[i]-65]->pere=tmp; //Le père du fils
         }
-        (tmp->fils)[mot[i]-65]->value=mot[i];
-        ((tmp->fils)[mot[i]-65]->char_is_in)[num_mot]=true;
-        (tmp->fils)[mot[i]-65]->pere=tmp; //Le père du fils
-        tmp=(tmp->fils)[mot[i]-65];
+
+        tmp->fils[mot[i]-65]->char_is_in[num_mot]=true;
+        
+        tmp=tmp->fils[mot[i]-65];
         
     }
     if (tmp->terminal){
@@ -78,9 +93,9 @@ void print_rec_element(element_t* elem,unsigned char* prefix,int len){
         printf("MOT : %s\n",prefix);
     }
     for (int i=0;i<25;i++){
-        if ((elem->fils)[i]!=NULL){
-            newprefix[len]=1;
-            print_rec_element((elem->fils)[i],newprefix,len+1);
+        if (elem->fils[i]!=NULL){
+            newprefix[len]=65+i;
+            print_rec_element(elem->fils[i],newprefix,len+1);
         }
     }
 }
