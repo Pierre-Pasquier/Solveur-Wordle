@@ -1,17 +1,13 @@
-///#include "ArbreFinal.h"
-///#include "lecture_pattern.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <string.h>
-#include <math.h>
+#include "ArbreFinal.h"
+#include "lecture_pattern.h"
 
 int main(int argc, char const *argv[])
 {
     /// 0) paramètres :
     int n;
     FILE *fptr;
+    char* motif;
+    char* stat;
     /// 1) ouvrir wsofl et récup n
     // cas où n entré en terminal
     if (argc != 1)
@@ -45,8 +41,32 @@ int main(int argc, char const *argv[])
     }
 
     /// 2) créer arbre
+
+    //arb = ArbreFinal_Create(n);
+
     /// 3) proposer racine
-    /// 3) boucle pattern -> proposition -> etc
+
+    printf("Longueur %d, meilleur premier mot :\n",n);
+    //printf("%s\n",GetRoot(arb));
+
+    /// 4) boucle pattern -> proposition -> etc
+    //récup du pattern résultant
+    printf("Entrez le motif du résultat du mot :\n (2 = bien placé ; 1 = dans le mot ; 0 absent du mot ; ex 01211)\n(ajoutez -i après le motif pour avoir plus d'informations)\n");
+    
+    scanf("%s %s",&motif, &stat);
+    if(motif=="-1"){printf("Arrêt du programme...\n"); return(0);}
+    while(n!=strlen(motif)){
+        printf("le motif ne correspond pas à un mot de cette longueur.\n");
+        printf("Entrez le motif du résultat du mot :\n (2 = bien placé ; 1 = dans le mot ; 0 absent du mot ; ex 01211)\n(ajoutez -i après le motif pour avoir plus d'informations)\n");
+        scanf("%s %s",&motif, &stat);
+    }
+
+    while(nbrgood(motif)!=n){
+    //parcours dans l'arbre + cas si -i
+
+
+
+    }
 
     return 0;
 }

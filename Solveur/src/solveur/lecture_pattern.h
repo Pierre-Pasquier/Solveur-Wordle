@@ -8,3 +8,5 @@
 ///#include "l'arbre de nathan
 
 arbre_t lecture_pattern(char* pattern);
+
+int nbrgood(char* motif);
