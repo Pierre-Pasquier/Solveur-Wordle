@@ -109,6 +109,7 @@ void parcours(arbre_t *arbre, int len_mot, int num_mot_cherche, int **matrice, e
             for (int k=0; k<26 ; k++){      //pour tous les fils
                 if (((tmp->fils)[k]->char_is_in)[i]){       //si la lettre est dans le prochain mot
                     char merge[2];
+                    printf("%c\n",tmp->value);
                     merge[0]=tmp->value;
                     merge[1]='\0';
                     strcat(suffixe_mot_donne,merge);   //on ajoute cette lettre au suffixe du prochain mot (mot donne)

@@ -45,8 +45,8 @@ void print_arbre(arbre_t* abr);
 
 int paterne(char *mot_cherche,char *mot_donne);
 
-void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int* num_mot_cherche,int* num_mot_donne,int len_mot,int **matrice,int nb_mot);
+void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int num_mot_cherche,int len_mot,int **matrice,int nb_mot);
 
-void parcours(arbre_t *arbre, int len_mot, int* num_mot_cherche, int **matrice, element_t *position,char *mot_cherche,int nb_mot);
+void parcours(arbre_t *arbre, int len_mot, int num_mot_cherche, int **matrice, element_t *position,char *mot_cherche,int nb_mot);
 
 #endif // ARBRE_H
