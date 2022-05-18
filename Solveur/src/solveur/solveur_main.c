@@ -62,8 +62,8 @@ int main(int argc, char const *argv[])
     }
 
     while(nbrgood(motif)!=n){
-    //parcours dans l'arbre + cas si -i
-
+        //parcours dans l'arbre + cas si -i
+        
 
 
     }
