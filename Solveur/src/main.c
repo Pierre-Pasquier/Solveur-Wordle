@@ -17,11 +17,9 @@ int main(){
     for (int i=0;i<3;i++){
         matrix[i]=malloc(3*sizeof(int));
     }
-    int num_mot_cherche=0;
-    int num_mot_donne=1;
 
 
-    mot_suivant(test,test->racine,"",&num_mot_cherche,&num_mot_donne,3,matrix,4);
+    mot_suivant(test,test->racine,"",0,3,matrix,4);
 
 
 
