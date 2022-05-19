@@ -107,6 +107,105 @@ void print_arbre(arbre_t* abr){
     
 }
 
+// Fonctions relatives à l'arbre à générer en prétraitement
+
+arbre_pat* cree_arbre_pat(int len){
+    arbre_pat* res= malloc(sizeof(arbre_pat));
+    res->len_mots=len;
+    res->root=NULL;
+    return res;
+
+}
+
+void insert_values_rec(node** noeud, char* mot, int nombre_fils, int pattern){
+    if ((*noeud)==NULL){
+        node* res=malloc(sizeof(node));
+        res->mot=mot;
+        res->nombre_fils=nombre_fils;
+        res->pattern=pattern;
+        res->fils=calloc(nombre_fils,sizeof(node*));
+        *noeud=res;
+        return;
+
+    }
+    else{
+        // On insère au dernier endroit disponible 
+        for (int k=0;k<(*noeud)->nombre_fils;k++){
+            insert_values_rec(&((*noeud)->fils[k]),mot,nombre_fils,pattern);
+        }
+    }
+}
+
+
+void insert_values(arbre_pat* arbre, char* mot, int nombre_fils, int pattern){
+    assert(arbre!=NULL);
+    if (arbre->root==NULL){
+        node* res=malloc(sizeof(node));
+        res->mot=mot;
+        res->nombre_fils=nombre_fils;
+        res->pattern=pattern;
+        res->fils=calloc(nombre_fils,sizeof(node*));
+        arbre->root=res;
+    }
+    else {
+        insert_values_rec(&(arbre->root),mot,nombre_fils,pattern);
+    }
+
+}
+
+void destroy_rec(node* current){
+    if (current==NULL){
+        return;
+    }
+    else{
+        for (int k=0;k<current->nombre_fils;k++){
+            destroy_rec(current->fils[k]);
+        }
+        free(current->fils);
+        free(current);
+    }
+}
+
+void destroy_arbre_pat(arbre_pat* arbre){
+
+    destroy_rec(arbre->root);
+
+    free(arbre);
+
+}
+
+void write_ligne_rec(FILE* file, int ligne, node* current, int profondeur){
+    if (profondeur==ligne){
+        fprintf(file,"%d",current->pattern);
+        fprintf(file," ");
+        fprintf(file,"%s",current->mot);
+        fprintf(file," ");
+        fprintf(file,"%d",current->nombre_fils);
+       
+
+    }
+    else {
+        fprintf(file,";1");
+        for (int k=0;k<current->nombre_fils;k++){
+            if (current->fils[k]!=NULL){
+                write_ligne_rec(file,ligne,current->fils[k],profondeur+1);
+                
+            }
+            if (k!=current->nombre_fils-1){fprintf(file,",");}
+         
+        }
+        fprintf(file,";");
+    }
+}
+
+void write_fichier(FILE* file, arbre_pat* arbre){
+    assert(arbre!=NULL);
+    for (int i=0;i<arbre->len_mots;i++){
+        
+        write_ligne_rec(file,i,arbre->root,0);
+        fprintf(file,"%c",'\n');
+    }
 
 
 
+}
