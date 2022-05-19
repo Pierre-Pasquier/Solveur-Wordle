@@ -31,7 +31,7 @@ element_t* create_element(int nbr_mots);
 
 arbre_t* create_arbre_mots(int nbre_mots);
 
-bool is_in(char a,char *mot);
+bool is_in(char a,char *mot,int *tab);
 
 void destroy_element(element_t* begin);
 
@@ -45,12 +45,14 @@ void print_arbre(arbre_t* abr);
 
 int paterne(char *mot_cherche,char *mot_donne);
 
-void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int num_mot_cherche,int len_mot,int **matrice,int nb_mot,int tour_boucle);
+void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int len_mot,int *num_mot_cherche,int **matrice,int nb_mot);
 
-void parcours(arbre_t *arbre, int len_mot, int num_mot_cherche, int **matrice, element_t *position,char *mot_cherche,int nb_mot);
+void parcours(arbre_t *arbre, int len_mot, int *num_mot_cherche, int **matrice, element_t *position,char *mot_cherche,int nb_mot);
 
 void rev(char *mot, size_t len);
 
 char *cat(char * mot1, char *mot2);
+
+int index(char *mot,char x);
 
 #endif // ARBRE_H
