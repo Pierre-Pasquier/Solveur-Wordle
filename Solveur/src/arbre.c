@@ -174,35 +174,37 @@ void destroy_arbre_pat(arbre_pat* arbre){
 
 }
 
-void write_ligne_rec(FILE* file, int ligne, node* current, int profondeur){
+void write_ligne_rec(FILE* file, int ligne, node* current, int profondeur,node* pere, int nb_fils_pere,int indice_boucle){
     if (profondeur==ligne){
         fprintf(file,"%d",current->pattern);
         fprintf(file," ");
         fprintf(file,"%s",current->mot);
         fprintf(file," ");
         fprintf(file,"%d",current->nombre_fils);
+        if (indice_boucle==nb_fils_pere-1){
+            fprintf(file,";");
+        }
+        else {
+            fprintf(file,",");
+        }
        
 
     }
     else {
-        fprintf(file,";1");
+        
         for (int k=0;k<current->nombre_fils;k++){
             if (current->fils[k]!=NULL){
-                write_ligne_rec(file,ligne,current->fils[k],profondeur+1);
-                
+                write_ligne_rec(file,ligne,current->fils[k],profondeur+1,current,current->nombre_fils,k);
             }
-            if (k!=current->nombre_fils-1){fprintf(file,",");}
-         
-        }
-        fprintf(file,";");
     }
+}
 }
 
 void write_fichier(FILE* file, arbre_pat* arbre){
     assert(arbre!=NULL);
     for (int i=0;i<arbre->len_mots;i++){
         
-        write_ligne_rec(file,i,arbre->root,0);
+        write_ligne_rec(file,i,arbre->root,0,NULL,1,0);
         fprintf(file,"%c",'\n');
     }
 
