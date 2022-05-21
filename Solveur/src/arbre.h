@@ -61,6 +61,14 @@ void print_rec_element(element_t* elem,unsigned char* prefix,int len);
 
 void print_arbre(arbre_t* abr);
 
+char* get_mot_num(arbre_t* arbre,int num_mot);
+
+char* get_mot_num_rec(char* prefix,element_t* elem,int num_mot,int len);
+
+int get_num_mot(arbre_t* arbre, char* mot);
+
+int get_num_mot_rec(element_t* elem, char* mot,int profondeur, int nombre_mots);
+
 int index(char *mot,char x);
 
 int paterne(char *mot_cherche,char *mot_donne);
@@ -86,5 +94,7 @@ void insert_values_rec(node** noeud, char* mot, int nombre_fils, int pattern);
 void destroy_arbre_pat(arbre_pat* arbre);
 
 void destroy_rec(node* current);
+
+arbre_pat* remplissage_arbre_rec(node* pere, arbre_t* prev_mots, int** matrice_fils,int len_mots,char* start_mot);
 
 #endif // ARBRE_H

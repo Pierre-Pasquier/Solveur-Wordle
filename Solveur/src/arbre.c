@@ -92,7 +92,7 @@ void print_rec_element(element_t* elem,unsigned char* prefix,int len){
     if (elem->terminal){
         printf("MOT : %s\n",prefix);
     }
-    for (int i=0;i<25;i++){
+    for (int i=0;i<26;i++){
         if (elem->fils[i]!=NULL){
             newprefix[len]=65+i;
             print_rec_element(elem->fils[i],newprefix,len+1);
@@ -105,6 +105,57 @@ void print_arbre(arbre_t* abr){
     print_rec_element(abr->racine,NULL,0);
 
     
+}
+char* get_mot_num_rec(char* prefix,element_t* elem,int num_mot,int len){
+    if (elem->terminal){
+        return prefix;
+    }
+    else{
+        char newprefix[len+2];
+        memcpy(newprefix,prefix,len);
+        newprefix[len+1]=0;
+        for (int i=0;i<26;i++){
+            if (elem->fils[i]!=NULL && elem->fils[i]->char_is_in[num_mot]){
+                newprefix[len]=65+i;
+                 return get_mot_num_rec(newprefix,elem->fils[i],num_mot,len+1);
+            }
+
+        }
+
+    }
+
+}
+
+char* get_mot_num(arbre_t* arbre,int num_mot){
+    assert(arbre!=NULL);
+    return get_mot_num_rec(NULL,arbre->racine,num_mot,0);
+
+}
+
+int get_num_mot(arbre_t* arbre, char* mot){
+    assert(arbre!=NULL);
+    return get_num_mot_rec(arbre->racine,mot,1,arbre->nbr_mots);
+
+}
+
+int get_num_mot_rec(element_t* elem, char* mot,int profondeur, int nombre_mots){
+    if (profondeur==strlen(mot)){
+        if (elem!=NULL){
+            for (int k=0;k<nombre_mots;k++){
+                if (elem->char_is_in[k]){
+                    return k;
+                }
+            }
+
+        }
+        else {return -1;}
+
+
+    }
+    else{
+        return get_num_mot_rec(elem->fils[mot[profondeur-1]-65],mot,profondeur+1,nombre_mots);
+    }
+
 }
 
 // Fonctions relatives à l'arbre à générer en prétraitement
@@ -207,7 +258,27 @@ void write_fichier(FILE* file, arbre_pat* arbre){
         write_ligne_rec(file,i,arbre->root,0,NULL,1,0);
         fprintf(file,"%c",'\n');
     }
-
-
-
 }
+
+arbre_pat* remplissage_arbre_rec(node* pere, arbre_t* prev_mots, int** matrice,int len_mots,char* start_mot){ //matrice_1 est la matrice des patterns correspondant à current->mot
+    if (pere==NULL){
+        arbre_pat* res= cree_arbre_pat(len_mots);
+        int num_mot=get_num_mot(prev_mots,start_mot); //On crée nos variables 
+        int tab_check[prev_mots->nbr_mots];
+        for (int i=0;i<prev_mots->nbr_mots;i++){
+            tab_check[i]=0;
+        }
+        int current_pattern; //On va calculer le nombre de fils, ce qui correspond au nombre de patterns différent sur la colonne num_mot
+        for (int i=0;i<prev_mots->nbr_mots;i++){
+            current_pattern=matrice[i][num_mot];
+            tab_check[i]=1;
+            for (int k=i+1;k<prev_mots->nbr_mots;k++){
+
+            }
+
+
+        }
+
+        return res;
+    }
+} 

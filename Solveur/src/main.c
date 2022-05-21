@@ -18,6 +18,10 @@ int main(){
 
 
     }
+    printf("%s\n",get_mot_num(test,2));
+    printf("%d\n",get_num_mot(test,"ACA"));
+
+    // Partie test pour l'écriture dans le fichier texte
 
     const char* filename= "out.txt";
 
