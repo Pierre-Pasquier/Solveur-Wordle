@@ -6,11 +6,11 @@
 
 struct _noeud_t{
     char * MotDuNoeud;
-    _noeud_t *fils[];
+    noeud_t **fils;
     int *pattern;
 };
 
-typedef strust _noeud_t noeud_t;
+typedef struct _noeud_t noeud_t;
 
 struct _arbre_t{
     noeud_t *pere;

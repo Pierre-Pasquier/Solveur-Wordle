@@ -30,3 +30,8 @@ void arbre_destroy(arbre_t *one_tree);
 
 void tree_append(arbre_t *one_tree, char *MotDuNoeud);
 
+
+
+arbre_t *arbrefinal(int n);
+
+void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos);

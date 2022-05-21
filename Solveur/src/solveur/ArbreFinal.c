@@ -56,22 +56,76 @@ void tree_append(arbre_t *one_tree, char *MotDuNoeud, int *pattern){
 }
 
 
-int main() {
 
-    FILE *f;
-    char c;
-    f=fopen("test.txt","r");
+arbre_t *arbrefinal(int n){
+    arbre_t* arbre = creation_arbre_t();
+    FILE* fptr;
+    char line[256];
+    
+    ///ouverture fichier
+    char* link = "FicherTestn.txt";
+    link[10] = itoa(n);
+    //test si se combine bien
+    printf("%s",link);
+    long pos = 0;
 
-    while((c=fgetc(f))!=EOF){
-        // ici on va rentrer les conditions sur les mots qu'on reçoit
-        // ici on met un autre while en attendant que le mots soit stocker entièrement
-        char* morceau;
-        fscanf( f , "%s" , &morceau); // on recupere les trucs lettres par lettres et on stock dans morceau mais apres il faut se demerder pour decouper en fonction des lignes et des virgules et tout le bordel 
-        printf("%c",c);
+    fptr = fopen(link,"r");
+
+    if (fptr==NULL) 
+    {
+        perror ("Error reading file");
     }
+    else
+    {
+        fgets(line, sizeof(line), fptr);
+        int N;
+        sscanf(line,"%d",N);
+        fgets(line, sizeof(line), fptr);
+        char* root;
+        int nbrfils;
+        sscanf(line,"%s %d",root,nbrfils);
 
-    fclose(f);
+        noeud_t *noeud_pere =creation_noeud_t(root, N, nbrfils); ///on triche avec N afin de pouvoir le récup (pattern du père n'existant pas il n'est pas sensé être utilisé)
+        ///de plus, nbrfils car il faut initialiser un tableau de nbrfils fils
+        arbre->père = noeud_pere;
 
-    return 0;
+        lectfils(noeud_pere, fptr, 0, pos);
+    }
+    
+
+    fclose(fptr);
+
+    return arbre;
 }
 
+void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
+    char line[256];
+    fseek(fptr, pos, SEEK_CUR);
+    fgets(line,sizeof(line),fptr);
+    char* mot = "";
+    int nbrpvir2 = 0;
+    int nbrvir = 0;
+    char* val;
+    int pattern;
+    int nbrfils;
+    for (int i = 0; i < 256; i++)
+    {
+        if(nbrpvir2 == nbrpvir){
+            if(line[i]==","){
+                sscanf(mot, "%d %s %d",pattern,val,nbrfils);
+                noeud_t *newnoeud = creation_noeud_t(val,pattern,nbrfils);
+                noeud_pere->tabfils[nbrvir]=newnoeud;
+                mot = "";
+                lectfils(newnoeud, fptr,nbrpvir2,ftell(fptr));
+                nbrvir++;
+            }
+            else if (line[i]!=";" && line[i]!=","){
+                strncat(mot,line[i],1);
+            }
+        }
+        if(line[i]==";"){
+            nbrpvir2++;
+        }
+    }
+    
+}

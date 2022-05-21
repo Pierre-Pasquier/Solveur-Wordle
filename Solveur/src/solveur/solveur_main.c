@@ -42,7 +42,7 @@ int main(int argc, char const *argv[])
 
     /// 2) créer arbre
 
-    //arb = ArbreFinal_Create(n);
+    //arb = LectureFinal(n);
 
     /// 3) proposer racine
 
@@ -59,7 +59,7 @@ int main(int argc, char const *argv[])
         printf("le motif ne correspond pas à un mot de cette longueur.\n");
         printf("Entrez le motif du résultat du mot :\n (2 = bien placé ; 1 = dans le mot ; 0 absent du mot ; ex 01211)\n(ajoutez -i après le motif pour avoir plus d'informations)\n");
         scanf("%s %s",&motif, &stat);
-    }
+    }//voir -2 pour reset
 
     while(nbrgood(motif)!=n){
         //parcours dans l'arbre + cas si -i
