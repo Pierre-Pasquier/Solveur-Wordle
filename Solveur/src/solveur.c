@@ -114,6 +114,7 @@ void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int len_mot,int 
                 printf("Dans fonction : matrice[%d][%d] = %d\n",k,i,matrice[k][i]);
             }
         }
+        free(l); //On libère l'espace mémoire
         num_mot_cherche[0] = num_mot_cherche[0] + 1;
         printf("Matrice à jour\n");
         printf("Après le parcours\n");
@@ -244,6 +245,10 @@ int *parcours(arbre_t *arbre, int len_mot, int *num_mot_cherche, int **matrice, 
             //matrice[num_mot_cherche[0]-1][i-1] = score;   //on met à jour le score dans la matrice
             printf("Matrice mise à jour\n");
         }
+        else {
+            l[i]=(int) pow(3.0,(double) len_mot) - 1;
+        }
+
     }
     return l;
 }

@@ -43,6 +43,8 @@ struct arbre_pat {
 
 };
 
+double safe_log2(double x);
+
 typedef struct arbre_pat arbre_pat;
 
 element_t* create_element(int nbr_mots);

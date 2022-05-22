@@ -1,5 +1,18 @@
 #include "arbre.h"
 
+double safe_log2(double x){
+    if (x>0){
+        return log2(x);
+    }
+    else {
+        return 0.0;
+    }
+}
+
+
+
+
+
 element_t* create_element(int nbr_mots){
     element_t* root=malloc(sizeof(element_t));
     for (int i=0;i<26;i++){
@@ -285,8 +298,140 @@ void write_fichier(FILE* file, arbre_pat* arbre){
     }
 }
 
-arbre_pat* remplissage_arbre_rec(node* pere, arbre_t* prev_mots, int** matrice_1,int len_mots,char* start_mot,arbre_pat* arbre){ //matrice_1 est la matrice des patterns correspondant à current->mot
-    if (pere==NULL){
-        //On ajoute le mot à la racine, c'est le début de l'appel récursif
+int same_pattern(arbre_t* arbre,int** matrice, int pattern, int num_motd){
+    int res=1;
+    for (int i=0;i<arbre->nbr_mots;i++){
+        if (matrice[i][num_motd]==pattern){
+            res++;
+        }
     }
+    return res;
+}
+
+
+void insert_same_pattern(arbre_t* prev,arbre_t* new, int** matrice, int pattern, int num_motd){
+    int cpt=0;
+    for (int i=0;i<prev->nbr_mots;i++){
+        if (matrice[i][num_motd]==pattern){
+            insert_arbre(new,get_mot_num(prev,i),cpt);
+            cpt++;
+        }
+    }
+}
+
+char* best_mot(arbre_t* arbre,int **matrice,int lenmot){
+    //Calcul du max de l'entropie pour tous les mots d'un arbre donné en paramètre
+    double temp_sum;
+    double entropie_max=0.0;
+    int indice_entropie_max=0;
+    int tab_check[arbre->nbr_mots];
+    int nb_patterns=(int)pow(3.0,(double)lenmot)-1;
+    int tab_pattern[nb_patterns];
+    for (int j=0;j<arbre->nbr_mots;j++){ //Les indices des mots donnés correspondent aux indices de colonnes
+        temp_sum=0;
+        for (int i=0;i<arbre->nbr_mots;i++){
+            //On compte combien de mots sont associés à chaque pattern
+            tab_pattern[matrice[i][j]]+=1;
+            
+        }
+        //On calcule l'entropie
+        for (int pattern;pattern<nb_patterns;pattern++){
+            temp_sum+=-(tab_pattern[pattern]/arbre->nbr_mots)*safe_log2((tab_pattern[pattern]/arbre->nbr_mots));
+        }
+        //On met à jour le max
+        if (temp_sum>entropie_max){
+            entropie_max=temp_sum;
+            indice_entropie_max=j;
+        }
+    }
+    //On renvoie le mot d'indice entropie_max dans l'arbre
+    return get_mot_num(arbre,indice_entropie_max);
+
+    
+    
+    }
+
+
+
+
+
+arbre_pat* remplissage_arbre_rec(node* pere, arbre_t* prev_mots, int** matrice_1,int len_mots,char* start_mot,arbre_pat* arbre){ //matrice_1 est la matrice des patterns correspondant à current->mot
+    //Calcul du nombre de fils;
+    arbre_t* temp;
+    int nb_mots;
+    int num_motd=get_num_mot(prev_mots,start_mot);
+    int nombre_fils=0;
+    int current_pattern;
+    int tab_check[prev_mots->nbr_mots];
+    for (int i=0;i<prev_mots->nbr_mots;i++){
+        current_pattern=matrice_1[i][num_motd];
+        for (int k=i+1;k<prev_mots->nbr_mots;k++){
+            if (tab_check[k]!=1 && matrice_1[i][k]==current_pattern){
+                tab_check[k]=1;
+
+            }
+        }
+        if (tab_check[i]!=1){   //On met à jour les patterns déjà rencontrés
+            nombre_fils++;
+            tab_check[i]=1;
+        }
+
+
+    }
+
+    //Si le nombre de fils vaut 0 on s'arrête
+
+    //Sinon on calcule les matrices des meilleurs fils et on insère dans l'arbre récursivement
+
+    if (nombre_fils!=0){
+        if (pere==NULL){
+            //On ajoute le mot à la racine, c'est le début de l'appel récursif
+            node* res=malloc(sizeof(node));
+            res->mot=start_mot;
+            res->nombre_fils=nombre_fils;
+            res->pattern=777; // Arbitraire, pour remplir l'arbre au niveau de la racine
+            res->fils=calloc(nombre_fils,sizeof(node*));
+            arbre->root=res;
+        }      
+        int *num_mot_cherche = malloc(sizeof(int));
+        
+        int** matrice_2;
+        for (int fils=0;fils<nombre_fils;fils++){
+            current_pattern=matrice_1[fils][num_motd];
+            nb_mots=same_pattern(prev_mots,matrice_1,current_pattern,num_motd);
+            temp=create_arbre_mots(nb_mots);
+            insert_same_pattern(prev_mots,temp,matrice_1,current_pattern,num_motd);
+            //print_arbre(temp); //pour le test
+            //Création de la matrice pour les fils de même pattern
+
+            matrice_2=calloc(temp->nbr_mots,sizeof(int*));
+            for (int i=0;i<temp->nbr_mots;i++){
+                matrice_2[i]=calloc(temp->nbr_mots,sizeof(int));
+            }
+            //On rempli la matrice
+            num_mot_cherche[0] = 0;
+            mot_suivant(temp,temp->racine,"",len_mots,num_mot_cherche,matrice_2,temp->nbr_mots);
+            //On calcule le meilleur fils
+
+
+
+
+
+            //On libère l'espace mémoire
+            for (int i=0;i<temp->nbr_mots;i++){
+                free(matrice_2[i]);
+            }
+            free(matrice_2);
+            destroy_arbre(temp);
+            free(num_mot_cherche);
+
+        }
+
+    }
+    
+    
+    
+    
+    
+
 } 

@@ -32,6 +32,22 @@ int main(){
     // 12 11 00 20
     // 13 08 20 00
 
+    arbre_pat* tes=cree_arbre_pat(3);
+    insert_values_node(&(tes->root),"Boo",2,26);
+    insert_values_node(&(tes->root->fils[0]),"Baa",2,26);
+    insert_values_node(&(tes->root->fils[0]),"Baa",2,26);
+    insert_values_node(&(tes->root->fils[1]),"Buu",2,26);
+    insert_values_node(&(tes->root->fils[1]),"Buu",2,26);
+    insert_values_node(&(tes->root->fils[0]->fils[0]),"Bii",4,26);
+    insert_values_node(&(tes->root->fils[0]->fils[0]),"Bii",4,26);
+    printf("%d\n",profondeur(tes->root));
+
+    const char* filename = "out.txt";
+    FILE* out=fopen(filename,"w+");
+    write_fichier(out,tes);
+    destroy_arbre_pat(tes);
+
+
 
 
 
@@ -41,7 +57,7 @@ int main(){
 
 
     free(num_mot_cherche);
-    for (int i=0;i<3;i++){
+    for (int i=0;i<4;i++){
         free(matrix[i]);
     }
     free(matrix);
