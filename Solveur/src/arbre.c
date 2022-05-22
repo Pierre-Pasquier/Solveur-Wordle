@@ -168,7 +168,7 @@ arbre_pat* cree_arbre_pat(int len){
 
 }
 
-void insert_values_rec(node** noeud, char* mot, int nombre_fils, int pattern){
+void insert_values_node(node** noeud, char* mot, int nombre_fils, int pattern){
     if ((*noeud)==NULL){
         node* res=malloc(sizeof(node));
         res->mot=mot;
@@ -180,10 +180,18 @@ void insert_values_rec(node** noeud, char* mot, int nombre_fils, int pattern){
 
     }
     else{
-        // On insère au dernier endroit disponible 
+        // On insère au premier fils disponible de noeud
         for (int k=0;k<(*noeud)->nombre_fils;k++){
-            insert_values_rec(&((*noeud)->fils[k]),mot,nombre_fils,pattern);
+            if ((*noeud)->fils[k]==NULL){
+                node* res=malloc(sizeof(node));
+                res->mot=mot;
+                res->nombre_fils=nombre_fils;
+                res->pattern=pattern;
+                res->fils=calloc(nombre_fils,sizeof(node*));
+                (*noeud)->fils[k]=res;
+            }
         }
+        
     }
 }
 
@@ -199,7 +207,7 @@ void insert_values(arbre_pat* arbre, char* mot, int nombre_fils, int pattern){
         arbre->root=res;
     }
     else {
-        insert_values_rec(&(arbre->root),mot,nombre_fils,pattern);
+        insert_values_node(&(arbre->root),mot,nombre_fils,pattern);
     }
 
 }
@@ -225,13 +233,31 @@ void destroy_arbre_pat(arbre_pat* arbre){
 
 }
 
+int profondeur(node* noeud){
+    if (noeud==NULL){
+        return 0;
+    }
+    else{
+        int temp_max=0;
+        for (int k=0;k<noeud->nombre_fils;k++){
+            if (profondeur(noeud->fils[k])>temp_max){
+                temp_max=profondeur(noeud->fils[k]);
+            }
+        }
+        return 1 + temp_max;
+            
+    }
+}
+
 void write_ligne_rec(FILE* file, int ligne, node* current, int profondeur,node* pere, int nb_fils_pere,int indice_boucle){
     if (profondeur==ligne){
-        fprintf(file,"%d",current->pattern);
-        fprintf(file," ");
-        fprintf(file,"%s",current->mot);
-        fprintf(file," ");
-        fprintf(file,"%d",current->nombre_fils);
+        if (current!=NULL){
+            fprintf(file,"%d",current->pattern);
+            fprintf(file," ");
+            fprintf(file,"%s",current->mot);
+            fprintf(file," ");
+            fprintf(file,"%d",current->nombre_fils);
+        }
         if (indice_boucle==nb_fils_pere-1){
             fprintf(file,";");
         }
@@ -244,41 +270,23 @@ void write_ligne_rec(FILE* file, int ligne, node* current, int profondeur,node* 
     else {
         
         for (int k=0;k<current->nombre_fils;k++){
-            if (current->fils[k]!=NULL){
-                write_ligne_rec(file,ligne,current->fils[k],profondeur+1,current,current->nombre_fils,k);
+            write_ligne_rec(file,ligne,current->fils[k],profondeur+1,current,current->nombre_fils,k);
             }
     }
 }
-}
+
 
 void write_fichier(FILE* file, arbre_pat* arbre){
     assert(arbre!=NULL);
-    for (int i=0;i<arbre->len_mots;i++){
+    for (int i=0;i<profondeur(arbre->root);i++){
         
         write_ligne_rec(file,i,arbre->root,0,NULL,1,0);
         fprintf(file,"%c",'\n');
     }
 }
 
-arbre_pat* remplissage_arbre_rec(node* pere, arbre_t* prev_mots, int** matrice,int len_mots,char* start_mot){ //matrice_1 est la matrice des patterns correspondant à current->mot
+arbre_pat* remplissage_arbre_rec(node* pere, arbre_t* prev_mots, int** matrice_1,int len_mots,char* start_mot,arbre_pat* arbre){ //matrice_1 est la matrice des patterns correspondant à current->mot
     if (pere==NULL){
-        arbre_pat* res= cree_arbre_pat(len_mots);
-        int num_mot=get_num_mot(prev_mots,start_mot); //On crée nos variables 
-        int tab_check[prev_mots->nbr_mots];
-        for (int i=0;i<prev_mots->nbr_mots;i++){
-            tab_check[i]=0;
-        }
-        int current_pattern; //On va calculer le nombre de fils, ce qui correspond au nombre de patterns différent sur la colonne num_mot
-        for (int i=0;i<prev_mots->nbr_mots;i++){
-            current_pattern=matrice[i][num_mot];
-            tab_check[i]=1;
-            for (int k=i+1;k<prev_mots->nbr_mots;k++){
-
-            }
-
-
-        }
-
-        return res;
+        //On ajoute le mot à la racine, c'est le début de l'appel récursif
     }
 } 
