@@ -8,10 +8,11 @@
 int main(){
     printf("Hello World\n");
     arbre_t* test=create_arbre_mots(4);
-    insert_arbre(test,"DBAA",0);
-    insert_arbre(test,"FBCA",1);
-    insert_arbre(test,"PABC",2);
-    insert_arbre(test,"SACA",3);
+    insert_arbre(test,"BACB",0);
+    insert_arbre(test,"DBAA",1);
+    insert_arbre(test,"FAYA",2);
+    insert_arbre(test,"PABA",3);
+    
     int** matrix=calloc(4,sizeof(int*));
     for (int i=0;i<4;i++){
         matrix[i]=calloc(4,sizeof(int));
@@ -25,7 +26,6 @@ int main(){
     num_mot_cherche[0] = 0;
     mot_suivant(test,test->racine,"",4,num_mot_cherche,matrix,4);
 
-
     //on doit obtenir
     // 00 21 12 13
     // 19 00 05 08
@@ -33,18 +33,11 @@ int main(){
     // 13 08 20 00
 
     printf("%s\n",best_mot(test,matrix,4));
+    getchar();
+    arbre_pat* tes=cree_arbre_pat(4);
+    //remplissage_arbre_rec(NULL,test,matrix,4,"FAYA",tes,777);
 
-    arbre_pat* tes=cree_arbre_pat(3);
-    insert_values_node(&(tes->root),"Boo",2,26);
-    insert_values_node(&(tes->root->fils[0]),"Baa",2,26);
-    insert_values_node(&(tes->root->fils[0]),"Baa",2,26);
-    insert_values_node(&(tes->root->fils[1]),"Buu",2,26);
-    insert_values_node(&(tes->root->fils[1]),"Buu",2,26);
-    insert_values_node(&(tes->root->fils[0]->fils[0]),"Bii",4,26);
-    insert_values_node(&(tes->root->fils[0]->fils[0]),"Bii",4,26);
-    printf("%d\n",profondeur(tes->root));
-
-    const char* filename = "out.txt";
+    const char* filename = "out2.txt";
     FILE* out=fopen(filename,"w+");
     write_fichier(out,tes);
     destroy_arbre_pat(tes);
@@ -54,7 +47,7 @@ int main(){
 
 
 
-
+    printf("\n");
     print_arbre(test);
 
 

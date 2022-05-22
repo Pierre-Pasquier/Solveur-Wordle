@@ -105,7 +105,7 @@ void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int len_mot,int 
         int *l = parcours(arbre,len_mot,num_mot_cherche,matrice,elem,prefixe,nb_mot);    //on parcours tous les autres mots qui sont à droite
         printf("Retour dans mot_suivant, len(l) = %lu\n",sizeof(l));
         int int_c = num_mot_cherche[0];
-        for (int k=0;k<sizeof(l)/2;k++){
+        for (int k=0;k<nb_mot;k++){
             matrice[int_c][k] = l[k];
             printf("k = %d\n",k);
         }
@@ -151,7 +151,7 @@ int *parcours(arbre_t *arbre, int len_mot, int *num_mot_cherche, int **matrice, 
     printf("Numéro mot cherche %d\n",num_mot_cherche[0]);
     printf("Entrée dans la fonction parcours\n");
     element_t *tmp = position;      //copie de la position
-    int *l = calloc(4,sizeof(int));
+    int *l = calloc(nb_mot,sizeof(int));
     printf("Avant la boucle\n");
     for (int i=0 ; i<nb_mot; i++){   //pour tous les mots à droite
         if (i != num_mot_cherche[0]){
@@ -250,6 +250,7 @@ int *parcours(arbre_t *arbre, int len_mot, int *num_mot_cherche, int **matrice, 
         }
 
     }
+    printf("l[0] : %d\n",l[0]);
     return l;
 }
 

@@ -103,4 +103,6 @@ int profondeur(node* noeud);
 
 char* best_mot(arbre_t* arbre,int **matrice,int lenmot);
 
+node* remplissage_arbre_rec(node* pere, arbre_t* prev_mots, int** matrice_1,int len_mots,char* start_mot,arbre_pat* arbre,int prev_pattern);
+
 #endif // ARBRE_H
