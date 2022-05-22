@@ -32,6 +32,8 @@ int main(){
     // 12 11 00 20
     // 13 08 20 00
 
+    printf("%s\n",best_mot(test,matrix,4));
+
     arbre_pat* tes=cree_arbre_pat(3);
     insert_values_node(&(tes->root),"Boo",2,26);
     insert_values_node(&(tes->root->fils[0]),"Baa",2,26);

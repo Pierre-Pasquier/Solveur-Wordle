@@ -325,19 +325,25 @@ char* best_mot(arbre_t* arbre,int **matrice,int lenmot){
     double entropie_max=0.0;
     int indice_entropie_max=0;
     int tab_check[arbre->nbr_mots];
-    int nb_patterns=(int)pow(3.0,(double)lenmot)-1;
+    int nb_patterns=(int)pow(3.0,(double)lenmot);
     int tab_pattern[nb_patterns];
+    for (int pattern=0;pattern<nb_patterns;pattern++){
+            tab_pattern[pattern]=0;
+    } 
     for (int j=0;j<arbre->nbr_mots;j++){ //Les indices des mots donnés correspondent aux indices de colonnes
+        printf("Boucle  j : %d\n",j);
         temp_sum=0;
         for (int i=0;i<arbre->nbr_mots;i++){
+            
             //On compte combien de mots sont associés à chaque pattern
             tab_pattern[matrice[i][j]]+=1;
             
         }
         //On calcule l'entropie
-        for (int pattern;pattern<nb_patterns;pattern++){
-            temp_sum+=-(tab_pattern[pattern]/arbre->nbr_mots)*safe_log2((tab_pattern[pattern]/arbre->nbr_mots));
+        for (int pattern=0;pattern<nb_patterns;pattern++){
+            temp_sum+=-1*((double)tab_pattern[pattern]/(double)arbre->nbr_mots)*safe_log2(((double)tab_pattern[pattern]/(double)arbre->nbr_mots));
         }
+        printf("Entropie du mot : %f\n",temp_sum);
         //On met à jour le max
         if (temp_sum>entropie_max){
             entropie_max=temp_sum;
@@ -357,6 +363,7 @@ char* best_mot(arbre_t* arbre,int **matrice,int lenmot){
 
 arbre_pat* remplissage_arbre_rec(node* pere, arbre_t* prev_mots, int** matrice_1,int len_mots,char* start_mot,arbre_pat* arbre){ //matrice_1 est la matrice des patterns correspondant à current->mot
     //Calcul du nombre de fils;
+    char* temp_best_mot;
     arbre_t* temp;
     int nb_mots;
     int num_motd=get_num_mot(prev_mots,start_mot);
@@ -412,6 +419,8 @@ arbre_pat* remplissage_arbre_rec(node* pere, arbre_t* prev_mots, int** matrice_1
             num_mot_cherche[0] = 0;
             mot_suivant(temp,temp->racine,"",len_mots,num_mot_cherche,matrice_2,temp->nbr_mots);
             //On calcule le meilleur fils
+            temp_best_mot=best_mot(temp,matrice_2,len_mots);
+
 
 
 

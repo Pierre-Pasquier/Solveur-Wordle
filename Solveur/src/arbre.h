@@ -101,4 +101,6 @@ void write_fichier(FILE* file, arbre_pat* arbre);
 
 int profondeur(node* noeud);
 
+char* best_mot(arbre_t* arbre,int **matrice,int lenmot);
+
 #endif // ARBRE_H
