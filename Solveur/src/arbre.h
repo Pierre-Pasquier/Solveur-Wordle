@@ -27,6 +27,24 @@ struct _arbre_t {
 
 typedef struct _arbre_t arbre_t;
 
+struct node {
+    struct node** fils;
+    int nombre_fils;
+    char* mot;
+    int pattern;
+};
+
+typedef struct node node;
+
+
+struct arbre_pat {
+    int len_mots;
+    node* root;
+
+};
+
+typedef struct arbre_pat arbre_pat;
+
 element_t* create_element(int nbr_mots);
 
 arbre_t* create_arbre_mots(int nbre_mots);
@@ -56,5 +74,19 @@ char *cat_d(char car, char *mot);
 char *cat_f(char *mot, char car);
 
 int index(char *mot,char x);
+
+arbre_pat* cree_arbre_pat(int len);
+
+void insert_values_rec(node** noeud, char* mot, int nombre_fils, int pattern);
+
+void insert_values(arbre_pat* arbre, char* mot, int nombre_fils, int pattern);
+
+void destroy_rec(node* current);
+
+void destroy_arbre_pat(arbre_pat* arbre);
+
+void write_ligne_rec(FILE* file, int ligne, node* current, int profondeur,node* pere, int nb_fils_pere,int indice_boucle);
+
+void write_fichier(FILE* file, arbre_pat* arbre);
 
 #endif // ARBRE_H
