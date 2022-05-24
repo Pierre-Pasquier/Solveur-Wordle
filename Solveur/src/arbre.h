@@ -28,7 +28,7 @@ struct _arbre_t {
 typedef struct _arbre_t arbre_t;
 
 struct node {
-    struct node** fils;
+    struct node** fils; //[nombre_fils]
     int nombre_fils;
     char* mot;
     int pattern;
@@ -87,9 +87,9 @@ int index(char *mot,char x);
 
 arbre_pat* cree_arbre_pat(int len);
 
-void insert_values_node(node** noeud, char* mot, int nombre_fils, int pattern);
+bool insert_values_node(node* current,node** voulu, char* mot, int nombre_fils, int pattern);
 
-void insert_values(arbre_pat* arbre, char* mot, int nombre_fils, int pattern);
+void insert_values(arbre_pat* arbre,node** voulu, char* mot, int nombre_fils, int pattern);
 
 void destroy_rec(node* current);
 
@@ -103,6 +103,8 @@ int profondeur(node* noeud);
 
 char* best_mot(arbre_t* arbre,int **matrice,int lenmot);
 
-node* remplissage_arbre_rec(node* pere, arbre_t* prev_mots, int** matrice_1,int len_mots,char* start_mot,arbre_pat* arbre,int prev_pattern);
+node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,char* start_mot,int prev_pattern);
+
+void print_arbre_pat(node* root);
 
 #endif // ARBRE_H

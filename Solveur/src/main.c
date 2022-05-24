@@ -9,7 +9,7 @@ int main(){
     printf("Hello World\n");
     arbre_t* test=create_arbre_mots(4);
     insert_arbre(test,"BACB",0);
-    insert_arbre(test,"DBAA",1);
+    insert_arbre(test,"DAXA",1);
     insert_arbre(test,"FAYA",2);
     insert_arbre(test,"PABA",3);
     
@@ -32,14 +32,15 @@ int main(){
     // 12 11 00 20
     // 13 08 20 00
 
-    printf("%s\n",best_mot(test,matrix,4));
+    printf("%lu\n",sizeof("B"));
     getchar();
     arbre_pat* tes=cree_arbre_pat(4);
-    //remplissage_arbre_rec(NULL,test,matrix,4,"FAYA",tes,777);
-
-    const char* filename = "out2.txt";
+    node* res=remplissage_arbre_rec(test,matrix,4,"FAYA",777);
+    tes->root=res;
+    const char* filename = "out.txt";
     FILE* out=fopen(filename,"w+");
     write_fichier(out,tes);
+    print_arbre_pat(tes->root);
     destroy_arbre_pat(tes);
 
 
