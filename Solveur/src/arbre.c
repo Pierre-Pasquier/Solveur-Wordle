@@ -393,10 +393,6 @@ node* cree_node(int nombre_fils, int pattern, char* mot,int len_mot){
 
 node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,char* start_mot,int prev_pattern){ //matrice_1 est la matrice des patterns 
     node* current=NULL;
-    printf("Nombre de noeuds dans l'arbre : %d\n",prev_mots->nbr_mots);
-    printf("Noeud vide ? : %d\n",current==NULL);
-    printf("Mot : %s\n",start_mot);
-    print_arbre(prev_mots);
     //Calcul du nombre de fils;
     arbre_t* temp;
     int nb_mots;
@@ -410,9 +406,7 @@ node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,cha
     }
     for (int i=0;i<prev_mots->nbr_mots;i++){
         current_pattern=matrice_1[i][num_motd];
-        printf("Pattern courant : %d\n",current_pattern);
         for (int k=i+1;k<prev_mots->nbr_mots;k++){
-            printf("Ok boucle\n");
             if (tab_check[k]!=1 && matrice_1[k][num_motd]==current_pattern){
                 tab_check[k]=1;
 
@@ -426,32 +420,27 @@ node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,cha
     //Pour le test
     }//On insère le mot courant
     current=cree_node(nombre_fils,prev_pattern,start_mot,len_mots);
-    printf("Noeud vide ? : %d\n",current==NULL);
-    print_arbre_pat(current);
-    printf("Arbre\n");
+
 
     //Si le nombre de mots dans l'arbre vaut 1 on s'arrête en ajoutant le mot à l'arbre
 
     //Sinon on calcule les matrices des meilleurs fils et on insère dans l'arbre récursivement
 
-    if (prev_mots->nbr_mots>1){
-        printf("Nombre de fils : %d\n",nombre_fils);    
+    if (prev_mots->nbr_mots>1){  
         int *num_mot_cherche = calloc(1,sizeof(int));
         int** matrice_2;
         int fils=0;
-        getchar();
+
         for (int i=0;i<prev_mots->nbr_mots;i++){
             tab_check[i]=0;
         }
 
-        printf("tab : %d\n",tab_check[prev_mots->nbr_mots-1]);
-        getchar();
+
 
         ;
         
         for (int i=0;i<prev_mots->nbr_mots;i++){
             current_pattern=matrice_1[i][num_motd];
-            printf("Pattern courant : %d\n",current_pattern);
             
                 for (int k=i+1;k<prev_mots->nbr_mots;k++){
                     if (tab_check[k]!=1 && matrice_1[k][num_motd]==current_pattern){
@@ -465,39 +454,35 @@ node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,cha
                     char* temp_best_mot=calloc((len_mots+1),sizeof(char));
                     
                     num_mot_cherche[0]=0;
-                    printf("Ok\n");
+                   
                     nb_mots=same_pattern(prev_mots,matrice_1,current_pattern,num_motd);
-                    printf("---------------Nb de mots dans l'arbre de pattern %d : %d\n",current_pattern,nb_mots);
-                    getchar();
+         
                     
                     temp=create_arbre_mots(nb_mots);
                     insert_same_pattern(prev_mots,temp,matrice_1,current_pattern,num_motd);
-                    print_arbre(temp); //pour le test
-                    getchar();
+                   
+           
                     //Création de la matrice pour les fils de même pattern
-                    printf("Nombre de mots : %d\n",temp->nbr_mots);
-                    getchar();
+                 
+              
                     matrice_2=calloc(temp->nbr_mots,sizeof(int*));
                     for (int i=0;i<temp->nbr_mots;i++){
                         matrice_2[i]=calloc(temp->nbr_mots,sizeof(int));
                     }
                     //Remplissage de la matrice
                     mot_suivant(temp,temp->racine,"",len_mots,num_mot_cherche,matrice_2,temp->nbr_mots);
-                    printf("Ok\n");
-                    getchar();
+                 
+                
                     //Calcul du meilleur mot de la matrice
                     strcpy(temp_best_mot,best_mot(temp,matrice_2,len_mots));
                     temp_best_mot[len_mots]='\0';
-                    printf("Meilleur mot : %s\n",temp_best_mot);
-                    print_arbre(temp);
-                    getchar();
+                 
                     //Insertion du noeud père
 
                     //Appel récursif 
                     current->fils[fils]=remplissage_arbre_rec(temp,matrice_2,len_mots,temp_best_mot,current_pattern);
-                    printf("Fin de récursion\n");
-                    print_arbre_pat(current);
-                    getchar();
+             
+                    
                     //Libération de la mémoire      
                     for (int i=0;i<temp->nbr_mots;i++){
                         free(matrice_2[i]);
