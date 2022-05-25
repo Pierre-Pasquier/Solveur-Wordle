@@ -1,15 +1,7 @@
 #include "lecture_pattern.h"
 
-int nbrgood(char* motif){
-    int i;
-    int count = 0;
-    for (i = 0; i < strlen(motif); i++)
-    {
-        if(motif[i]=="2"){
-            count++;
-        }
-    }
-    return count;    
+bool nbrgood(char* motif){
+    return(!strcmp(motif,"222") || !strcmp(motif,"222222") ||!strcmp(motif,"2222222") ||!strcmp(motif,"22222222") ||!strcmp(motif,"222222222") ||!strcmp(motif,"2222222222"));
 }
 
 
@@ -19,12 +11,14 @@ arbre_t *arbrefinal(int n){
     char line[256];
     
     ///ouverture fichier
-    char* link = "FicherTestn.txt";
-    link[10] = atoi(n);
+    char link[32] = "FichierTest";
+    char str[10];
+    sprintf(str, "%d", n);
+    strcat(link,str);
+    strcat(link,".txt");
     //test si se combine bien
-    printf("%s",link);
 
-    long pos = 0;
+    //long pos = 0;
 
     fptr = fopen(link,"r");
 
@@ -35,22 +29,24 @@ arbre_t *arbrefinal(int n){
     else
     {
         fgets(line, sizeof(line), fptr);
-        int N;
-        sscanf(line,"%d",N);
+        
+        int N=0;
+        char *root=malloc(10);
+        int nbrfils=0;
+        char tmp[10]="";
+        N = strtoll(line,(char**)NULL,10); ///conversion de 10 de line en 10 int
         fgets(line, sizeof(line), fptr);
-        char* root;
-        int nbrfils;
-        sscanf(line,"%s %d",root,nbrfils);
-
+        sscanf(line,"%s %s",root,tmp); ///extraction en root et tmp
+        nbrfils = strtoll(tmp,(char**)NULL,10);///pour convertir séparement tmp en int 
         noeud_t *noeud_pere =create_noeud(nbrfils, N, root); ///on triche avec N afin de pouvoir le récup (pattern du père n'existant pas il n'est pas sensé être utilisé)
         ///de plus, nbrfils car il faut initialiser un tableau de nbrfils fils
         arbre->pere = noeud_pere;
 
-        lectfils(noeud_pere, fptr, 0, pos);
+        //lectfils(noeud_pere, fptr, 0, pos);
     }
-    fclose(fptr);
+    if(fptr!=NULL){fclose(fptr);} //ok ne pas si pointeur vers null(ex fichier pas trouvé)
 
-    return arbre;
+    return arbre; 
 }
 
 void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
@@ -60,29 +56,29 @@ void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
     char* mot = "";
     int nbrpvir2 = 0;
     int nbrvir = 0;
-    char* val;
-    int pattern;
-    int nbrfils;
+    char* val="";
+    int *pattern=0;
+    int *nbrfils=0;
     for (int i = 0; i < 256; i++)
     {
         if(nbrpvir2 == nbrpvir){
-            if(line[i]==","){ //vérif mot non vide 
+            if(strcmp(&line[i],",")==0){ //vérif mot non vide 
                 sscanf(mot, "%d %s %d",pattern,val,nbrfils);
-                noeud_t *newnoeud = create_noeud(nbrfils,pattern,val);
+                noeud_t *newnoeud = create_noeud(*nbrfils,*pattern,val);
                 noeud_pere->fils[nbrvir]=newnoeud;
                 mot = "";
                 lectfils(newnoeud, fptr,nbrpvir2+nbrpvir,ftell(fptr)); ///+ nbrpvir?
                 nbrvir++;
             }
-            else if (line[i]!=";" && line[i]!=","){
-                strncat(mot,line[i],1);
+            else if (strcmp(&line[i],";")!=0 && strcmp(&line[i],",")!=0){
+                strncat(mot,&line[i],1);
             }
         }
-        if(line[i]==";"){
+        if(strcmp(&line[i],";")==0){
             ///vérif cas où mot fini par ; à ajouter et vérif non vide
             if(strcmp(mot,"")!=0){
                 sscanf(mot, "%d %s %d",pattern,val,nbrfils);
-                noeud_t *newnoeud = create_noeud(nbrfils,pattern,val);
+                noeud_t *newnoeud = create_noeud(*nbrfils,*pattern,val);
                 noeud_pere->fils[nbrvir]=newnoeud;
                 mot="";
                 lectfils(newnoeud,fptr,nbrpvir2+nbrpvir,ftell(fptr));

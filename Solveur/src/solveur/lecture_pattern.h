@@ -9,7 +9,7 @@
 
 arbre_t *lecture_pattern(char* pattern);
 
-int nbrgood(char* motif);
+bool nbrgood(char* motif);
 
 arbre_t *arbrefinal(int n);
 

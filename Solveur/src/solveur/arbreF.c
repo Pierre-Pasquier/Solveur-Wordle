@@ -28,6 +28,7 @@ void destroy_noeud(noeud_t* noeud){
                 free(noeud->fils[i]);
             }
         }
+    free(noeud->MotDuNoeud);
     free(noeud->fils);
     free(noeud);
     }
