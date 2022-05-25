@@ -6,6 +6,7 @@
 #include<assert.h>
 
 
+
 #ifndef ARBRE_H
 #define ARBRE_H
 
@@ -26,6 +27,26 @@ struct _arbre_t {
 };
 
 typedef struct _arbre_t arbre_t;
+
+
+struct node {
+    struct node** fils; //[nombre_fils]
+    int nombre_fils;
+    char* mot;
+    int pattern;
+};
+
+typedef struct node node;
+
+
+struct arbre_pat {
+    int len_mots;
+    node* root;
+
+};
+
+typedef struct arbre_pat arbre_pat;
+
 
 element_t* create_element(int nbr_mots);
 
@@ -56,5 +77,7 @@ char *cat_d(char car, char *mot);
 char *cat_f(char *mot, char car);
 
 int index(char *mot,char x);
+
+arbre_t *construct_arbre(int len_mot);
 
 #endif // ARBRE_H

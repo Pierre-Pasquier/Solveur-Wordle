@@ -282,3 +282,48 @@ arbre_pat* remplissage_arbre_rec(node* pere, arbre_t* prev_mots, int** matrice,i
         return res;
     }
 } 
+
+
+
+arbre_t *construct_arbre(int len_mot){
+    
+    FILE* fptr;
+    
+    ///ouverture fichier
+    char link[100];
+    
+    sprintf(link,"./Mots/mot%d.txt",len_mot);
+    puts(link);
+    
+    
+    fptr = fopen(link,"r");
+    if (fptr==NULL){
+        perror ("Error reading file");
+    }
+    char line[256];
+    fgets(line, sizeof(line), fptr);
+    int nb_mot;
+    
+    sscanf(line,"%d",&nb_mot);
+    
+    arbre_t* arbre=create_arbre_mots(nb_mot);
+    
+    if (fptr==NULL) 
+    {
+        perror ("Error reading file");
+    }
+    else
+    {
+        for (int k=0 ; k<nb_mot ; k++){
+            char mot[20];
+            fgets(line,sizeof(line),fptr);
+            sscanf(line,"%s",mot);
+            insert_arbre(arbre,mot,k);
+        }
+
+    } 
+    
+    fclose(fptr);
+    printf("Mots bien ajoutés dans l'arbre\n");
+    return arbre;
+}
