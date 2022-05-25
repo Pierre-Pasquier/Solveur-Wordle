@@ -41,11 +41,3 @@ void destroy_arbre(arbre_t* abr){
 }
 
 
-int main(){
-
-    printf("let's goooo");
-
-
-    return(0);
-}
-
