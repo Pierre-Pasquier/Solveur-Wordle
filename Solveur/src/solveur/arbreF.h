@@ -7,7 +7,7 @@
 struct _noeud_t{
     char * MotDuNoeud;
     struct _noeud_t **fils;
-    int *pattern;
+    int pattern;
 };
 
 typedef struct _noeud_t noeud_t;
@@ -18,7 +18,7 @@ struct _arbre_t{
 
 typedef struct _arbre_t arbre_t;
 
-noeud_t* create_noeud(int nbfils, int pattern, char MotDuNoeud);
+noeud_t* create_noeud(int nbfils, int pattern, char *MotDuNoeud);
 
 arbre_t* create_arbre();
 
