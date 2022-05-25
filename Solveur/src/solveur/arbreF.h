@@ -8,6 +8,7 @@ struct _noeud_t{
     char * MotDuNoeud;
     struct _noeud_t **fils;
     int pattern;
+    int nbfils;
 };
 
 typedef struct _noeud_t noeud_t;
