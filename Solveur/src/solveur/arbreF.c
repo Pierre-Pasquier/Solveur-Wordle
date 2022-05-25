@@ -18,15 +18,17 @@ arbre_t* create_arbre(){
 
 
 void destroy_noeud(noeud_t* noeud){
-    for(int i=0;i<sizeof(noeud->fils);i++){
-        if(noeud->fils[i]!= NULL){
-            destroy_noeud(noeud->fils[i]);
-        }else{
-            free(noeud->fils[i]);
+    if(noeud!=NULL){
+        for(int i=0;i<sizeof(noeud->fils);i++){
+            if(noeud->fils[i]!= NULL){
+                destroy_noeud(noeud->fils[i]);
+            }else{
+                free(noeud->fils[i]);
+            }
         }
-    };
     free(noeud->MotDuNoeud);
     free(noeud);
+    }
 }
 
 
@@ -40,8 +42,8 @@ void destroy_arbre(arbre_t* abr){
 
 int main(){
 
-
-
+    arbre_t* arb=create_arbre();
+    destroy_arbre(arb);
 
     return(0);
 }
