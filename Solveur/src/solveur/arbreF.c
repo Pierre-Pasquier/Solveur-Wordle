@@ -41,15 +41,3 @@ void destroy_arbre(arbre_t* abr){
 }
 
 
-int main(){
-
-    arbre_t* arb=create_arbre();
-    arb->pere=create_noeud(3,27,"chocolat");
-
-    printf("%s\n%d\n%d\n",arb->pere->MotDuNoeud,arb->pere->nbfils,arb->pere->pattern);
-
-    destroy_arbre(arb);
-
-    return(0);
-}
-
