@@ -6,7 +6,7 @@
 
 struct _noeud_t{
     char * MotDuNoeud;
-    noeud_t **fils;
+    struct _noeud_t **fils;
     int *pattern;
 };
 
