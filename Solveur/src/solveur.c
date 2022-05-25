@@ -87,6 +87,7 @@ void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int len_mot,int 
         for (int k=0;k<nb_mot;k++){
             matrice[int_c][k] = l[k];
         }
+        free(l); //On libère l'espace mémoire
         num_mot_cherche[0] = num_mot_cherche[0] + 1;
     }
     for (int i=0; i<26 ; i++){      //pour tous les fils
@@ -163,7 +164,12 @@ int *parcours(arbre_t *arbre, int len_mot, int *num_mot_cherche, int **matrice, 
             free(suffixe_mot_cherche);
             free(suffixe_mot_donne);
         }
+        else {
+            l[i]=(int) pow(3.0,(double) len_mot) - 1;
+        }
+
     }
+    printf("l[0] : %d\n",l[0]);
     return l;
 }
 

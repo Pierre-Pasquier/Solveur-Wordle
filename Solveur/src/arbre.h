@@ -28,7 +28,6 @@ struct _arbre_t {
 
 typedef struct _arbre_t arbre_t;
 
-
 struct node {
     struct node** fils; //[nombre_fils]
     int nombre_fils;
@@ -45,8 +44,9 @@ struct arbre_pat {
 
 };
 
-typedef struct arbre_pat arbre_pat;
+double safe_log2(double x);
 
+typedef struct arbre_pat arbre_pat;
 
 element_t* create_element(int nbr_mots);
 
@@ -70,6 +70,14 @@ void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int len_mot,int 
 
 int *parcours(arbre_t *arbre, int len_mot, int *num_mot_cherche, int **matrice, element_t *position,char *mot_cherche,int nb_mot);
 
+char* get_mot_num_rec(char* prefix,element_t* elem,int num_mot,int len);
+
+char* get_mot_num(arbre_t* arbre,int num_mot);
+
+int get_num_mot(arbre_t* arbre, char* mot);
+
+int get_num_mot_rec(element_t* elem, char* mot,int profondeur, int nombre_mots);
+
 void rev(char *mot, size_t len);
 
 char *cat_d(char car, char *mot);
@@ -78,6 +86,30 @@ char *cat_f(char *mot, char car);
 
 int index(char *mot,char x);
 
+<<<<<<< HEAD
 arbre_t *construct_arbre(int len_mot);
+=======
+arbre_pat* cree_arbre_pat(int len);
+
+bool insert_values_node(node* current,node** voulu, char* mot, int nombre_fils, int pattern);
+
+void insert_values(arbre_pat* arbre,node** voulu, char* mot, int nombre_fils, int pattern);
+
+void destroy_rec(node* current);
+
+void destroy_arbre_pat(arbre_pat* arbre);
+
+void write_ligne_rec(FILE* file, int ligne, node* current, int profondeur,node* pere, int nb_fils_pere,int indice_boucle);
+
+void write_fichier(FILE* file, arbre_pat* arbre);
+
+int profondeur(node* noeud);
+
+char* best_mot(arbre_t* arbre,int **matrice,int lenmot);
+
+node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,char* start_mot,int prev_pattern);
+
+void print_arbre_pat(node* root);
+>>>>>>> f2635e146214698c25e3f628a0b1dbc2a054c6ea
 
 #endif // ARBRE_H
