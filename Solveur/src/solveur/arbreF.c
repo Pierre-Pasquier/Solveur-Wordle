@@ -2,9 +2,12 @@
 
 noeud_t* create_noeud(int nbfils, int pattern, char *MotDuNoeud){
     noeud_t* noeud=malloc(sizeof(noeud_t));
+    noeud_t** fils=malloc(sizeof(noeud_t*)*nbfils);
     for (int i=0;i<nbfils;i++){
-        noeud->fils[i]=NULL;
+        fils[i]=NULL;
     }
+    noeud->nbfils=nbfils;
+    noeud->fils=fils;
     noeud->pattern=pattern;
     noeud->MotDuNoeud=MotDuNoeud;
     return noeud;
@@ -19,18 +22,16 @@ arbre_t* create_arbre(){
 
 void destroy_noeud(noeud_t* noeud){
     if(noeud!=NULL){
-        for(int i=0;i<sizeof(noeud->fils);i++){
+        for(int i=0;i<noeud->nbfils;i++){
             if(noeud->fils[i]!= NULL){
                 destroy_noeud(noeud->fils[i]);
-            }else{
                 free(noeud->fils[i]);
             }
         }
-    free(noeud->MotDuNoeud);
+    free(noeud->fils);
     free(noeud);
     }
 }
-
 
 
 void destroy_arbre(arbre_t* abr){
@@ -43,6 +44,10 @@ void destroy_arbre(arbre_t* abr){
 int main(){
 
     arbre_t* arb=create_arbre();
+    arb->pere=create_noeud(3,27,"chocolat");
+
+    printf("%s\n%d\n%d\n",arb->pere->MotDuNoeud,arb->pere->nbfils,arb->pere->pattern);
+
     destroy_arbre(arb);
 
     return(0);
