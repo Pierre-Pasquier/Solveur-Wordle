@@ -19,7 +19,7 @@ element_t* create_element(int nbr_mots){
         root->fils[i]=NULL;
     }
     root->pere=NULL;
-    bool* tab=malloc(nbr_mots*sizeof(bool));
+    bool* tab=calloc(nbr_mots,sizeof(bool));
     for (int i=0;i<nbr_mots;i++){
         tab[i]=false;
     }
@@ -69,6 +69,7 @@ void destroy_arbre(arbre_t* abr){
 }
 
 bool insert_arbre(arbre_t* abr,char* signed_mot,int num_mot){
+    printf("MOT à insérer : %s\n",signed_mot);
     assert(abr!=NULL);
     unsigned char* mot=(unsigned char*) signed_mot;
     element_t* tmp=abr->racine;
@@ -80,6 +81,8 @@ bool insert_arbre(arbre_t* abr,char* signed_mot,int num_mot){
             tmp->fils[mot[i]-65]=content;
             tmp->fils[mot[i]-65]->value=mot[i];
             tmp->fils[mot[i]-65]->pere=tmp; //Le père du fils
+            printf("%c\n",tmp->fils[mot[i]-65]->value);
+            printf("%d\n",tmp->fils[mot[i]-65]->char_is_in[num_mot]);
         }
 
         tmp->fils[mot[i]-65]->char_is_in[num_mot]=true;
@@ -288,7 +291,7 @@ void write_ligne_rec(FILE* file, int ligne, node* current, int profondeur,node* 
        
 
     }
-    else {
+    else if (current!=NULL) {
         
         for (int k=0;k<current->nombre_fils;k++){
             write_ligne_rec(file,ligne,current->fils[k],profondeur+1,current,current->nombre_fils,k);
@@ -433,93 +436,69 @@ node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,cha
 
         for (int i=0;i<prev_mots->nbr_mots;i++){
             tab_check[i]=0;
-        }
-
-
-
-        ;
+        };
         
         for (int i=0;i<prev_mots->nbr_mots;i++){
             current_pattern=matrice_1[i][num_motd];
             
-                for (int k=i+1;k<prev_mots->nbr_mots;k++){
-                    if (tab_check[k]!=1 && matrice_1[k][num_motd]==current_pattern){
-                        
-                        tab_check[k]=1;
+            for (int k=i+1;k<prev_mots->nbr_mots;k++){
+                if (tab_check[k]!=1 && matrice_1[k][num_motd]==current_pattern){
+                    
+                    tab_check[k]=1;
 
-                    }
                 }
-                
-                if (tab_check[i]!=1){   //On prend tous les mots de même pattern, en les prenant tous différents
-                    char* temp_best_mot=calloc((len_mots+1),sizeof(char));
-                    
-                    num_mot_cherche[0]=0;
-                   
-                    nb_mots=same_pattern(prev_mots,matrice_1,current_pattern,num_motd);
-         
-                    
-                    temp=create_arbre_mots(nb_mots);
-                    insert_same_pattern(prev_mots,temp,matrice_1,current_pattern,num_motd);
-                   
-           
-                    //Création de la matrice pour les fils de même pattern
-                 
-              
-                    matrice_2=calloc(temp->nbr_mots,sizeof(int*));
-                    for (int i=0;i<temp->nbr_mots;i++){
-                        matrice_2[i]=calloc(temp->nbr_mots,sizeof(int));
-                    }
-                    //Remplissage de la matrice
-                    mot_suivant(temp,temp->racine,"",len_mots,num_mot_cherche,matrice_2,temp->nbr_mots);
-                 
-                
-                    //Calcul du meilleur mot de la matrice
-                    strcpy(temp_best_mot,best_mot(temp,matrice_2,len_mots));
-                    temp_best_mot[len_mots]='\0';
-                 
-                    //Insertion du noeud père
-
-                    //Appel récursif 
-                    current->fils[fils]=remplissage_arbre_rec(temp,matrice_2,len_mots,temp_best_mot,current_pattern);
-             
-                    
-                    //Libération de la mémoire      
-                    for (int i=0;i<temp->nbr_mots;i++){
-                        free(matrice_2[i]);
-                    }
-                    free(matrice_2);
-                    destroy_arbre(temp);
-                    tab_check[i]=1;
-                    fils++;
-                    free(temp_best_mot);
-                    
-
-                    
-                    
-                    
-                              
-                }
+            }
             
-
+            if (tab_check[i]!=1){   //On prend tous les mots de même pattern, en les prenant tous différents
+                char* temp_best_mot=calloc((len_mots+1),sizeof(char));
                 
+                num_mot_cherche[0]=0;
+                
+                nb_mots=same_pattern(prev_mots,matrice_1,current_pattern,num_motd);
+        
+                
+                temp=create_arbre_mots(nb_mots);
+                insert_same_pattern(prev_mots,temp,matrice_1,current_pattern,num_motd);
+                
+        
+                //Création de la matrice pour les fils de même pattern
+                
+            
+                matrice_2=calloc(temp->nbr_mots,sizeof(int*));
+                for (int i=0;i<temp->nbr_mots;i++){
+                    matrice_2[i]=calloc(temp->nbr_mots,sizeof(int));
+                }
+                //Remplissage de la matrice
+                mot_suivant(temp,temp->racine,"",len_mots,num_mot_cherche,matrice_2,temp->nbr_mots);
+                
+            
+                //Calcul du meilleur mot de la matrice
+                strcpy(temp_best_mot,best_mot(temp,matrice_2,len_mots));
+                temp_best_mot[len_mots]='\0';
+                
+                //Insertion du noeud père
+
+                //Appel récursif 
+                current->fils[fils]=remplissage_arbre_rec(temp,matrice_2,len_mots,temp_best_mot,current_pattern);
+            
+                
+                //Libération de la mémoire      
+                for (int i=0;i<temp->nbr_mots;i++){
+                    free(matrice_2[i]);
+                }
+                free(matrice_2);
+                destroy_arbre(temp);
+                tab_check[i]=1;
+                fils++;
+                free(temp_best_mot);           
+            }    
         }
         free(num_mot_cherche);
-
-            }
-
-        else {
-            return current;
-
-        }
-        
+    }else {
         return current;
-
-
-        }
-
-        return res;
     }
-} 
+    return current;
+    }
 
 
 

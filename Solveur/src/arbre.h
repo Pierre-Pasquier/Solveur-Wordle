@@ -86,9 +86,6 @@ char *cat_f(char *mot, char car);
 
 int index(char *mot,char x);
 
-<<<<<<< HEAD
-arbre_t *construct_arbre(int len_mot);
-=======
 arbre_pat* cree_arbre_pat(int len);
 
 bool insert_values_node(node* current,node** voulu, char* mot, int nombre_fils, int pattern);
@@ -110,6 +107,11 @@ char* best_mot(arbre_t* arbre,int **matrice,int lenmot);
 node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,char* start_mot,int prev_pattern);
 
 void print_arbre_pat(node* root);
->>>>>>> f2635e146214698c25e3f628a0b1dbc2a054c6ea
+
+void insert_same_pattern(arbre_t* prev,arbre_t* new, int** matrice, int pattern, int num_motd);
+
+int same_pattern(arbre_t* arbre,int** matrice, int pattern, int num_motd);
+
+arbre_t *construct_arbre(int len_mot);
 
 #endif // ARBRE_H
