@@ -24,13 +24,11 @@ void destroy_noeud(noeud_t* noeud){
     if(noeud!=NULL){
         for(int i=0;i<noeud->nbfils;i++){
             if(noeud->fils[i]!= NULL){
-                destroy_noeud(noeud->fils[i]);
-                free(noeud->fils[i]);
+                destroy_noeud(noeud->fils[i]); 
             }
         }
-    free(noeud->MotDuNoeud);
-    free(noeud->fils);
-    free(noeud);
+        free(noeud->fils);
+        free(noeud);
     }
 }
 

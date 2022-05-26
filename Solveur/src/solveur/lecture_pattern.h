@@ -7,7 +7,9 @@
 #include "arbreF.h"
 ///#include "l'arbre de nathan
 
-arbre_t *lecture_pattern(char* pattern);
+noeud_t* lecture_pattern(noeud_t* noeud,char* motif);
+
+int nbr_noeuds(noeud_t* noeud);
 
 bool nbrgood(char* motif);
 
