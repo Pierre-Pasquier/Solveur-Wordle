@@ -14,7 +14,7 @@ double safe_log2(double x){
 
 
 element_t* create_element(int nbr_mots){
-    element_t* root=malloc(sizeof(element_t));
+    element_t* root=calloc(1,sizeof(element_t));
     for (int i=0;i<26;i++){
         root->fils[i]=NULL;
     }
@@ -69,25 +69,23 @@ void destroy_arbre(arbre_t* abr){
 }
 
 bool insert_arbre(arbre_t* abr,char* signed_mot,int num_mot){
-    printf("MOT à insérer : %s\n",signed_mot);
     assert(abr!=NULL);
     unsigned char* mot=(unsigned char*) signed_mot;
     element_t* tmp=abr->racine;
     int len=strlen(signed_mot);
     for (int i=0;i<len;i++){
         if (tmp->fils[mot[i]-65]==NULL){
-            
-            element_t* content=create_element(abr->nbr_mots);
-            tmp->fils[mot[i]-65]=content;
+            tmp->fils[mot[i]-65]=create_element(abr->nbr_mots);
             tmp->fils[mot[i]-65]->value=mot[i];
             tmp->fils[mot[i]-65]->pere=tmp; //Le père du fils
-            printf("%c\n",tmp->fils[mot[i]-65]->value);
-            printf("%d\n",tmp->fils[mot[i]-65]->char_is_in[num_mot]);
+
+           
         }
 
         tmp->fils[mot[i]-65]->char_is_in[num_mot]=true;
         
         tmp=tmp->fils[mot[i]-65];
+
         
     }
     if (tmp->terminal){
@@ -343,7 +341,6 @@ char* best_mot(arbre_t* arbre,int **matrice,int lenmot){
         for (int pattern=0;pattern<nb_patterns;pattern++){
             tab_pattern[pattern]=0;
         } 
-        printf("Boucle  j : %d\n",j);
         temp_sum=0;
         for (int i=0;i<arbre->nbr_mots;i++){
             
@@ -355,7 +352,6 @@ char* best_mot(arbre_t* arbre,int **matrice,int lenmot){
         for (int pattern=0;pattern<nb_patterns;pattern++){
             temp_sum+=-1*((double)tab_pattern[pattern]/(double)arbre->nbr_mots)*safe_log2(((double)tab_pattern[pattern]/(double)arbre->nbr_mots));
         }
-        printf("Entropie du mot : %f\n",temp_sum);
         //On met à jour le max
         if (temp_sum>entropie_max){
             entropie_max=temp_sum;
@@ -455,11 +451,8 @@ node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,cha
                 num_mot_cherche[0]=0;
                 
                 nb_mots=same_pattern(prev_mots,matrice_1,current_pattern,num_motd);
-        
-                
                 temp=create_arbre_mots(nb_mots);
                 insert_same_pattern(prev_mots,temp,matrice_1,current_pattern,num_motd);
-                
         
                 //Création de la matrice pour les fils de même pattern
                 
@@ -473,9 +466,8 @@ node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,cha
                 
             
                 //Calcul du meilleur mot de la matrice
-                strcpy(temp_best_mot,best_mot(temp,matrice_2,len_mots));
+                strncpy(temp_best_mot,best_mot(temp,matrice_2,len_mots),len_mots+1);
                 temp_best_mot[len_mots]='\0';
-                
                 //Insertion du noeud père
 
                 //Appel récursif 
