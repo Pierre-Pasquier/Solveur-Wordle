@@ -81,7 +81,6 @@ int index(char *mot,char x){
 
 void mot_suivant(arbre_t *arbre,element_t * elem, char *prefixe,int len_mot,int *num_mot_cherche,int **matrice,int nb_mot){
     if (elem->terminal){    // cas de base, si on est dans une feuille
-        printf("Mot : %s\n",prefixe);
         int *l = parcours(arbre,len_mot,num_mot_cherche,matrice,elem,prefixe,nb_mot);    //on parcours tous les autres mots qui sont à droite
         int int_c = num_mot_cherche[0];
         for (int k=0;k<nb_mot;k++){
