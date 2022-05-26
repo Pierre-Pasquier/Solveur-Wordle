@@ -19,7 +19,7 @@ element_t* create_element(int nbr_mots){
         root->fils[i]=NULL;
     }
     root->pere=NULL;
-    bool* tab=malloc(nbr_mots*sizeof(bool));
+    bool* tab=calloc(nbr_mots,sizeof(bool));
     for (int i=0;i<nbr_mots;i++){
         tab[i]=false;
     }
@@ -69,6 +69,7 @@ void destroy_arbre(arbre_t* abr){
 }
 
 bool insert_arbre(arbre_t* abr,char* signed_mot,int num_mot){
+    printf("MOT à insérer : %s\n",signed_mot);
     assert(abr!=NULL);
     unsigned char* mot=(unsigned char*) signed_mot;
     element_t* tmp=abr->racine;
@@ -80,6 +81,8 @@ bool insert_arbre(arbre_t* abr,char* signed_mot,int num_mot){
             tmp->fils[mot[i]-65]=content;
             tmp->fils[mot[i]-65]->value=mot[i];
             tmp->fils[mot[i]-65]->pere=tmp; //Le père du fils
+            printf("%c\n",tmp->fils[mot[i]-65]->value);
+            printf("%d\n",tmp->fils[mot[i]-65]->char_is_in[num_mot]);
         }
 
         tmp->fils[mot[i]-65]->char_is_in[num_mot]=true;
@@ -288,7 +291,7 @@ void write_ligne_rec(FILE* file, int ligne, node* current, int profondeur,node* 
        
 
     }
-    else {
+    else if (current!=NULL) {
         
         for (int k=0;k<current->nombre_fils;k++){
             write_ligne_rec(file,ligne,current->fils[k],profondeur+1,current,current->nombre_fils,k);
