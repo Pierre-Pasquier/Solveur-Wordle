@@ -433,93 +433,69 @@ node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,cha
 
         for (int i=0;i<prev_mots->nbr_mots;i++){
             tab_check[i]=0;
-        }
-
-
-
-        ;
+        };
         
         for (int i=0;i<prev_mots->nbr_mots;i++){
             current_pattern=matrice_1[i][num_motd];
             
-                for (int k=i+1;k<prev_mots->nbr_mots;k++){
-                    if (tab_check[k]!=1 && matrice_1[k][num_motd]==current_pattern){
-                        
-                        tab_check[k]=1;
+            for (int k=i+1;k<prev_mots->nbr_mots;k++){
+                if (tab_check[k]!=1 && matrice_1[k][num_motd]==current_pattern){
+                    
+                    tab_check[k]=1;
 
-                    }
                 }
-                
-                if (tab_check[i]!=1){   //On prend tous les mots de même pattern, en les prenant tous différents
-                    char* temp_best_mot=calloc((len_mots+1),sizeof(char));
-                    
-                    num_mot_cherche[0]=0;
-                   
-                    nb_mots=same_pattern(prev_mots,matrice_1,current_pattern,num_motd);
-         
-                    
-                    temp=create_arbre_mots(nb_mots);
-                    insert_same_pattern(prev_mots,temp,matrice_1,current_pattern,num_motd);
-                   
-           
-                    //Création de la matrice pour les fils de même pattern
-                 
-              
-                    matrice_2=calloc(temp->nbr_mots,sizeof(int*));
-                    for (int i=0;i<temp->nbr_mots;i++){
-                        matrice_2[i]=calloc(temp->nbr_mots,sizeof(int));
-                    }
-                    //Remplissage de la matrice
-                    mot_suivant(temp,temp->racine,"",len_mots,num_mot_cherche,matrice_2,temp->nbr_mots);
-                 
-                
-                    //Calcul du meilleur mot de la matrice
-                    strcpy(temp_best_mot,best_mot(temp,matrice_2,len_mots));
-                    temp_best_mot[len_mots]='\0';
-                 
-                    //Insertion du noeud père
-
-                    //Appel récursif 
-                    current->fils[fils]=remplissage_arbre_rec(temp,matrice_2,len_mots,temp_best_mot,current_pattern);
-             
-                    
-                    //Libération de la mémoire      
-                    for (int i=0;i<temp->nbr_mots;i++){
-                        free(matrice_2[i]);
-                    }
-                    free(matrice_2);
-                    destroy_arbre(temp);
-                    tab_check[i]=1;
-                    fils++;
-                    free(temp_best_mot);
-                    
-
-                    
-                    
-                    
-                              
-                }
+            }
             
-
+            if (tab_check[i]!=1){   //On prend tous les mots de même pattern, en les prenant tous différents
+                char* temp_best_mot=calloc((len_mots+1),sizeof(char));
                 
+                num_mot_cherche[0]=0;
+                
+                nb_mots=same_pattern(prev_mots,matrice_1,current_pattern,num_motd);
+        
+                
+                temp=create_arbre_mots(nb_mots);
+                insert_same_pattern(prev_mots,temp,matrice_1,current_pattern,num_motd);
+                
+        
+                //Création de la matrice pour les fils de même pattern
+                
+            
+                matrice_2=calloc(temp->nbr_mots,sizeof(int*));
+                for (int i=0;i<temp->nbr_mots;i++){
+                    matrice_2[i]=calloc(temp->nbr_mots,sizeof(int));
+                }
+                //Remplissage de la matrice
+                mot_suivant(temp,temp->racine,"",len_mots,num_mot_cherche,matrice_2,temp->nbr_mots);
+                
+            
+                //Calcul du meilleur mot de la matrice
+                strcpy(temp_best_mot,best_mot(temp,matrice_2,len_mots));
+                temp_best_mot[len_mots]='\0';
+                
+                //Insertion du noeud père
+
+                //Appel récursif 
+                current->fils[fils]=remplissage_arbre_rec(temp,matrice_2,len_mots,temp_best_mot,current_pattern);
+            
+                
+                //Libération de la mémoire      
+                for (int i=0;i<temp->nbr_mots;i++){
+                    free(matrice_2[i]);
+                }
+                free(matrice_2);
+                destroy_arbre(temp);
+                tab_check[i]=1;
+                fils++;
+                free(temp_best_mot);           
+            }    
         }
         free(num_mot_cherche);
-
-            }
-
-        else {
-            return current;
-
-        }
-        
+    }else {
         return current;
-
-
-        }
-
-        return res;
     }
-} 
+    return current;
+    }
 
 
 

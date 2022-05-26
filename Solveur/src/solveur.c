@@ -169,7 +169,6 @@ int *parcours(arbre_t *arbre, int len_mot, int *num_mot_cherche, int **matrice, 
         }
 
     }
-    printf("l[0] : %d\n",l[0]);
     return l;
 }
 
