@@ -83,7 +83,6 @@ void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
     char *line=NULL; //attention prblm de thomas : si fils vide ";;;;;;;" alors ligne suivante n'aura pas leurs
     size_t line_size;
     size_t line_buf_size = 0;
-    int line_count = 0;
     fseek(fptr, pos, SEEK_SET); //on se repositionne dans le fichier
     line_size = getline(&line,&line_buf_size,fptr);
     printf(" taille line %ld\n",line_size);
@@ -142,17 +141,3 @@ void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
     free(car);
 }
 
-void arb_print(noeud_t* node){
-    if(node==NULL){printf("no\n");return;}
-    if(node->MotDuNoeud!=NULL){
-        printf("%d : %s",node->pattern,node->MotDuNoeud);
-        printf("\nses fils sont:\n");
-    }
-    if(node->nbfils!=0){
-        for (int i = 0; i < node->nbfils; i++)
-        {
-            arb_print(node->fils[i]);
-        }
-        
-    }
-}

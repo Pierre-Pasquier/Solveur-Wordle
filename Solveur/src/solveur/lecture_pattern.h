@@ -16,5 +16,3 @@ bool nbrgood(char* motif);
 arbre_t *arbrefinal(int n);
 
 void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos);
-
-void arb_print(noeud_t* node);
