@@ -189,7 +189,7 @@ void rev(char *mot, size_t len)
   rev(mot+1, len -1);
 }
 
-#ifdef SNOW_ENABLED
+
 describe(pattern){
     it("Test de pattern : égalité de mot"){
         char* mot1="BONJOUR";
@@ -399,7 +399,7 @@ describe(implemTableau){
 
     }
 
-#endif
+
 
 
 
