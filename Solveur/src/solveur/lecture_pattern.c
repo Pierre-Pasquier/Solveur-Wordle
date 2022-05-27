@@ -85,8 +85,7 @@ void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
     size_t line_buf_size = 0;
     fseek(fptr, pos, SEEK_SET); //on se repositionne dans le fichier
     line_size = getline(&line,&line_buf_size,fptr);
-    printf(" taille line %ld\n",line_size);
-    if(line_size==-1){return;}
+    if(line_size==-1){free(line);return;}
 
     long pos2 = ftell(fptr);
     char *car=malloc(2);
@@ -97,20 +96,17 @@ void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
     char val[12]="";
     int pattern=0;
     int nbrfils=0;
-    printf("%s",line);
-    printf("nbr de pvir à passer %d\n",nbrpvir);
+    char *tmp = line;
 
     for (int i = 0; i < line_size; i++)
     {
         strncpy(car,line,1);
         car[1]='\0';
         
-        printf("%s\n",car);
         if(nbrpvir2 == nbrpvir){
             if(strcmp(car,",")==0){ //vérif mot non vide 
                 sscanf(mot, "%d %s %d",&pattern,val,&nbrfils);
                 noeud_t *newnoeud = create_noeud(nbrfils,pattern,val);
-                printf("%d %s %d\n",nbrfils,val,pattern);
                 noeud_pere->fils[nbrvir]=newnoeud;
                 memset(mot,0,1);
                 
@@ -127,7 +123,6 @@ void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
             if(strcmp(mot,"")!=0){
                 sscanf(mot, "%d %s %d",&pattern,val,&nbrfils);
                 noeud_t *newnoeud = create_noeud(nbrfils,pattern,val);
-                printf("%d %s %d\n",nbrfils,val,pattern);
                 noeud_pere->fils[nbrvir]=newnoeud;
                 memset(mot,0,1);
                 lectfils(newnoeud,fptr,nbrpvir2+nbrvir,pos2);
@@ -137,6 +132,7 @@ void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
         } 
         line++;
     }    
+    free(tmp);
     free(mot);
     free(car);
 }
