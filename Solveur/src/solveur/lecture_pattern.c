@@ -47,7 +47,7 @@ arbre_t *arbrefinal(int n){
     strcat(link,".txt");
     //test si se combine bien
 
-    //long pos = 0;
+    long pos = 0;
 
     fptr = fopen(link,"r");
 
@@ -61,17 +61,18 @@ arbre_t *arbrefinal(int n){
         
         int N=0;
         char root[12]="";
+        char nbr[12]="";
         int nbrfils=0;
         char tmp[10]="";
-        N = strtoll(line,(char**)NULL,10); ///conversion de 10 de line en 10 int
-        fgets(line, sizeof(line), fptr);
-        sscanf(line,"%s %s",root,tmp); ///extraction en root et tmp
+        sscanf(line,"%s %s %s",nbr,root,tmp); ///extraction en root et tmp et nbr
+        N = strtoll(nbr,(char**)NULL,10); ///conversion de 10 de line en 10 int
         nbrfils = strtoll(tmp,(char**)NULL,10);///pour convertir séparement tmp en int 
         noeud_t *noeud_pere =create_noeud(nbrfils, N, root); ///on triche avec N afin de pouvoir le récup (pattern du père n'existant pas il n'est pas sensé être utilisé)
         ///de plus, nbrfils car il faut initialiser un tableau de nbrfils fils
         arbre->pere = noeud_pere;
+        pos = ftell(fptr);
 
-        //lectfils(noeud_pere, fptr, 0, pos);
+        lectfils(noeud_pere, fptr, 0, pos);
     }
     if(fptr!=NULL){fclose(fptr);} //ok ne pas si pointeur vers null(ex fichier pas trouvé)
 
@@ -79,40 +80,79 @@ arbre_t *arbrefinal(int n){
 }
 
 void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
-    char line[256]; //attention prblm de thomas : si fils vide ";;;;;;;" alors ligne suivante n'aura pas leurs
-    fseek(fptr, pos, SEEK_CUR); //fils
-    fgets(line,sizeof(line),fptr);
-    char* mot = "";
+    char *line=NULL; //attention prblm de thomas : si fils vide ";;;;;;;" alors ligne suivante n'aura pas leurs
+    size_t line_size;
+    size_t line_buf_size = 0;
+    int line_count = 0;
+    fseek(fptr, pos, SEEK_SET); //on se repositionne dans le fichier
+    line_size = getline(&line,&line_buf_size,fptr);
+    printf(" taille line %ld\n",line_size);
+    if(line_size==-1){return;}
+
+    long pos2 = ftell(fptr);
+    char *car=malloc(2);
+    char* mot = malloc(20);
+    strncpy(mot,"",1);
     int nbrpvir2 = 0;
     int nbrvir = 0;
-    char* val="";
-    int *pattern=0;
-    int *nbrfils=0;
-    for (int i = 0; i < 256; i++)
+    char val[12]="";
+    int pattern=0;
+    int nbrfils=0;
+    printf("%s",line);
+    printf("nbr de pvir à passer %d\n",nbrpvir);
+
+    for (int i = 0; i < line_size; i++)
     {
+        strncpy(car,line,1);
+        car[1]='\0';
+        
+        printf("%s\n",car);
         if(nbrpvir2 == nbrpvir){
-            if(strcmp(&line[i],",")==0){ //vérif mot non vide 
-                sscanf(mot, "%d %s %d",pattern,val,nbrfils);
-                noeud_t *newnoeud = create_noeud(*nbrfils,*pattern,val);
+            if(strcmp(car,",")==0){ //vérif mot non vide 
+                sscanf(mot, "%d %s %d",&pattern,val,&nbrfils);
+                noeud_t *newnoeud = create_noeud(nbrfils,pattern,val);
+                printf("%d %s %d\n",nbrfils,val,pattern);
                 noeud_pere->fils[nbrvir]=newnoeud;
-                mot = "";
-                lectfils(newnoeud, fptr,nbrpvir2+nbrpvir,ftell(fptr)); ///+ nbrpvir?
+                memset(mot,0,1);
+                
+                lectfils(newnoeud, fptr,nbrpvir2+nbrvir,pos2); ///+ nbrpvir?
+                fseek(fptr, pos2, SEEK_SET); //on se repositionne dans le fichier parce que lectfils déplace indirectement
                 nbrvir++;
             }
-            else if (strcmp(&line[i],";")!=0 && strcmp(&line[i],",")!=0){
-                strncat(mot,&line[i],1);
+            else if (strcmp(car,";")!=0 && strcmp(car,",")!=0){
+                strncat(mot,car,1);
             }
         }
-        if(strcmp(&line[i],";")==0){
+        if(strcmp(car,";")==0){
             ///vérif cas où mot fini par ; à ajouter et vérif non vide
             if(strcmp(mot,"")!=0){
-                sscanf(mot, "%d %s %d",pattern,val,nbrfils);
-                noeud_t *newnoeud = create_noeud(*nbrfils,*pattern,val);
+                sscanf(mot, "%d %s %d",&pattern,val,&nbrfils);
+                noeud_t *newnoeud = create_noeud(nbrfils,pattern,val);
+                printf("%d %s %d\n",nbrfils,val,pattern);
                 noeud_pere->fils[nbrvir]=newnoeud;
-                mot="";
-                lectfils(newnoeud,fptr,nbrpvir2+nbrpvir,ftell(fptr));
+                memset(mot,0,1);
+                lectfils(newnoeud,fptr,nbrpvir2+nbrvir,pos2);
+                fseek(fptr, pos2, SEEK_SET); //on se repositionne dans le fichier parce que lectfils déplace indirectement
             }
             nbrpvir2++; 
-        }
+        } 
+        line++;
     }    
+    free(mot);
+    free(car);
+}
+
+void arb_print(noeud_t* node){
+    if(node==NULL){printf("no\n");return;}
+    if(node->MotDuNoeud!=NULL){
+        printf("%d : %s",node->pattern,node->MotDuNoeud);
+        printf("\nses fils sont:\n");
+    }
+    if(node->nbfils!=0){
+        for (int i = 0; i < node->nbfils; i++)
+        {
+            arb_print(node->fils[i]);
+        }
+        
+    }
 }
