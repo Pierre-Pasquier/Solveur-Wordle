@@ -60,7 +60,7 @@ arbre_t *arbrefinal(int n){
         fgets(line, sizeof(line), fptr);
         
         int N=0;
-        char *root=malloc(10);
+        char root[12]="";
         int nbrfils=0;
         char tmp[10]="";
         N = strtoll(line,(char**)NULL,10); ///conversion de 10 de line en 10 int
