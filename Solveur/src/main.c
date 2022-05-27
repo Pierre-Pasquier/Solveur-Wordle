@@ -4,6 +4,14 @@
 #include<string.h>
 #include "arbre.h"
 
+#include "arbre.h"
+#ifdef SNOW_ENABLED
+
+#include<snow/snow.h>
+snow_main();
+
+#else
+
 
 int main(){
     char* tab[5]={"CASIER","RACINEE","REALITES","CERTAINES","CARENTIELS"};
@@ -50,3 +58,4 @@ int main(){
         fclose(out);
     }
 }
+#endif
