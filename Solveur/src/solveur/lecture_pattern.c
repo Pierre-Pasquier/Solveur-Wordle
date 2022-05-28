@@ -146,3 +146,22 @@ void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
     free(car);
 }
 
+
+
+describe(arbParcours){
+    it("Test de création de l'arbre pour la longueur 6 : 2231 mots"){
+        arbre_t *arb = arbrefinal(6);
+    }
+    it("Test de création de l'arbre pour la longueur 7 : 4257 mots"){
+        arbre_t *arb = arbrefinal(7);
+    }
+    it("Test de création de l'arbre pour la longueur 8 : 6249 mots"){
+        arbre_t *arb = arbrefinal(8);
+    }
+    it("Test de création de l'arbre pour la longueur 9 : 7296 mots"){
+        arbre_t *arb = arbrefinal(9);
+    }
+    it("Test de création de l'arbre pour la longueur 10 : 6064 mots"){
+        arbre_t *arb = arbrefinal(10);
+    }
+}

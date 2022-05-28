@@ -5,6 +5,7 @@
 #include<string.h>
 #include<math.h>
 #include "arbreF.h"
+#include<snow/snow.h>
 ///#include "l'arbre de nathan
 
 noeud_t* lecture_pattern(noeud_t* noeud,char* motif);

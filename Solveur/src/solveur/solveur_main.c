@@ -1,5 +1,12 @@
 #include "lecture_pattern.h"
 
+#ifdef SNOW_ENABLED
+
+#include<snow/snow.h>
+snow_main();
+
+#else
+
 int main(int argc, char const *argv[])
 {
     /// 0) paramètres :
@@ -77,6 +84,7 @@ int main(int argc, char const *argv[])
             strcpy(mot_lu ,noeud->MotDuNoeud);
             if(strcmp(stat,"-i")==0){
                 printf("Avec ce mot, il reste %d / %d mots dans le dictionnaire !\n",nbr_noeuds(noeud),N);
+                memset(stat,0,2);
             }
             printf("\nLe mot à rentrer est: %s\n",mot_lu);
         }
@@ -108,6 +116,7 @@ int main(int argc, char const *argv[])
             strcpy(mot_lu ,noeud->MotDuNoeud);
             if(strcmp(stat,"-i")==0){
                 printf("Avec ce mot, il reste %d / %d mots dans le dictionnaire !\n",nbr_noeuds(noeud),N);
+                memset(stat,0,2); //afin d'éviter que -i soit constamment actif
             }
             printf("\nLe mot à rentrer est: %s\n",mot_lu);
         }   //check motif et erreur et check -i
@@ -132,3 +141,4 @@ int main(int argc, char const *argv[])
     ///puis dans le main une boucle sur la fonction si l'utilisateur souhaite.
     return 0;
 }
+#endif
