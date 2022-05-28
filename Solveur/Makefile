@@ -8,7 +8,6 @@ SNOW =  -DSNOW_ENABLED -g
 CC = clang
 CXXFLAGS = -std=c11 -Wall -lm -Isnow 
 LDFLAGS = 
-
 # Makefile settings - Can be customized.
 APPNAME = preTT
 APPNAME2=solveur

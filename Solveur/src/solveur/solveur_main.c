@@ -81,6 +81,7 @@ int main(int argc, char const *argv[])
         printf("Entrez le motif du résultat du mot :\n (2 = bien placé ; 1 = dans le mot ; 0 absent du mot ; ex 01211)\n(ajoutez -i après le motif pour avoir plus d'informations)\n");
         fgets(buff,15,stdin);
         sscanf(buff,"%s %s",motif, stat); 
+        if(strcmp(motif,"-1")==0){destroy_arbre(arb); printf("Arrêt du programme...\n"); return(0);}
     }
     //on lit le pattern pour obtenir le mot suivant
     char mot_lu[10]="";
@@ -107,12 +108,14 @@ int main(int argc, char const *argv[])
         printf("Entrez le motif suivant :\n");
         fgets(buff,15,stdin);
         sscanf(buff,"%s %s",motif, stat);
+        if(strcmp(motif,"-1")==0){destroy_arbre(arb); printf("Arrêt du programme...\n"); return(0);}
         while(n!=strlen(motif)){
             if(strcmp(motif,"-1")==0){destroy_arbre(arb); printf("Arrêt du programme...\n"); return(0);}
             printf("le motif ne correspond pas à un mot de cette longueur.\n");
             printf("Entrez le motif suivant :\n");
             fgets(buff,15,stdin);
             sscanf(buff,"%s %s",motif, stat); 
+            printf("%s\n",motif);
         }
 
         noeud = lecture_pattern(noeud,motif);
