@@ -536,3 +536,16 @@ arbre_t *construct_arbre(int len_mot){
     printf("Mots bien ajoutés dans l'arbre\n");
     return arbre;
 }
+
+int nbrnode(node* current){
+    if (current==NULL){
+        return 0;
+    }
+    else {
+        int S=0;
+        for (int i=0;i<current->nombre_fils;i++){
+            S+=nbrnode(current->fils[i]);
+        }
+        return S+1;
+    }
+}

@@ -41,7 +41,7 @@ arbre_t *arbrefinal(int n){
     
     ///ouverture fichier
     char link[32]; 
-    sprintf(link, "FichierTest%d.txt", n);
+    sprintf(link, "SortiePreTT/out%d.txt", n);
     //test si se combine bien
 
     long pos = 0;

@@ -115,4 +115,6 @@ int same_pattern(arbre_t* arbre,int** matrice, int pattern, int num_motd);
 
 arbre_t *construct_arbre(int len_mot);
 
+int nbrnode(node* current);
+
 #endif // ARBRE_H

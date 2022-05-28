@@ -2,13 +2,10 @@
 
 noeud_t* create_noeud(int nbfils, int pattern, char *MotDuNoeud){
     noeud_t* noeud=malloc(sizeof(noeud_t));
-    noeud_t** fils=malloc(sizeof(noeud_t*)*(nbfils-1));
+    noeud_t** fils=calloc(sizeof(noeud_t*),(nbfils));
     char* mdn = malloc(12);
-    strncpy(mdn,MotDuNoeud,12);
-    for (int i=0;i<nbfils;i++){
-        fils[i]=NULL;
-    }
-    noeud->nbfils=nbfils-1;
+    memcpy(mdn,MotDuNoeud,12);
+    noeud->nbfils=nbfils;
     noeud->fils=fils;
     noeud->pattern=pattern;
     noeud->MotDuNoeud=mdn;
