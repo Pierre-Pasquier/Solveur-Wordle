@@ -40,11 +40,8 @@ arbre_t *arbrefinal(int n){
     char line[256];
     
     ///ouverture fichier
-    char link[32] = "FichierTest";
-    char str[10];
-    sprintf(str, "%d", n);
-    strcat(link,str);
-    strcat(link,".txt");
+    char link[32]; 
+    sprintf(link, "FichierTest%d.txt", n);
     //test si se combine bien
 
     long pos = 0;
@@ -97,6 +94,7 @@ void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
     int pattern=0;
     int nbrfils=0;
     char *tmp = line;
+    int pvir = 0;
 
     for (int i = 0; i < line_size; i++)
     {
@@ -104,34 +102,45 @@ void lectfils(noeud_t *noeud_pere,FILE* fptr,int nbrpvir,long pos){
         car[1]='\0';
         
         if(nbrpvir2 == nbrpvir){
-            if(strcmp(car,",")==0){ //vérif mot non vide 
-                sscanf(mot, "%d %s %d",&pattern,val,&nbrfils);
-                noeud_t *newnoeud = create_noeud(nbrfils,pattern,val);
-                noeud_pere->fils[nbrvir]=newnoeud;
-                memset(mot,0,1);
+            if(strcmp(car,",")==0){
+                if(strcmp(mot,"")!=0){ //vérif mot non vide 
+                    sscanf(mot, "%d %s %d",&pattern,val,&nbrfils);
+                    noeud_t *newnoeud = create_noeud(nbrfils,pattern,val);
+                    noeud_pere->fils[nbrvir]=newnoeud;
+                    memset(mot,0,1);
+                    
+                    lectfils(newnoeud, fptr,pvir,pos2); 
+                    fseek(fptr, pos2, SEEK_SET); //on se repositionne dans le fichier parce que lectfils déplace indirectement
+                    nbrvir++;
+                    pvir++;
+                }
+            }
+            if(strcmp(car,";")==0){
+                ///vérif cas où mot fini par ; à ajouter et vérif non vide
+                if(strcmp(mot,"")!=0){
+                    sscanf(mot, "%d %s %d",&pattern,val,&nbrfils);
+                    noeud_t *newnoeud = create_noeud(nbrfils,pattern,val);
+                    noeud_pere->fils[nbrvir]=newnoeud;
+                    memset(mot,0,1);
+                    lectfils(newnoeud,fptr,pvir,pos2);
+                    fseek(fptr, pos2, SEEK_SET); //on se repositionne dans le fichier parce que lectfils déplace indirectement
+                    pvir++;
+                }
+                nbrpvir2++; 
                 
-                lectfils(newnoeud, fptr,nbrpvir2+nbrvir,pos2); ///+ nbrpvir?
-                fseek(fptr, pos2, SEEK_SET); //on se repositionne dans le fichier parce que lectfils déplace indirectement
-                nbrvir++;
-            }
-            else if (strcmp(car,";")!=0 && strcmp(car,",")!=0){
-                strncat(mot,car,1);
-            }
+            } 
         }
-        if(strcmp(car,";")==0){
-            ///vérif cas où mot fini par ; à ajouter et vérif non vide
-            if(strcmp(mot,"")!=0){
-                sscanf(mot, "%d %s %d",&pattern,val,&nbrfils);
-                noeud_t *newnoeud = create_noeud(nbrfils,pattern,val);
-                noeud_pere->fils[nbrvir]=newnoeud;
-                memset(mot,0,1);
-                lectfils(newnoeud,fptr,nbrpvir2+nbrvir,pos2);
-                fseek(fptr, pos2, SEEK_SET); //on se repositionne dans le fichier parce que lectfils déplace indirectement
+        else if(strcmp(car,",")==0 || strcmp(car,";")==0){
+            if(strcmp(mot,"")!=0){pvir++;}
+            if(strcmp(car,";")==0){nbrpvir2++;}
+            memset(mot,0,1);
             }
-            nbrpvir2++; 
-        } 
+        if (strcmp(car,";")!=0 && strcmp(car,",")!=0){
+            strncat(mot,car,1);
+        }    
         line++;
-    }    
+    }
+
     free(tmp);
     free(mot);
     free(car);

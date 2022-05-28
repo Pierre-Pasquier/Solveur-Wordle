@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
         }
         n = atoi(argv[1]);
 
-        if (n != 6 && n != 7 && n != 8 && n != 9 && n != 10 && n!=3) ///LE 3 SERA A RETIRER PLZ BCZ TEST OUBLIEZ PAS LISEZ MOI ICI FAITES GAFFE AUX MAJUSCULES
+        if (n != 6 && n != 7 && n != 8 && n != 9 && n != 10 && n!=3) 
         {
             printf("\nErreur : longueur de mot invalide");
             return (0);
@@ -35,7 +35,7 @@ int main(int argc, char const *argv[])
     fscanf(fptr,"%d", &n);
     fclose(fptr);
 
-    if (n != 6 && n != 7 && n != 8 && n != 9 && n != 10 && n!=3){ ///ENCORE UNE FOIS PAREIL QU'AU DESSUS ME RATEZ PAS PLZ
+    if (n != 6 && n != 7 && n != 8 && n != 9 && n != 10 && n!=3){ 
             printf("\nErreur : longueur de mot invalide");
             return (0);
     }
