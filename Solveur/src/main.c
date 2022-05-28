@@ -17,7 +17,7 @@ int main(){
     char* tab[5]={"CASIER","RACINEE","REALITES","CERTAINES","CARENTIELS"};
     for (int len_mot=6;len_mot<=10;len_mot++){  
         printf("%d\n",len_mot);  
-        arbre_t* test=construct_arbre(len_mot);
+        arbre_t* tes=construct_arbre(len_mot);
         FILE* fptr;
         char link[100];
         sprintf(link,"./Mots/mot%d.txt",len_mot);
@@ -35,12 +35,12 @@ int main(){
         }
         int *num_mot_cherche = malloc(sizeof(int));
         num_mot_cherche[0] = 0;
-        mot_suivant(test,test->racine,"",len_mot,num_mot_cherche,matrix,nb_mot);
+        mot_suivant(tes,tes->racine,"",len_mot,num_mot_cherche,matrix,nb_mot);
         printf("%s\n",tab[len_mot-6]);
-        node* root=remplissage_arbre_rec(test,matrix,len_mot,tab[len_mot-6],777);
-        print_arbre_pat(root);
+        printf("%d\n",tes->nbr_mots);
+        node* root=remplissage_arbre_rec(tes,matrix,len_mot,tab[len_mot-6],tes->nbr_mots);
         char filename[100];
-        sprintf(filename,"out%d.txt",len_mot);
+        sprintf(filename,"./SortiePreTT/out%d.txt",len_mot);
         FILE* out=fopen(filename,"w+");
         
 
@@ -52,7 +52,7 @@ int main(){
             free(matrix[i]);
         }
         free(matrix);
-        destroy_arbre(test);
+        destroy_arbre(tes);
         destroy_rec(root);
         free(res);
         fclose(out);
