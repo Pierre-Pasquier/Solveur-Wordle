@@ -121,7 +121,7 @@ void print_arbre(arbre_t* abr){
     
 }
 char* get_mot_num_rec(char* prefix,element_t* elem,int num_mot,int len){
-    if (elem->terminal){
+    if (elem->terminal && elem->char_is_in[num_mot]){
         return prefix;
     }
     else{
@@ -131,7 +131,7 @@ char* get_mot_num_rec(char* prefix,element_t* elem,int num_mot,int len){
         for (int i=0;i<26;i++){
             if (elem->fils[i]!=NULL && elem->fils[i]->char_is_in[num_mot]){
                 newprefix[len]=65+i;
-                 return get_mot_num_rec(newprefix,elem->fils[i],num_mot,len+1);
+                return get_mot_num_rec(newprefix,elem->fils[i],num_mot,len+1);
             }
 
         }
@@ -153,7 +153,7 @@ int get_num_mot(arbre_t* arbre, char* mot){
 }
 
 int get_num_mot_rec(element_t* elem, char* mot,int profondeur, int nombre_mots){
-    if (profondeur==strlen(mot)){
+    if (profondeur==strlen(mot)+1){
         if (elem!=NULL){
             for (int k=0;k<nombre_mots;k++){
                 if (elem->char_is_in[k]){
@@ -472,7 +472,6 @@ node* remplissage_arbre_rec(arbre_t* prev_mots, int** matrice_1,int len_mots,cha
 
                 //Appel récursif 
                 current->fils[fils]=remplissage_arbre_rec(temp,matrice_2,len_mots,temp_best_mot,current_pattern);
-            
                 
                 //Libération de la mémoire      
                 for (int i=0;i<temp->nbr_mots;i++){
