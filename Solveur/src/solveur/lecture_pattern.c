@@ -1,7 +1,7 @@
 #include "lecture_pattern.h"
 
 bool nbrgood(char* motif){
-    return(!strcmp(motif,"222") || !strcmp(motif,"222222") ||!strcmp(motif,"2222222") ||!strcmp(motif,"22222222") ||!strcmp(motif,"222222222") ||!strcmp(motif,"2222222222"));
+    return(!strcmp(motif,"222222") ||!strcmp(motif,"2222222") ||!strcmp(motif,"22222222") ||!strcmp(motif,"222222222") ||!strcmp(motif,"2222222222"));
 }
 
 int nbr_noeuds(noeud_t* noeud){
