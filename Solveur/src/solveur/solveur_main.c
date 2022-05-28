@@ -44,23 +44,6 @@ int main(int argc, char const *argv[])
 
     arbre_t *arb = arbrefinal(n);
 
-    /* //partie test où je rentre manuellement les valeurs
-    char* mot1 = malloc(12);
-    strncpy(mot1,"CIL",12);
-    char* mot2 = malloc(12);
-    strncpy(mot2,"BAR",12);
-    noeud_t *new1 = create_noeud(0,0,mot1); ///tester de malloc avant de fils 
-    noeud_t *new2 = create_noeud(0,8,mot2);
-    free(mot1);
-    free(mot2);
-    arb->pere->fils[0]=new1;
-    arb->pere->fils[1]=new2; */
-
-    ///print de l' arbre pour test
-    //arb_print(arb->pere);
-
-
-
 
     int N = arb->pere->pattern; //triche afin d'accéder au nombre de mot total
     //permet de calculer le % de mots en moins pour les stats
@@ -93,7 +76,7 @@ int main(int argc, char const *argv[])
         if(noeud!=NULL){
             strcpy(mot_lu ,noeud->MotDuNoeud);
             if(strcmp(stat,"-i")==0){
-                printf("Avec ce mot, il reste %d %% de mots dans le dictionnaire !\n",(nbr_noeuds(noeud)*100)/N);
+                printf("Avec ce mot, il reste %d / %d mots dans le dictionnaire !\n",nbr_noeuds(noeud),N);
             }
             printf("\nLe mot à rentrer est: %s\n",mot_lu);
         }
@@ -124,7 +107,7 @@ int main(int argc, char const *argv[])
         if(noeud!=NULL){
             strcpy(mot_lu ,noeud->MotDuNoeud);
             if(strcmp(stat,"-i")==0){
-                printf("Avec ce mot, il reste %d%% de mots dans le dictionnaire !\n",(nbr_noeuds(noeud)*100)/N);
+                printf("Avec ce mot, il reste %d / %d mots dans le dictionnaire !\n",nbr_noeuds(noeud),N);
             }
             printf("\nLe mot à rentrer est: %s\n",mot_lu);
         }   //check motif et erreur et check -i
