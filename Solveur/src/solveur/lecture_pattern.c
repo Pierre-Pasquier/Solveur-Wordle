@@ -6,13 +6,13 @@ bool nbrgood(char* motif){
 
 int nbr_noeuds(noeud_t* noeud){
     if(noeud==NULL){return 0;}
-    if(noeud->nbfils==0){return 1;} //on pourrait simplement return nbfils, mais thomas a des cas où nbfils=1 avec 0 fils
+    if(noeud->nbfils==1){return 1;} 
     else{
         int S = 0;
         for(int i=0;i<noeud->nbfils;i++){
             S= S+nbr_noeuds(noeud->fils[i]);
         }
-        return S+1;
+        return S;
     }
 }
 

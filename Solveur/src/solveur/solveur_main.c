@@ -92,7 +92,7 @@ int main(int argc, char const *argv[])
         if(noeud!=NULL){
             strcpy(mot_lu ,noeud->MotDuNoeud);
             if(strcmp(stat,"-i")==0){
-                printf("Avec ce mot, il reste %d %% de mots dans le dictionnaire !\n",(nbr_noeuds(noeud)*100)/N);
+                printf("Avec ce mot, il reste %d / %d mots dans le dictionnaire !\n",nbr_noeuds(noeud),N);
             }
             printf("\nLe mot à rentrer est: %s\n",mot_lu);
         }
@@ -121,7 +121,7 @@ int main(int argc, char const *argv[])
         if(noeud!=NULL){
             strcpy(mot_lu ,noeud->MotDuNoeud);
             if(strcmp(stat,"-i")==0){
-                printf("Avec ce mot, il reste %d%% de mots dans le dictionnaire !\n",(nbr_noeuds(noeud)*100)/N);
+                printf("Avec ce mot, il reste %d / %d mots dans le dictionnaire !\n",nbr_noeuds(noeud),N);
             }
             printf("\nLe mot à rentrer est: %s\n",mot_lu);
         }   //check motif et erreur et check -i
