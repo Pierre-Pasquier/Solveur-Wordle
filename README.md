@@ -6,6 +6,8 @@
 - IORI-GINGEMBRE Nathan
 - PASQUIER Pierre
 
+# **PARTIE WEB** 
+
 ## Description du projet :
 
 TuNom dispose de 3 modes de jeux qui ont chacun pour principal objectif de trouver des mots à la manière d’un motus :
@@ -53,3 +55,41 @@ Entrez donc un mot, puis en tapant la touche "entrée", vous pourrez voir si vou
 Les lettres se colorant en vert sont bien placées, celles en jaune sont dans le mot mais au mauvais endroit, et celle restant en gris indiquent que la lettre ne fait pas partie du mot. Vous pouvez donc très bien avoir un E vert, un E jaune et un E gris, signifiant qu'un E est bien placé, qu'un deuxième E est dans le mot, mais qu'il n'y a que deux E.
 
 Une fois la partie terminée vous entendrez une musique vous indiquant que vous avez gagné la partie !
+
+
+# **PARTIE SOLVEUR** 
+
+## Description :
+
+Notre solveur de motus en C est capable via un dictionnaire donnée dans des fichiers .txt de trouver les mots à partir des motifs que reçoit le joueur. Les longueurs possibles dépendent des dictionnaires de l'utilisateur, et le choix de la longueur pour le solveur se fait via le fichier wsolf.txt où doit être écrit la taille du mot, ou alors en paramètre du solveur lors de son exécution.
+La méthode utilisée est celle du pré traitement, ainsi notre application est avantageuse pour une grande quantité de partie sur un dictionnaire fixé. 
+
+## Installation :
+
+Comme pour la partie web, il faut tout d'abord cloner le projet, puis une fois déplacé dans le dossier Solveur, il suffira d'exécuter le makefile et de lancer l'application dans le terminal. Nous avons un dictionnaire préparé à l'avance pour l'occasion, mais si vous souhaitez le changer, il suffira ensuite (voir utilisation) de relancer l'étape de pré traitement :
+
+```sh
+cd projet2-E2/Solveur
+make preTT
+./preTT
+```
+
+Une fois pré traité (ou non si cela a déjà été fait ou est déjà fait), il suffit de lancer dans le terminal le solveur avec ou non une longueur choisie. Si la longueur n'est pas en paramètre, elle sera récupérée dans le fichier wsolf.txt.
+
+```sh
+cd projet2-E2/solveur
+make solveur
+./ solveur (+ longueur optionnelle)
+```
+
+## Utilisation :
+
+Afin d'utiliser le solveur, il faut voir comment utiliser ses deux parties. 
+La première partie, le pré traitement est optionnelle selon ce que vous souhaitez faire.
+Si vous voulez changer de dictionnaire, il faut dans Mots/motN.txt (N étant la longueur des mots dedans) mettre les mots de longueur N de votre dictionnaire dans le fichier, ligne par ligne dans l'ordre lexicographique sans accent avec le nombre de mots en première ligne (voir le format dans les fichiers actuels). Une fois fait il suffit d'exécuter ./preTT et d'attendre quelques minutes que les fichiers de fin de pré traitement soient mis à jour.
+
+Ensuite, pour utiliser la partie solveur, il faut donner la longueur de mot à chercher, soit dans le fichier wsolf.txt, soit en paramètre ./solveur N. Sachez que la longueur en paramètre prend la priorité sur le fichier wsolf et change la longueur dans le fichier.
+Enfin, une fois le solveur exécuté, il faudra suivre ses indications afin qu'il sache où vous en êtes. Il vous proposera le premier mot à rentrer, et vous demandera le motif résultant, et ce jusqu'à avoir trouvé le mot.
+Il est possible d'ajouter en paramètre après votre motif dans la même ligne -i afin de savoir le nombre de mots restants possibles grâce au motif rentré.
+Cependant, sachez que si vos motifs ne sont pas cohérents ou que vous n'utilisez pas correctement le solveur, il vous demandera soit de répéter, soit vous dira qu'une erreur et survenue et s'éteindra.
+Finalement, il est possible dans la demande de motif de repondre -1 afin de quitter l'application.
