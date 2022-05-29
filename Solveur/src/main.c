@@ -36,6 +36,7 @@ int main(){
         int *num_mot_cherche = malloc(sizeof(int));
         num_mot_cherche[0] = 0;
         mot_suivant(tes,tes->racine,"",len_mot,num_mot_cherche,matrix,nb_mot);
+        printf("Le remplissage de l'arbre commence\n");
         node* root=remplissage_arbre_rec(tes,matrix,len_mot,tab[len_mot-6],tes->nbr_mots);
         char filename[100];
         sprintf(filename,"./SortiePreTT/out%d.txt",len_mot);
@@ -45,6 +46,7 @@ int main(){
         arbre_pat* res=calloc(1,sizeof(arbre_pat));
         res->root=root;
         write_fichier(out,res);
+        printf("Ecriture dans le fichier texte terminée...\n");
         free(num_mot_cherche);
         for (int i=0;i<nb_mot;i++){
             free(matrix[i]);
