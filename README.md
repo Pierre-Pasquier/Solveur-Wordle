@@ -61,7 +61,7 @@ Une fois la partie terminée vous entendrez une musique vous indiquant que vous 
 
 ## Description :
 
-Notre solveur de motus en C est capable via un dictionnaire donnée dans des fichiers .txt de trouver les mots à partir des motifs que reçoit le joueur. Les longueurs possibles dépendent des dictionnaires de l'utilisateur, et le choix de la longueur pour le solveur se fait via le fichier wsolf.txt où doit être écrit la taille du mot, ou alors en paramètre du solveur lors de son exécution.
+Notre solveur de motus en C est capable via un dictionnaire donné dans des fichiers .txt de trouver les mots à partir des motifs que reçoit le joueur. Les longueurs possibles dépendent des dictionnaires de l'utilisateur, et le choix de la longueur pour le solveur se fait via le fichier wsolf.txt où doit être écrit la taille du mot, ou alors en paramètre du solveur lors de son exécution.
 La méthode utilisée est celle du pré traitement, ainsi notre application est avantageuse pour une grande quantité de partie sur un dictionnaire fixé. 
 
 ## Installation :
